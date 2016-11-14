@@ -11,28 +11,32 @@
 |
 */
 
-Route::group(['middleware' => ['guest']], function(){
-    
-    Route::get('/',function(){
-        return view('welcome');
-    });
+
+
+//Crearé una nueva rama para hacer cambios a las rutas bro, subiré la rama
+//al rato, para que cheques, es para poder hacer que no se reenvíe el formulario
+
+//Here are the new routes (ok now I'll write everithing in english lol):
+
+
+Route::group(['middleware' => ['checklog']], function(){
+
+	Route::get('/home', function () {
+	    return view('welcome');
+	});
 
     Route::get('/signup',function(){
         return view('auth.signup');
     });
-
 });
 
-Route::group(['middleware' => ['auth']],function(){
-
-    Route::get('/home', function () {
-        return view('auth.login');
+Route::group(['middleware' => ['authen']], function(){
+    
+    Route::get('/',function(){
+        return "Here is supposed to be de first layout";
     });
-
+    //here must have to be all of the routes that needs authentication
 });
-
-//Crearé una nueva rama para hacer cambios a las rutas bro, subiré la rama
-//al rato, para que cheques, es para poder hacer que no se reenvíe el formulario
 
 //pruebas
 

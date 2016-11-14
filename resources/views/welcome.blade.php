@@ -157,15 +157,17 @@ Welcome to the official site of the spain league
 <div class="loginMargin">
     <div class="loginContainer">
         <h2 style="margin:10px; color: white; margin-bottom: 70px;">Log in</h2>
-        <div class="ctrls-group">
-            <div class="symbol">Email</div>
-            <input type="email" class="myInput">
-        </div>
-        <div class="ctrls-group">
-            <div class="symbol">Password</div>
-            <input type="password" class="myInput">
-        </div>
-        <button class="btn" id="myLogBtn">Log in</button>
+        <form method="post" action="/">
+            <div class="ctrls-group">
+                <div class="symbol">Email</div>
+                <input type="email" class="myInput">
+            </div>
+            <div class="ctrls-group">
+                <div class="symbol">Password</div>
+                <input type="password" class="myInput">
+            </div>
+            <button class="btn" id="myLogBtn">Log in</button>
+        </form> 
         <a href="/signup" style="margin-left: 10px;">Don't you have an account?</a>
     </div>
 </div>
