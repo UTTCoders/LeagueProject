@@ -31,6 +31,9 @@ Route::group(['middleware' => ['auth']],function(){
 
 });
 
+//Crearé una nueva rama para hacer cambios a las rutas bro, subiré la rama
+//al rato, para que cheques, es para poder hacer que no se reenvíe el formulario
+
 //pruebas
 
 Route::get('/prueba', function(){
