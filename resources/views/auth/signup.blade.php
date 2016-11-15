@@ -9,12 +9,6 @@ Sign up on league-project
     body{
         background-color: #222525;    
     }
-    .whiteCard{
-        background-color: #111;
-        border-radius: 3px;
-        box-shadow: 0px 1px 1px 0px #000;
-        color: white;
-    }
     #signupCard{
         margin-bottom: 80px;
         padding: 0px;
@@ -51,7 +45,7 @@ Sign up on league-project
 
 @section('body')
 <div id="signupContainer">
-    <div class="whiteCard col-md-4 col-md-offset-4 col-xs-10 col-xs-offset-1" id="signupCard">
+    <div class="blackCard col-md-4 col-md-offset-4 col-xs-10 col-xs-offset-1" id="signupCard">
         <div class="header">
             <h3>Sign up</h3>
         </div>

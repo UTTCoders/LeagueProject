@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Coach extends Model
 {
     public $timestamps = false;
+    public $table = "coaches";
 
     public function team(){
         return $this->hasOne('App\League\Team');
