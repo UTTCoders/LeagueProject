@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Player extends Model
 {
-    //
+    public $timestamps=false;
 
     public function matches(){
         return $this->belongsToMany('App\League\Match')->withPivot('playing','has_left');

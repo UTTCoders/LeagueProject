@@ -156,18 +156,27 @@ Welcome to the official site of the spain league
 </div>
 <div class="loginMargin">
     <div class="loginContainer">
+        @if(Session::has('msgs'))
+        <h2 style="margin:10px; color: white;">Log in</h2>
+            @foreach(Session::get('msgs') as $msg)
+            <h4 style="margin-left: 10px; font-weight: 100; color:#f00;">{{$msg}}</h4>
+            @endforeach
+        @else
         <h2 style="margin:10px; color: white; margin-bottom: 70px;">Log in</h2>
+        @endif
         <form method="post" action="/">
+        {{csrf_field()}}
             <div class="ctrls-group">
                 <div class="symbol">Email</div>
-                <input type="email" class="myInput">
+                <input type="email" class="myInput" name="email">
             </div>
             <div class="ctrls-group">
                 <div class="symbol">Password</div>
-                <input type="password" class="myInput">
+                <input type="password" class="myInput" name="password">
             </div>
             <button class="btn" id="myLogBtn">Log in</button>
         </form> 
+        <br>
         <a href="/signup" style="margin-left: 10px;">Don't you have an account?</a>
     </div>
 </div>
@@ -193,6 +202,16 @@ Welcome to the official site of the spain league
         });
     });
 </script>
+@if(Session::has('msgs'))
+<script>
+$(function($){
+    $('.loginMargin').fadeIn('slow',function(){
+        $('.loginMargin').css('display','initial');
+    });
+    $('.loginContainer').css('margin-top','8%');
+});
+</script>
+@endif
 @endsection
 
 

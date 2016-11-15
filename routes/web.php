@@ -31,12 +31,14 @@ Route::group(['middleware' => ['checklog']], function(){
 });
 
 Route::group(['middleware' => ['authen']], function(){
-    
     Route::get('/',function(){
-        return "Here is supposed to be de first layout";
+        return "Here is supposed to be the principal layout";
+        //what a shame jaja
     });
     //here must have to be all of the routes that needs authentication
 });
+
+Route::post('/','Authentication\LoginHomeController@FirstRequest');
 
 //pruebas
 
