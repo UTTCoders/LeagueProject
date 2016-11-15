@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Authentication;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
+use Auth;
+use App\User;
 
 class LoginHomeController extends Controller
 {
@@ -18,8 +20,19 @@ class LoginHomeController extends Controller
     		return redirect('/home')
     		->with('msgs',$result->messages()->all());
     	}
-    	
-    	return $r->all();
-
+    	$checkemail=User::where('email',$r->input('email'))->get()->count();
+    	if ($checkemail==0) {
+    		return redirect('/home')
+    		->with('msgs',["That email is not registered yet!"]);
+    	}
+    	$userData=[
+    		"email"=>$r->input('email'),
+    		"password"=>$r->input('password')
+    	];
+    	if (Auth::attempt()) {
+    		return redirect('/');
+    	}
+    	return redirect('/home')
+    	->with('msgs',["Wrong email or password!"]);
     }
 }
