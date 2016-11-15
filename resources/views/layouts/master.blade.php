@@ -257,8 +257,8 @@
     </head>
     <body>
         <nav class="navBar">
-            <a href="/" class="navItem toLeft">Home<div class="bottomBar"></div></a>
             @if(Auth::check())
+            <a href="/" class="navItem toLeft">Home<div class="bottomBar"></div></a>
             <div class="menu toRight">
                 <div class="menuBar"></div>
                 <div class="menuBar"></div>
@@ -266,6 +266,7 @@
             </div>
             <a class="navItem toRight">{{Auth::user()->name}}<div class="bottomBar"></div></a>
             @else
+             <a href="/home" class="navItem toLeft">Home<div class="bottomBar"></div></a>
             <a class="navItem toRight" id="loginLauncher">Log in<div class="bottomBar"></div></a>
             @endif
             
