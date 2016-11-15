@@ -174,84 +174,109 @@
                 color: white;
             }
             .menuPanel{
-            margin-top: 62px;
-            position: fixed;
-            float: right;
-            background-color: #000;
-            height: 100%;
-            width: 210px;
-            right: -210px;
-            -webkit-transition: right .6s;
-            padding-top: 20px;
-            z-index: 9;
-            box-shadow: -1px 0px 2px #000;
-        }
-        .panelItem{
-            position: relative;
-            background-color: #000;
-            text-align: center;
-            padding-top: 7px;
-            padding-bottom: 7px;
-            float: left;
-            width: 100%;
-            font-size: 16px;
-            color: #eee;
-        }
-        .panelItem:link,.panelItem:active,.panelItem:visited{
-            text-decoration: none;
-            color: #6f9;
-        }
-        .panelItem:hover{
-            -webkit-transition: background-color 1s, width .6s, border-left .1s;
-            color: #6f9;
-            background-color: #000;
-            box-shadow: inset 0px 0px 5px 0px #000;
-            text-decoration: none;
-            border-left: 4px solid dodgerblue;
-        }
-        .panelSubItem{
-            background-color: #000;
-            position: relative;
-            text-align: center;
-            padding-top: 5px;
-            padding-bottom: 5px;
-            float: left;
-            width: 100%;
-            font-size: 12px;
-            color: #eee;
-        }
-        .panelSubItem:link,.panelItem:active,.panelItem:visited{
-            text-decoration: none;
-            color: #fff;
-        }
-        .panelSubItem:hover{
-            -webkit-transition: background-color .4s, width .6s;
-            border: 1px solid #222; 
-            background-color: #111;
-            box-shadow: inset 0px 0px 5px 0px #111;
-            text-decoration: none;
-        }
-        .menu{
-            top: 8px;
-            width: 30px;
-            height: 27px;
-            padding-top: 5px;
-            padding-left: 3px;
-            padding-right: 3px;
-            margin-left: 40px;
-        }
-        .menu:hover{
-            background-color: transparent;
-        }
-        .menuBar{
-            background-color: white;
-            height: 3px;
-            margin-bottom: 4px;
-            -webkit-transition: background-color .9s;
-        }
-        .menuBar{
-            -webkit-transition: background-color .9s;
-        }
+                margin-top: 62px;
+                position: fixed;
+                float: right;
+                background-color: #000;
+                height: 100%;
+                width: 210px;
+                right: -210px;
+                -webkit-transition: right .6s;
+                padding-top: 20px;
+                z-index: 9;
+                box-shadow: -1px 0px 2px #000;
+            }
+            .panelItem{
+                position: relative;
+                background-color: #000;
+                text-align: center;
+                padding-top: 7px;
+                padding-bottom: 7px;
+                float: left;
+                width: 100%;
+                font-size: 16px;
+                color: #eee;
+            }
+            .panelItem:link,.panelItem:active,.panelItem:visited{
+                text-decoration: none;
+                color: #6f9;
+            }
+            .panelItem:hover{
+                -webkit-transition: background-color 1s, width .6s, border-left .1s;
+                color: #6f9;
+                background-color: #000;
+                box-shadow: inset 0px 0px 5px 0px #000;
+                text-decoration: none;
+                border-left: 4px solid dodgerblue;
+            }
+            .panelSubItem{
+                background-color: #000;
+                position: relative;
+                text-align: center;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                float: left;
+                width: 100%;
+                font-size: 12px;
+                color: #eee;
+            }
+            .panelSubItem:link,.panelItem:active,.panelItem:visited{
+                text-decoration: none;
+                color: #fff;
+            }
+            .panelSubItem:hover{
+                -webkit-transition: background-color .4s, width .6s;
+                border: 1px solid #222; 
+                background-color: #111;
+                box-shadow: inset 0px 0px 5px 0px #111;
+                text-decoration: none;
+            }
+            .menu{
+                top: 8px;
+                width: 30px;
+                height: 27px;
+                padding-top: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
+                margin-left: 40px;
+                margin-right: 10px;
+                -webkit-transition: padding .4s;
+            }
+            .menu:hover{
+                background-color: transparent;
+                padding-left: 3px;
+                padding-right: 3px;
+            }
+            .menuBar{
+                background-color: white;
+                height: 3px;
+                margin-bottom: 4px;
+                -webkit-transition: background-color .9s;
+            }
+            .menuBar{
+                -webkit-transition: background-color .9s;
+            }
+            .blackCard{
+                background-color: #111;
+                border-radius: 3px;
+                box-shadow: 0px 1px 1px 0px #000;
+                color: white;
+            }
+            .whiteCard{
+                background-color: #fff;
+                border-radius: 3px;
+                box-shadow: 0px 1px 1px 0px #777;
+                color: #555;
+            }
+            #footerBrand{
+                padding:5px;
+                border-radius: 3px;
+                box-shadow: 0px 1px 5px 0px #000;
+                width: 30px;
+                margin: auto; 
+                display: block; 
+                background-color:white;
+            }
         </style>
         @yield('css')
     </head>
@@ -290,7 +315,7 @@
         <div class="footer col-md-12 col-xs-12 col-sm-12 col-lg-12">
             <div style="padding-left: 40px; padding-top: 30px; padding-right: 40px; padding-bottom: 30px;">
                 <p class="toLeft" style="position: absolute; left: 30px; top: 40px;">league-project.com</p>
-                <img src="{{elixir('img/icons/la-liga.png')}}" alt="" style="padding-top:2px; width: 30px; margin: auto; display: block;" >
+                <img src="{{elixir('img/icons/la-liga.png')}}" alt="" id="footerBrand" >
                 <a class="footerLink" style="position: absolute; right: 30px; top: 40px;" href="">privacity</a>
             </div>
         </div>
