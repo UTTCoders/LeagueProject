@@ -22,7 +22,7 @@ class Player extends Model
         //            ->join('matches','goals.match_id','=','matches.id')
         //            ->join('goal_types as gt','gt.id','=','goals.type_id')
         //            ->select('matches.id','players.*','goals.*','gt.description')->get();
-        return $this->hasMany('App\League\Goal')->withPivot('minute');
+        return $this->hasMany('App\League\Goal');
     }
 
     public function assists(){

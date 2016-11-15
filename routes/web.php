@@ -34,6 +34,9 @@ Route::group(['middleware' => ['auth']],function(){
 //pruebas
 
 Route::get('/prueba', function(){
-    $match = \App\League\Match::find(1);
-    return $match->goals()->count();
+    return view('admin.management');
+});
+
+Route::get('/prueba2', function(){
+    return view('admin.calendar');
 });

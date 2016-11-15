@@ -40,7 +40,7 @@ class Match extends Model
         //            ->join('players','goals.player_id','=','players.id')
         //            ->join('goal_types as gt','gt.id','=','goals.type_id')
         //            ->select('matches.id','players.*','goals.*','gt.description')->get();
-        return $this->hasMany('App\Goal')->withPivote('minute');
+        return $this->hasMany('App\League\Goal');
     }
 
     public function assists(){
