@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Position extends Model
 {
-    public $timestamps=false;
+    protected $fillable = ['id','name'];
+    public $timestamps = false;
+    
+    public function players(){
+        return $this->belongsToMany('App\League\Players')->withPivot('main');
+    }
 }
