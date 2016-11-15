@@ -9,7 +9,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-
+        <link rel="stylesheet" href="{{elixir('css/app.css')}}">
         <!-- Styles -->
         <style>
             html, body {
@@ -41,6 +41,8 @@
             
             .navBar{
                 width: 100%;
+                top: 0px;
+                left: 0px;
                 position: fixed;
                 z-index: 1;
                 background-color: rgba(255, 255, 255, .0);
@@ -63,7 +65,6 @@
             .toRight{
                 position: relative;
                 float: right;
-                margin-right: 20px;
             }
             .toLeft{
                 position: relative;
@@ -107,7 +108,6 @@
             }
             
             .footer{
-                position: relative;
                 background: #111;
                 box-shadow: inset 0px 0px 7px 0px #000;
                 bottom: 0px;
@@ -129,6 +129,7 @@
             }
             a{
                 color: #ddd;
+                font-weight: 600;
                 text-decoration: none;
                 -webkit-transition: color .2s;
             }
@@ -141,12 +142,12 @@
     </head>
     <body>
         <nav class="navBar">
-            <a href="" class="navItem toLeft">Home<div class="bottomBar"></div></a>
+            <a href="/" class="navItem toLeft">Home<div class="bottomBar"></div></a>
             <a class="navItem toRight" id="loginLauncher">Log in<div class="bottomBar"></div></a>
         </nav>
         @yield('body')
         <div class="footer">
-            <div style="padding-left: 40px; padding-top: 20px; padding-right: 40px; padding-bottom: 30px;">
+            <div style="padding-left: 40px; padding-top: 30px; padding-right: 40px; padding-bottom: 30px;">
                 <p>league-project.com</p>
                 <a class="footerLink" href="">privacity</a>
             </div>

@@ -8,7 +8,7 @@ class Match extends Model
 {
     //
     protected $table = "matches";
-    public $timestamps = "false";
+    public $timestamps = false;
     protected $fillable = ['start_date','state','season_id','referee_id'];
 
     public function teams(){
@@ -36,9 +36,14 @@ class Match extends Model
     }
 
     public function goals(){
-        return $this::join('goals','matches.id','=','goals.match_id')
-                    ->join('players','goals.player_id','=','players.id')
-                    ->join('goal_types as gt','gt.id','=','goals.type_id')
-                    ->select('matches.id','players.*','goals.*','gt.description')->get();
+        //return $this::join('goals','matches.id','=','goals.match_id')
+        //            ->join('players','goals.player_id','=','players.id')
+        //            ->join('goal_types as gt','gt.id','=','goals.type_id')
+        //            ->select('matches.id','players.*','goals.*','gt.description')->get();
+        return $this->hasMany('App\Goal')->withPivote('minute');
+    }
+
+    public function assists(){
+        return $this->hasMany('App\League\Assist');
     }
 }

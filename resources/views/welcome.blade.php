@@ -30,14 +30,13 @@ Welcome to the official site of the spain league
     .fbBtn > p{
         font-size: 14px;
         font-weight: 600;
+        color: white;
         margin: 0px;
-        margin-top: 5px;
         background-color: transparent;
         float: right;
     }
     #fbIcon{
         position: relative;
-        top: 2px;
         margin: 0px;
         width: 22px;
         margin-left: -14px;
@@ -70,7 +69,7 @@ Welcome to the official site of the spain league
         margin-left: 30%;
         margin-right: 30%;
         border: 1px solid #444;
-        box-shadow: 0px 0px 20px 10px #111;
+        box-shadow: 0px 0px 20px 10px #000;
         padding: 20px;
         z-index: 2;
         -webkit-transition: margin-top .5s;
@@ -88,17 +87,15 @@ Welcome to the official site of the spain league
     .ctrls-group{
         position: relative;
         width: 100%;
-        margin: 10px;
-        padding: 0px;
+        padding: 10px;
     }
     .ctrls-group > .symbol{
         background-color: dodgerblue;
         border: 1px solid white;
         font-size: 16px;
-        height: 20px;
-        width: 15%;
+        height: 40px;
+        width: 20%;
         float:left;
-        padding: 8px;
         padding-left: 10px;
         padding-right: 10px;
         text-align: center;
@@ -106,18 +103,20 @@ Welcome to the official site of the spain league
         font-weight: 600;
         border-bottom-left-radius: 4px;
         border-top-left-radius: 4px;
+        margin: 0px;
         margin-top: 20px;
         margin-bottom: 10px;
+    }.ctrls-group > .symbol > p{
+        margin-top: 6px;
     }
     .myInput{
         background-color: transparent;
         color: #ddd;
         border: 1px solid #fff;
         font-size: 16px;
-        height: 20px;
-        width: 70%;
+        height: 40px;
+        width: 80%;
         float:left;
-        padding: 8px;
         padding-left: 16px;
         padding-right: 16px;
         font-weight: 200;
@@ -158,11 +157,15 @@ Welcome to the official site of the spain league
     <div class="loginContainer">
         <h2 style="margin:10px; color: white; margin-bottom: 70px;">Log in</h2>
         <div class="ctrls-group">
-            <div class="symbol">Email</div>
+            <div class="symbol">
+                <p>Email</p>
+            </div>
             <input type="email" class="myInput">
         </div>
         <div class="ctrls-group">
-            <div class="symbol">Password</div>
+            <div class="symbol">
+                <p>Password</p>
+            </div>
             <input type="password" class="myInput">
         </div>
         <button class="btn" id="myLogBtn">Log in</button>
