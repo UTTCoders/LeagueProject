@@ -11,14 +11,6 @@
 |
 */
 
-
-
-//Crearé una nueva rama para hacer cambios a las rutas bro, subiré la rama
-//al rato, para que cheques, es para poder hacer que no se reenvíe el formulario
-
-//Here are the new routes (ok now I'll write everithing in english lol):
-
-
 Route::group(['middleware' => ['checklog']], function(){
 
 	Route::get('/home', function () {
@@ -33,9 +25,11 @@ Route::group(['middleware' => ['checklog']], function(){
 Route::group(['middleware' => ['authen']], function(){
     Route::get('/',function(){
         return "Here is supposed to be the principal layout";
-        //what a shame jaja
+        /*Bro here is where we have to return a view that extends master
+        or we can also return the welcome view now that I think so :s 
+        however we'll see what we gonna do later
+        */
     });
-    //here must have to be all of the routes that needs authentication
 });
 
 Route::post('/','Authentication\LoginHomeController@FirstRequest');

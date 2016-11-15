@@ -264,7 +264,7 @@
                 <div class="menuBar"></div>
                 <div class="menuBar"></div>
             </div>
-            <a class="navItem toRight">Pedro<div class="bottomBar"></div></a>
+            <a class="navItem toRight">{{Auth::user()->name}}<div class="bottomBar"></div></a>
             @else
             <a class="navItem toRight" id="loginLauncher">Log in<div class="bottomBar"></div></a>
             @endif
