@@ -258,7 +258,7 @@
     <body>
         <nav class="navBar">
             <a href="/" class="navItem toLeft">Home<div class="bottomBar"></div></a>
-            @if(!Auth::check())
+            @if(Auth::check())
             <div class="menu toRight">
                 <div class="menuBar"></div>
                 <div class="menuBar"></div>
@@ -270,7 +270,7 @@
             @endif
             
         </nav>
-        @if(!Auth::check())
+        @if(Auth::check())
         <div class="menuPanel">
             <div class="itemsContainer">
                 <a href="#" id="1" class="panelItem">Prueba</a>
