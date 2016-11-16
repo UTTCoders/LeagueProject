@@ -17,13 +17,11 @@ class LoginHomeController extends Controller
     	];
     	$result=Validator::make($r->all(),$rules);
     	if ($result->fails()) {
-    		return redirect('/home')
-    		->with('msgs',$result->messages()->all());
+    		return back()->with('msgs',$result->messages()->all());
     	}
     	$checkemail=User::where('email',$r->input('email'))->get()->count();
     	if ($checkemail==0) {
-    		return redirect('/home')
-    		->with('msgs',["That email is not registered yet!"]);
+    		return back()->with('msgs',["That email is not registered yet!"]);
     	}
     	$userData=[
     		"email"=>$r->input('email'),
@@ -32,7 +30,6 @@ class LoginHomeController extends Controller
     	if (Auth::attempt()) {
     		return redirect('/');
     	}
-    	return redirect('/home')
-    	->with('msgs',["Wrong email or password!"]);
+    	return back()->with('msgs',["Wrong email or password!"]);
     }
 }
