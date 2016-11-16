@@ -23,18 +23,20 @@ Route::group(['middleware' => ['checklog']], function(){
 Route::group(['middleware' => ['authen']], function(){
     Route::get('/',function(){
         return "Here is supposed to be the principal layout";
-        /*Bro here is where we have to return a view that extends master
-        or we can also return the welcome view now that I think so :s 
-        however we'll see what we gonna do later
+
+        /*Well bro, it seems that here we could put a condition, and then
+        return a view or another depending of the user's type which is
+        logged in
         */
     });
 });
 
 //Route for the login needs to get inside the app without middleware
 Route::post('/','Authentication\LoginHomeController@FirstRequest');
-
 //Activation route
 Route::get('activate/{t}/{id}','ActivationController@ActivationRequest');
+
+
 
 //pruebas
 
@@ -44,4 +46,11 @@ Route::get('/prueba', function(){
 
 Route::get('/prueba2', function(){
     return view('admin.calendar');
+});
+
+Route::get('/prueba3', function(){
+    if (App\User::find(1) == null) {
+        return "a";
+    }
+    return "cucu";
 });

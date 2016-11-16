@@ -37,8 +37,8 @@ class RegController extends Controller
 		$newuser->type = false;
 		$newuser->save();
 
-		$maillink="http://league-project.com/activate/"
-		.$newuser->remember_token."/".$newuser->id;
+		$maillink=url('/')."/activate"."/"
+        .$newuser->remember_token."/".$newuser->id;
 		
 		Mail::send('emailviews.activation', ["link"=> $maillink], 
 		function ($m) use ($newuser) {
@@ -46,8 +46,8 @@ class RegController extends Controller
 			$m->to($newuser->email, "Destiny")
 			->subject("Activation");
 		});
-		return redirect('/login')
+		return redirect('/home')
 		->with('emailreg',$newuser->email)
-		->with('msg',["We've sent the activation email to your account!"]);
+		->with('activate',["We've sent the activation email to your account!"]);
     }
 }

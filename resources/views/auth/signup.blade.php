@@ -144,7 +144,7 @@ Sign up on league-project
                 {{csrf_field()}}
                 <div class="form-group ">
                     <label style="margin-right: 10%;" for="name">Name</label>
-                    <input type="text" name="name" class="myInputWhite myInput-large">
+                    <input type="text" name="name" class="myInputWhite myInput-large" value="">
                 </div>
                 <div class="form-group ">
                     <label style="margin-right: 10%;" for="email">Email</label>

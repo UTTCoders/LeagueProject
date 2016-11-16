@@ -177,7 +177,11 @@ Welcome to the official site of the spain league
                 <div class="symbol">
                     <p>Email</p>
                 </div>
-                <input type="email" class="myInput" name="email">
+                @if(Session::has('emailreg'))
+                    <input value="{{Session::get('emailreg')}}" type="email" class="myInput" name="email">
+                @else
+                    <input type="email" class="myInput" name="email">
+                @endif
             </div>
             <div class="form-group">
                 <div class="symbol">
@@ -189,6 +193,13 @@ Welcome to the official site of the spain league
                 <div class="col-md-12 col-xs-12" style="margin:0px; padding:0px;">
                     @foreach(Session::get('msgs') as $msg)
                     <p class="msg error">{{$msg}}</p>
+                    @endforeach
+                </div>
+            @endif
+            @if(Session::has('activate'))
+                <div class="col-md-12 col-xs-12" style="margin:0px; padding:0px;">
+                    @foreach(Session::get('activate') as $msg)
+                    <p align="center" class="msg error" style="color:#090;">{{$msg}}</p>
                     @endforeach
                 </div>
             @endif
@@ -222,7 +233,7 @@ Welcome to the official site of the spain league
         });
     });
 </script>
-@if(Session::has('msgs'))
+@if(Session::has('msgs') || Session::has('activate'))
 <script>
     $(function($){
         $('.loginMargin').fadeIn('slow',function(){

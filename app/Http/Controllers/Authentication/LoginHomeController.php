@@ -23,6 +23,10 @@ class LoginHomeController extends Controller
     	if ($checkemail==0) {
     		return back()->with('msgs',["That email is not registered yet!"]);
     	}
+        $checkemail=User::where('email',$r->input('email'))->get()->count();
+        if ($checkemail==0) {
+            return back()->with('msgs',["That email is not registered yet!"]);
+        }
     	$userData=[
     		"email"=>$r->input('email'),
     		"password"=>$r->input('password')
