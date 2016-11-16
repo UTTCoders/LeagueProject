@@ -50,6 +50,7 @@ Sign up on league-project
             <h3>Sign up</h3>
         </div>
         <div style="padding: 20px;">
+        <form action="/signup" method="post">
             <div class="form-group ">
                 <label style="margin-right: 10%;" for="">Name</label>
                 <input type="text" class="myInputWhite myInput-large">
@@ -69,6 +70,7 @@ Sign up on league-project
             <div class="form-group" style="margin-bottom: 0px; margin-top: 20px;">
                 <button class="btn btnBlue" style="width:100%;">Sign up!</button>
             </div>
+        </form>
         </div>
     </div>
 </div>
