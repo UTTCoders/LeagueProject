@@ -50,25 +50,33 @@ Sign up on league-project
             <h3>Sign up</h3>
         </div>
         <div style="padding: 20px;">
+        <form action="/signup" method="post">
+        {{csrf_field()}}
             <div class="form-group ">
-                <label style="margin-right: 10%;" for="">Name</label>
-                <input type="text" class="myInputWhite myInput-large">
+                <label style="margin-right: 10%;" for="name">Name</label>
+                <input type="text" name="name" class="myInputWhite myInput-large">
             </div>
             <div class="form-group ">
-                <label style="margin-right: 10%;" for="">Email</label>
-                <input type="email" class="myInputWhite myInput-large">
+                <label style="margin-right: 10%;" for="email">Email</label>
+                <input type="email" name="email" class="myInputWhite myInput-large">
             </div>
             <div class="form-group ">
-                <label style="margin-right: 10%;" for="">Password</label>
-                <input type="password" class="myInputWhite myInput-large">
+                <label style="margin-right: 10%;" for="password">Password</label>
+                <input type="password" name="password" class="myInputWhite myInput-large">
             </div>
             <div class="form-group ">
-                <label style="margin-right: 10%;" for="">Password confirm</label>
-                <input type="password" class="myInputWhite myInput-large">
+                <label style="margin-right: 10%;" for="password2">Password confirm</label>
+                <input type="password" name="password2" class="myInputWhite myInput-large">
             </div>
+            @if(Session::has('msgs'))
+                @foreach(Session::get('msgs') as $msg)
+                <h5 align="center" style="font-weight: 100; color:#fff;">***{{$msg}}***</h5>
+                @endforeach
+            @endif
             <div class="form-group" style="margin-bottom: 0px; margin-top: 20px;">
                 <button class="btn btnBlue" style="width:100%;">Sign up!</button>
             </div>
+        </form>
         </div>
     </div>
 </div>
