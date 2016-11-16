@@ -6,12 +6,15 @@ Welcome to the official site of the spain league
 
 @section('css')
 <style>
+    body{
+        background-color: #000;   
+    }
     .coverContainer{
         background-image: url("{{asset('img/campnou.jpg')}}");
         background-size: cover;
         width: 100%;
         height: 100%;
-        position: relative;
+        position: fixed;
         overflow: hidden;
         box-shadow: inset 0px 0px 10px 0px #000;
     }
@@ -62,13 +65,10 @@ Welcome to the official site of the spain league
     .loginContainer{
         background-color: rgba(0, 0, 0, .9);
         border-radius: 3px;
-        position: relative;
-        height: 60%;
-        margin: 8%;
+        min-height: 60%;
         margin-top: 0%;
-        margin-left: 30%;
-        margin-right: 30%;
         border: 1px solid #444;
+        display: inline;
         box-shadow: 0px 0px 20px 10px #000;
         padding: 20px;
         z-index: 2;
@@ -84,20 +84,15 @@ Welcome to the official site of the spain league
         width: 100%;
         background-color: rgba(0, 0, 0, .6)
     }
-    .ctrls-group{
-        position: relative;
-        width: 100%;
-        padding: 10px;
-    }
-    .ctrls-group > .symbol{
+    .form-group > .symbol{
         background-color: dodgerblue;
         border: 1px solid white;
-        font-size: 16px;
+        font-size: 12px;
         height: 40px;
         width: 20%;
         float:left;
-        padding-left: 10px;
-        padding-right: 10px;
+        padding-left: 3px;
+        padding-right: 3px;
         text-align: center;
         color: white;
         font-weight: 600;
@@ -106,8 +101,8 @@ Welcome to the official site of the spain league
         margin: 0px;
         margin-top: 20px;
         margin-bottom: 10px;
-    }.ctrls-group > .symbol > p{
-        margin-top: 6px;
+    }.form-group > .symbol > p{
+        margin-top: 10px;
     }
     .myInput{
         background-color: transparent;
@@ -119,7 +114,7 @@ Welcome to the official site of the spain league
         float:left;
         padding-left: 16px;
         padding-right: 16px;
-        font-weight: 200;
+        font-weight: 400;
         border-bottom-right-radius: 4px;
         border-top-right-radius: 4px;
         margin-right: 0px;
@@ -132,17 +127,37 @@ Welcome to the official site of the spain league
         color: #fff;
     }
     #myLogBtn{
-        position: absolute;
-        bottom: 20px;
+        padding: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
         background-color: transparent;
         color: white;
         border-radius: 3px;
-        margin: 10px;
+        margin-top: 40px;
+        margin-bottom: 10px;
         border: 1px solid white;
         font-size: 16px;
     }
     #myLogBtn:hover{
         background-color: rgba(255, 255, 255, .1);
+    }
+    .msg{
+        background-color: white;
+        border-radius: 3px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding-left: 8px;
+        padding-right: 8px;
+        font-weight: 600;
+    }
+    .error{
+        color: #e34;
+    }
+    .success{
+        color: #6d9;
+    }
+    .footer{
+        display: none;
     }
 </style>
 @endsection
@@ -154,29 +169,35 @@ Welcome to the official site of the spain league
     <a href="#" id="fbBtn1" class="btn fbBtn"><img id="fbIcon" src="{{asset('img/_f_logo_online/png/FB-f-Logo__white_29.png')}}"><p>Log in with facebook</p></a>
 </div>
 <div class="loginMargin">
-    <div class="loginContainer">
-        @if(Session::has('msgs'))
-        <h2 style="margin:10px; color: white;">Log in</h2>
-            @foreach(Session::get('msgs') as $msg)
-            <h4 style="margin-left: 10px; font-weight: 100; color:#f00;">{{$msg}}</h4>
-            @endforeach
-        @else
-        <h2 style="margin:10px; color: white; margin-bottom: 70px;">Log in</h2>
-        @endif
+    <div class="loginContainer col-md-offset-4 col-md-4 col-xs-10 col-xs-offset-1">
+        <h2 style="margin:10px; color: white; margin-bottom: 40px;">Log in</h2>
         <form method="post" action="/">
         {{csrf_field()}}
-            <div class="ctrls-group">
-                <div class="symbol">Email</div>
+            <div class="form-group">
+                <div class="symbol">
+                    <p>Email</p>
+                </div>
                 <input type="email" class="myInput" name="email">
             </div>
-            <div class="ctrls-group">
-                <div class="symbol">Password</div>
+            <div class="form-group">
+                <div class="symbol">
+                    <p>Password</p>
+                </div>
                 <input type="password" class="myInput" name="password">
             </div>
-            <button class="btn" id="myLogBtn">Log in</button>
+            @if(Session::has('msgs'))
+                <div class="col-md-12 col-xs-12" style="margin:0px; padding:0px;">
+                    @foreach(Session::get('msgs') as $msg)
+                    <p class="msg error">{{$msg}}</p>
+                    @endforeach
+                </div>
+            @endif
+            <div class="form-group">
+                <button id="myLogBtn" class="btn col-md-12 col-xs-12">Log in</button>
+            </div>
+            <a href="/signup">Don't you have an account?</a>
         </form> 
         <br>
-        <a href="/signup" style="margin-left: 10px;">Don't you have an account?</a>
     </div>
 </div>
 @endsection
@@ -203,12 +224,12 @@ Welcome to the official site of the spain league
 </script>
 @if(Session::has('msgs'))
 <script>
-$(function($){
-    $('.loginMargin').fadeIn('slow',function(){
-        $('.loginMargin').css('display','initial');
+    $(function($){
+        $('.loginMargin').fadeIn('slow',function(){
+            $('.loginMargin').css('display','initial');
+        });
+        $('.loginContainer').css('margin-top','8%');
     });
-    $('.loginContainer').css('margin-top','8%');
-});
 </script>
 @endif
 @endsection

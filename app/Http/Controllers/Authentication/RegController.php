@@ -21,13 +21,11 @@ class RegController extends Controller
     	];
     	$result=Validator::make($r->all(),$rules);
     	if ($result->fails()) {
-    		return redirect('/signup')
-    		->with('msgs',$result->messages()->all());
+    		return redirect('/signup')->with('msgsReg',$result->messages()->all());
     	}
     	$checkemail=User::where('email',$r->input('email'))->get()->count();
     	if ($checkemail>0) {
-    		return redirect('/signup')
-    		->with('msgs',["The email you typed is already registered!"]);
+    		return redirect('/signup')->with('msgsReg',["The email you typed is already registered!"]);
     	}
 
     }

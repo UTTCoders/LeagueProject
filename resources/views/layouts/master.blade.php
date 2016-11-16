@@ -12,15 +12,6 @@
         <link rel="stylesheet" href="{{elixir('css/app.css')}}">
         <!-- Styles -->
         <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
-
             .title {
                 font-size: 84px;
             }
@@ -82,11 +73,7 @@
                 padding-top: 10px;
                 cursor: pointer;
                 padding-bottom: 10px;
-                width: 100px;
                 -webkit-transition: background-color .5s, width .2s;
-            }
-            .btn:hover{
-                width: 120px;
             }
             .btnTrans{
                 background-color: transparent;
@@ -108,10 +95,9 @@
             }
             
             .footer{
-                background: #111;
-                box-shadow: inset 0px 0px 7px 0px #000;
-                bottom: 0px;
-                width: 100%;
+                position: relative;
+                background: transparent;
+                padding: 0;
             }
             .footer > div > p{
                 color: #ddd;
@@ -324,17 +310,14 @@
         @yield('body')
         <div class="footer col-md-12 col-xs-12 col-sm-12 col-lg-12">
             <div style="padding-left: 40px; padding-top: 30px; padding-right: 40px; padding-bottom: 30px;">
-                <p class="toLeft" style="position: absolute; left: 30px; top: 40px;">league-project.com</p>
+                <p class="toLeft" style="position: absolute; left: 25%; top: 40px;">league-project.com</p>
                 <img src="{{elixir('img/icons/la-liga.png')}}" alt="" id="footerBrand" >
-                <a class="footerLink" style="position: absolute; right: 30px; top: 40px;" href="">privacity</a>
+                <a class="footerLink" style="position: absolute; right: 25%; top: 40px;" href="">privacity</a>
             </div>
         </div>
         <script src="{{elixir('js/jquery-3.1.0.min.js')}}"></script>
         @yield('js')
         <script>
-            if ( $(document).height() <= $(window).height() ){
-                $('.footer').css('position', 'fixed').css('bottom','0px');
-            }
             $(function($){
                 //menu
                 $('.menu').hover(function(){
