@@ -289,7 +289,11 @@
                 <div class="menuBar"></div>
                 <div class="menuBar"></div>
             </div>
-            <a class="navItem toRight">{{Auth::user()->name}}<div class="bottomBar"></div></a>
+            @if(Auth::user()->type)
+                <a class="navItem toRight">Admin: {{Auth::user()->name}}<div class="bottomBar"></div></a>
+            @else
+                <a class="navItem toRight">{{Auth::user()->name}}<div class="bottomBar"></div></a>
+            @endif
             @else
              <a href="/home" class="navItem toLeft">Home<div class="bottomBar"></div></a>
             <a class="navItem toRight" id="loginLauncher">Log in<div class="bottomBar"></div></a>
@@ -297,20 +301,25 @@
             
         </nav>
         @if(Auth::check())
-        <div class="menuPanel">
-            <div class="itemsContainer">
-                <a href="#" id="1" class="panelItem">Prueba</a>
-                <a href="#" id="1" class="panelSubItem">Hijo</a>
-                <a href="#" id="1" class="panelSubItem">Hijo</a>
-                <a href="#" id="1" class="panelSubItem">Hijo</a>
-                <a href="#" id="2" class="panelItem">Prueba 2</a>
-                <a href="#" id="2" class="panelSubItem">Hijo</a>
-                <a href="#" id="2" class="panelSubItem">Hijo</a>
-                <a href="#" id="2" class="panelSubItem">Hijo</a>
-            </div>
-            <a href="/logout" class="panelItem" style="position:absolute; bottom:111px;">Log out</a>
-            <a href="/favorites" class="panelItem" style="position:absolute;bottom:72px;">Favorites</a>
-        </div>
+            @if(Auth::user()->type)
+            <!-- Here goes the admin options :O -->
+            @else
+            <!-- And here the user options :D -->
+                <div class="menuPanel">
+                    <div class="itemsContainer">
+                        <a href="#" id="1" class="panelItem">Prueba</a>
+                        <a href="#" id="1" class="panelSubItem">Hijo</a>
+                        <a href="#" id="1" class="panelSubItem">Hijo</a>
+                        <a href="#" id="1" class="panelSubItem">Hijo</a>
+                        <a href="#" id="2" class="panelItem">Prueba 2</a>
+                        <a href="#" id="2" class="panelSubItem">Hijo</a>
+                        <a href="#" id="2" class="panelSubItem">Hijo</a>
+                        <a href="#" id="2" class="panelSubItem">Hijo</a>
+                    </div>
+                    <a href="/logout" class="panelItem" style="position:absolute; bottom:111px;">Log out</a>
+                    <a href="/favorites" class="panelItem" style="position:absolute;bottom:72px;">Favorites</a>
+                </div>
+            @endif
         @endif
         @yield('body')
         <div class="footer col-md-12 col-xs-12 col-sm-12 col-lg-12">
