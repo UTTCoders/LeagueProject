@@ -17,9 +17,7 @@ Route::group(['middleware' => ['checklog']], function(){
 	    return view('welcome');
 	});
 
-    Route::get('/signup',function(){
-        return view('auth.signup');
-    });
+    Route::match(['GET','POST'],'/signup','Authentication\RegController@RegRequest');
 });
 
 Route::group(['middleware' => ['authen']], function(){
