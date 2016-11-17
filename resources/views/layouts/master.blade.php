@@ -29,7 +29,7 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
-            
+
             .navBar{
                 width: 100%;
                 top: 0px;
@@ -39,6 +39,7 @@
                 background-color: rgba(255, 255, 255, .0);
                 display: inline-block;
                 padding: 10px;
+                -webkit-transition: background-color .4s;
             }
             .navItem{
                 background-color: transparent;
@@ -83,17 +84,17 @@
                 background-color: rgba(255, 255, 255, .1);
                 color: #fff;
             }
-            
+
             .bottomBar{
                 background-color: white;
                 position: absolute;
-                margin-top: 5px; 
+                margin-top: 5px;
                 margin-left: -10px;
                 width: 0%;
                 height: 3px;
                 -webkit-transition: width .3s;
             }
-            
+
             .footer{
                 position: relative;
                 background: transparent;
@@ -212,7 +213,7 @@
             }
             .panelSubItem:hover{
                 -webkit-transition: background-color .4s, width .6s;
-                border: 1px solid #222; 
+                border: 1px solid #222;
                 background-color: #111;
                 box-shadow: inset 0px 0px 5px 0px #111;
                 text-decoration: none;
@@ -259,8 +260,8 @@
                 border-radius: 3px;
                 box-shadow: 0px 1px 5px 0px #000;
                 width: 30px;
-                margin: auto; 
-                display: block; 
+                margin: auto;
+                display: block;
                 background-color:white;
             }
         </style>
@@ -284,12 +285,12 @@
              <a href="/home" class="navItem toLeft">Home<div class="bottomBar"></div></a>
             <a class="navItem toRight" id="loginLauncher">Log in<div class="bottomBar"></div></a>
             @endif
-            
+
         </nav>
         @if(Auth::check())
             @if(Auth::user()->type)
             <!-- Here goes the admin options :O -->
-            
+
 
             @else
             <!-- And here the user options :D -->
