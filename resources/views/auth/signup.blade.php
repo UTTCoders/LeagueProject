@@ -144,11 +144,11 @@ Sign up on league-project
                 {{csrf_field()}}
                 <div class="form-group ">
                     <label style="margin-right: 10%;" for="name">Name</label>
-                    <input type="text" name="name" class="myInputWhite myInput-large" value="">
+                    <input type="text" name="name" class="myInputWhite myInput-large" value="{{old('name')}}" autofocus>
                 </div>
                 <div class="form-group ">
                     <label style="margin-right: 10%;" for="email">Email</label>
-                    <input type="email" name="email" class="myInputWhite myInput-large">
+                    <input type="email" name="email" class="myInputWhite myInput-large" value="{{old('email')}}">
                 </div>
                 <div class="form-group ">
                     <label style="margin-right: 10%;" for="password">Password</label>

@@ -49,8 +49,5 @@ Route::get('/prueba2', function(){
 });
 
 Route::get('/prueba3', function(){
-    if (App\User::find(1) == null) {
-        return "a";
-    }
-    return "cucu";
+    App\User::count();
 });

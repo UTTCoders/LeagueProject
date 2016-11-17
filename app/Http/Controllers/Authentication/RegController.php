@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Validator;
 use App\User;
 use Hash;
+use Mail;
 
 class RegController extends Controller
 {
@@ -22,11 +23,14 @@ class RegController extends Controller
     	];
     	$result=Validator::make($r->all(),$rules);
     	if ($result->fails()) {
-    		return redirect('/signup')->with('msgsReg',$result->messages()->all());
+    		return redirect('/signup')->with('msgsReg',$result->messages()->all())
+            ->withInput($r->except('password','password2'));
     	}
     	$checkemail=User::where('email',$r->input('email'))->get()->count();
     	if ($checkemail>0) {
-    		return redirect('/signup')->with('msgsReg',["The email you typed is already registered!"]);
+    		return redirect('/signup')
+            ->with('msgsReg',["The email you typed is already registered!"])
+            ->withInput($r->except('password','password2'));
     	}
     	$newuser=new User;
     	$newuser->name=$r->input('name');
