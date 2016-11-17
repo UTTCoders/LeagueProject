@@ -289,20 +289,16 @@
         @if(Auth::check())
             @if(Auth::user()->type)
             <!-- Here goes the admin options :O -->
+            
+
             @else
             <!-- And here the user options :D -->
                 <div class="menuPanel">
                     <div class="itemsContainer">
-                        <a href="#" id="1" class="panelItem">Prueba</a>
-                        <a href="#" id="1" class="panelSubItem">Hijo</a>
-                        <a href="#" id="1" class="panelSubItem">Hijo</a>
-                        <a href="#" id="1" class="panelSubItem">Hijo</a>
-                        <a href="#" id="2" class="panelItem">Prueba 2</a>
-                        <a href="#" id="2" class="panelSubItem">Hijo</a>
-                        <a href="#" id="2" class="panelSubItem">Hijo</a>
-                        <a href="#" id="2" class="panelSubItem">Hijo</a>
+                        <a href="#" id="1"  class="panelItem event">Prueba</a>
+                        <a href="#" id="1" class="panelSubItem" style="display:none">Hijo</a>
+                        <a href="/logout" class="panelItem">Log out</a>
                     </div>
-                    <a href="/logout" class="panelItem" style="position:absolute; bottom:111px;">Log out</a>
                     <a href="/favorites" class="panelItem" style="position:absolute;bottom:72px;">Favorites</a>
                 </div>
             @endif
@@ -342,12 +338,11 @@
                 });
                 $.each($('.panelItem'),function(index,element){
                     $(element).click(function(){
-                        $.each($('.panelSubItem[id='+$(element).prop('id')+']'),function(index,subElement){
-                            $(subElement).slideToggle();
+                        $.each($('.panelSubItem[id="'+$(element).prop('id')+'"]'),function(index,subElement){
+                            $(subElement).slideToggle('fast');
                         });
                     });
                 });
-                //
             });
         </script>
     </body>

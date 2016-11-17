@@ -34,8 +34,7 @@ Route::post('/','Authentication\LoginHomeController@FirstRequest');
 //Activation route
 Route::get('activate/{t}/{id}',
 'Authentication\ActivationController@ActivationRequest');
-
-
+Route::get('/logout','Authentication\LoginHomeController@LogoutRequest');
 
 //pruebas
 

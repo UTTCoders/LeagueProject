@@ -40,4 +40,9 @@ class LoginHomeController extends Controller
     	return back()->with('msgs',["Wrong email or password!"])
         ->withInput($r->except('password'));
     }
+
+    public function LogoutRequest(){
+        Auth::logout();
+        return redirect('/home');
+    }
 }
