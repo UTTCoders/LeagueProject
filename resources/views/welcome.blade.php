@@ -180,7 +180,7 @@ Welcome to the official site of the spain league
                 @if(Session::has('emailreg'))
                     <input value="{{Session::get('emailreg')}}" type="email" class="myInput" name="email">
                 @else
-                    <input type="email" class="myInput" name="email">
+                    <input type="email" class="myInput" name="email" value="{{old('email')}}">
                 @endif
             </div>
             <div class="form-group">

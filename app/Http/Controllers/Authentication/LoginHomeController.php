@@ -17,12 +17,15 @@ class LoginHomeController extends Controller
     	];
     	$result=Validator::make($r->all(),$rules);
     	if ($result->fails()) {
-    		return back()->with('msgs',$result->messages()->all());
+    		return back()->with('msgs',$result->messages()->all())
+            ->withInput($r->except('password'));
     	}
     	$checkemail=User::where('email',$r->input('email'))->get()->count();
     	if ($checkemail==0) {
-    		return back()->with('msgs',["That email is not registered yet!"]);
+    		return back()->with('msgs',["That email is not registered yet!"])
+            ->withInput($r->except('password'));
     	}
+        
         $checkemail=User::where('email',$r->input('email'))->get()->count();
         if ($checkemail==0) {
             return back()->with('msgs',["That email is not registered yet!"]);

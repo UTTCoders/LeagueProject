@@ -47,7 +47,3 @@ Route::get('/prueba', function(){
 Route::get('/prueba2', function(){
     return view('admin.calendar');
 });
-
-Route::get('/prueba3', function(){
-    App\User::count();
-});
