@@ -34,9 +34,10 @@ class LoginHomeController extends Controller
     		"email"=>$r->input('email'),
     		"password"=>$r->input('password')
     	];
-    	if (Auth::attempt()) {
+    	if (Auth::attempt($userData)) {
     		return redirect('/');
     	}
-    	return back()->with('msgs',["Wrong email or password!"]);
+    	return back()->with('msgs',["Wrong email or password!"])
+        ->withInput($r->except('password'));
     }
 }

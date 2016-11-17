@@ -204,7 +204,6 @@ Sign up on league-project
         </div>
     </div>
 </div>
-
 @endsection
 
 @section('js')
