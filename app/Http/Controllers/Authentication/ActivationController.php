@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Authentication;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\User;
 
 class ActivationController extends Controller
 {
@@ -15,9 +16,12 @@ class ActivationController extends Controller
     	if ($user->active) {
     		return redirect('/');
     	}
-    	if ($user->remember_token==null || $user->remember_token=="") {
-    		return redirect('/');
-    	}
+        if ($user->remember_token==null || $user->remember_token=="") {
+            return redirect('/');
+        }
+        if ($user->remember_token!=$t) {
+            return redirect('/');
+        }
     	$user->active=true;
     	$user->save();
     	return redirect('/home')->with('emailreg',$user->email)

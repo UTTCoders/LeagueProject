@@ -46,7 +46,7 @@ class RegController extends Controller
 		
 		Mail::send('emailviews.activation', ["link"=> $maillink], 
 		function ($m) use ($newuser) {
-			$m->from('isramaillaravel@gmail.com', 'MusicRecords!');
+			$m->from('isramaillaravel@gmail.com', 'League-Project.com');
 			$m->to($newuser->email, "Destiny")
 			->subject("Activation");
 		});

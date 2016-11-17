@@ -34,7 +34,8 @@ Route::group(['middleware' => ['authen']], function(){
 //Route for the login needs to get inside the app without middleware
 Route::post('/','Authentication\LoginHomeController@FirstRequest');
 //Activation route
-Route::get('activate/{t}/{id}','ActivationController@ActivationRequest');
+Route::get('activate/{t}/{id}',
+'Authentication\ActivationController@ActivationRequest');
 
 
 
