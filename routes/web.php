@@ -17,17 +17,15 @@ Route::group(['middleware' => ['checklog']], function(){
 	    return view('welcome');
 	});
 
-    Route::match(['GET','POST'],'/signup','Authentication\RegController@RegRequest');
+    Route::match(['GET','POST'],'/signup',
+    'Authentication\RegController@RegRequest');
 });
 
 Route::group(['middleware' => ['authen']], function(){
     Route::get('/',function(){
-        return "Here is supposed to be the principal layout";
-
-        /*Well bro, it seems that here we could put a condition, and then
-        return a view or another depending of the user's type which is
-        logged in
-        */
+        if (Auth::user()->type)
+            return "Here is supposed to be the admin's layout";
+        return view('user.userhome');
     });
 });
 
