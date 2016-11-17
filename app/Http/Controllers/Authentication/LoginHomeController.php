@@ -25,10 +25,10 @@ class LoginHomeController extends Controller
     		return back()->with('msgs',["That email is not registered yet!"])
             ->withInput($r->except('password'));
     	}
-        
-        $checkemail=User::where('email',$r->input('email'))->get()->count();
-        if ($checkemail==0) {
-            return back()->with('msgs',["That email is not registered yet!"]);
+        $state=User::where('email',$r->input('email'))->get()->first()->active;
+        if (!$state) {
+            return back()->with('msgs',["Your account is not activated yet!"])
+            ->withInput($r->except('password'));
         }
     	$userData=[
     		"email"=>$r->input('email'),
