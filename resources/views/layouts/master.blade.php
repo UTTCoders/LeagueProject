@@ -88,7 +88,7 @@
             .bottomBar{
                 background-color: white;
                 position: absolute;
-                margin-top: 5px;
+                margin-top: 2px;
                 margin-left: -10px;
                 width: 0%;
                 height: 3px;
