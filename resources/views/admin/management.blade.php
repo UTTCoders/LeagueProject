@@ -182,6 +182,48 @@ League management
     #file-info{
       padding: 5px;
     }
+    #gmaps-container{
+      height: 300px;
+      border-radius: 3px;
+      box-shadow: 0px 1px 6px 0px #000;
+      margin-bottom: 10px;
+    }
+    .alert-card{
+        background-color: #da2;
+        border: 1px solid #640;
+        border-radius: 3px;
+        color: #640;
+    }
+    .error-card{
+        background-color: #d22;
+        border: 1px solid #510;
+        border-radius: 3px;
+        color: #510;
+    }
+    .success-card{
+        background-color: #2b6;
+        border: 1px solid #052;
+        border-radius: 3px;
+        color: #052;
+    }
+    #msgs-card{
+        z-index: 3;
+        position: fixed;
+        bottom: -200px;
+        box-shadow: 0px 0px 10px 0px #111;
+        font-weight: 600;
+        -webkit-transition: bottom .5s;
+    }
+    .dark-block{
+        display: none;
+        z-index: 4;
+        top: 0px;
+        left: 0px;
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, .6)
+    }
 </style>
 @endsection
 
@@ -189,32 +231,47 @@ League management
 <div class="coverContainer">
     <h2 class="mainTitle">Add teams, stadiums, players, coaches and more</h2>
 </div>
-<div class="col-md-12 no-padding">
-    <div class="col-md-7 col-md-offset-1">
-        <div class="col-md-12 no-padding module module-active" id="stadiumsModule">
+<div class="dark-block">
+    <div class="col-md-8 col-md-offset-2" id="msgs-card">
+        <h4>Title</h4>
+        <p>Message</p>
+    </div>
+</div>
+<div class="col-md-12 col-sm-12 no-padding">
+    <div class="col-md-7 col-md-offset-1 col-sm-10 col-sm-offset-0">
+        <div class="col-md-12 col-sm-12 no-padding module module-active" id="stadiumsModule">
             <div class="tabsContainer no-padding col-md-12">
-                <a href="#" class="tab tab-active col-md-4" id="addingLauncher">Add</a>
-                <a href="#" class="tab col-md-4" id="editingLauncher">Edit</a>
-                <a href="#" class="tab col-md-4" id="deletingLauncher">Remove</a>
+                <a href="#" class="tab tab-active col-md-4 col-sm-4" id="addingLauncher">Add</a>
+                <a href="#" class="tab col-md-4 col-sm-4" id="editingLauncher">Edit</a>
+                <a href="#" class="tab col-md-4 col-sm-4" id="deletingLauncher">Remove</a>
             </div>
             <div class="col-md-12 no-padding sub-module sub-module-active" id="addingModule" style="padding: 20px;">
                 <h3>New stadium</h3>
-                <div class="form-group col-md-12 no-padding">
-                    <input type="text" name="name" value="" class="blackInput col-md-6" placeholder="Pick a name...">
+                <div class="form-group col-md-7 col-sm-7 no-padding">
+                    <input type="text" name="name" value="" class="blackInput col-md-12 col-sm-12" placeholder="Pick a name...">
+                </div>
+                <div class="form-group col-md-5 col-sm-5">
+                    <button type="button" name="button" id="addBtn" class="blueBtn col-md-11 col-sm-8 col-sm-offset-3 col-md-offset-1">Add!</button>
                 </div>
                 <div class="form-group col-md-12 no-padding">
-                    <input type="location" name="name" value="" class="blackInput col-md-6" placeholder="Write the location...">
-                </div>
-                <div class="form-group col-md-12 no-padding">
-                    <div class="col-md-3 no-padding" id="file-container">
+                    <div class="col-md-7 no-padding" id="file-container">
                         <p>Select a photo</p>
-                        <input type="file" name="name" class="input-file">
+                        <input type="file" name="photo" class="input-file">
                     </div>
                     <div class="col-md-12"></div>
-                    <p class="col-md-6" id="file-info">No file selected...</p>
+                    <p class="col-md-7" id="file-info">No file selected...</p>
                 </div>
-                <div class="form-group">
-                    <button type="button" name="button" class="blueBtn col-md-4 col-md-offset-8">Add!</button>
+                <label for="" class="col-md-7 no-padding">Select the location...</label>
+                <div class="col-md-7 no-padding" id="gmaps-container">
+
+                </div>
+                <div class="form-group col-md-5">
+                  <div class="alert-card col-md-11 col-md-offset-1">
+                    <h4>Instructions:</h4>
+                    <p>1. Make zoom to select accurately the stadium's location.</p>
+                    <p>2. Move the marker to the wished point.</p>
+                    <p>3. Once you get ready, and you have filled all the information, click add!</p>
+                  </div>
                 </div>
             </div>
             <div class="col-md-12 no-padding sub-module" id="editingModule">
@@ -259,21 +316,131 @@ League management
             </p>
         </div>
     </div>
-    <div class="col-md-2 col-md-offset-1" id="manageMenu">
-        <a class="manageMenuHeader col-md-12">Manage...</a>
-        <a href="#" id="stadiumsLauncher" class="manageMenuItem item-active col-md-12">Stadiums</a>
-        <a href="#" id="coachesLauncher" class="manageMenuItem col-md-12">Coaches</a>
-        <a href="#" id="teamsLauncher" class="manageMenuItem col-md-12">Teams</a>
-        <a href="#" id="playersLauncher" class="manageMenuItem col-md-12">Players</a>
+    <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0" id="manageMenu">
+        <a class="manageMenuHeader col-md-12 col-sm-12">Manage...</a>
+        <a href="#" id="stadiumsLauncher" class="manageMenuItem item-active col-md-12 col-sm-12">Stadiums</a>
+        <a href="#" id="coachesLauncher" class="manageMenuItem col-md-12 col-sm-12">Coaches</a>
+        <a href="#" id="teamsLauncher" class="manageMenuItem col-md-12 col-sm-12">Teams</a>
+        <a href="#" id="playersLauncher" class="manageMenuItem col-md-12 col-sm-12">Players</a>
     </div>
 </div>
 @endsection
 
 @section('js')
 <script type="text/javascript">
+    var marker, map;
+    function initMap() {
+        var myLatLng = {lat: 40.416786, lng: -3.703788};
+        map = new google.maps.Map($('#gmaps-container')[0], {
+            zoom: 6,
+            center: myLatLng
+        });
+
+        marker = new google.maps.Marker({
+            position: myLatLng,
+            animation: google.maps.Animation.DROP,
+            map: map,
+            title: 'Move me to a point!',
+            draggable: true
+        });
+
+        map.addListener('click', function (e) {
+            marker.setPosition(e.latLng);
+        });
+    }
+
+    $.ajax({
+        url: '/getStadiums',
+        type:'post',
+        dataType:'json',
+        data: {
+            _token: '{{csrf_token()}}'
+        }
+    }).done(function(response){
+        $.each(response ,function (i, e) {
+            var mker = new google.maps.Marker({
+                position: JSON.parse(e['location']),
+                map: map,
+                title: e['name']
+            });
+        });
+    });
+
     $(function($){
+        $('.dark-block').click(function () {
+            var parent = $(this);
+            var children = parent.children('#msgs-card');
+            children.removeClass(alertClass);
+            children.css('bottom','-200px');
+            children.fadeOut(200,function () {
+                parent.fadeOut('fast',function () {
+                    parent.css('display','none');
+                });
+            });
+        });
+
+        var alertClass = "";
+        $('#addBtn').click(function () {
+            if(map.zoom < 15){
+                showMessages('Stop just there!','You need to aument the zoom for select accurately!','alert-card');
+            }
+            else if(!$('input[type=file][class=input-file]')[0].files[0]){
+                showMessages('Stop just there!','You must to select a photo!','alert-card');
+            }
+            else if($('input[name=name]').val() == "") showMessages('Stop just there!','The stadium must have a name!','alert-card');
+            else {
+                $.ajax({
+                    url:'/addStadium',
+                    type: 'post',
+                    dataType:'json',
+                    data:{
+                        location: JSON.stringify(marker.position),
+                        _token: '{{csrf_token()}}'
+                    }
+                }).done(function (response) {
+                    //fix. add stadium tu map and show messages
+                    var mker = new google.maps.Marker({
+                        title: response['stadium']['name'],
+                        icon: response['stadium']['photo'],
+                        position: response['stadium']['location'],
+                        map: map,
+                        animation: google.maps.Animation.DROP
+                    });
+                    showMessages(response['msgs']['title'], response['msgs']['content'][0], response['msgs']['type']);
+                });
+            }
+        });
+
+        function showMessages(title, msg){
+            var parent = $('.dark-block');
+            var children = parent.children('#msgs-card');
+            children.children('h4').text(title);
+            children.children('p').text(msg);
+            children.css('bottom','0px');
+            children.fadeIn(200,function () {
+                parent.fadeIn('fast',function () {
+                    parent.css('display','initial');
+                });
+            });
+        }
+
+        function showMessages(title, msg, type){
+            var parent = $('.dark-block');
+            var children = parent.children('#msgs-card');
+            alertClass = type;
+            children.addClass(type);
+            children.children('h4').text(title);
+            children.children('p').text(msg);
+            children.css('bottom','0px');
+            children.fadeIn(200,function () {
+                parent.fadeIn('fast',function () {
+                    parent.css('display','initial');
+                });
+            });
+        }
+
         $(window).scroll(function () {
-            if($(this).scrollTop() > $('.coverContainer').height()){
+            if($(this).scrollTop() > $('.coverContainer').height() - 50){
                 $('nav[class=navBar]').css('background-color', 'black');
             }
             else{
@@ -282,7 +449,6 @@ League management
         });
         $('input[type=file][class=input-file]').change(function () {
             var file = this.files[0];
-            console.log(file);
             if(file){
                 $('#file-info').text("1 selected ("+file.name+").");
             }
@@ -330,4 +496,6 @@ League management
         });
     });
 </script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9fuikPcHicK9HnQSzmHM-iZikumk6710&signed_in=false&callback=initMap"></script>
 @endsection

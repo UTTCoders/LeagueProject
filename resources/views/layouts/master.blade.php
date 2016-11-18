@@ -277,7 +277,7 @@
                 <div class="menuBar"></div>
             </div>
                 @if(Auth::user()->type)
-                <a class="navItem toRight">Admin: {{Auth::user()->name}}<div class="bottomBar"></div></a>
+                <a class="navItem toRight">{{Auth::user()->name}} (admin)<div class="bottomBar"></div></a>
                 @else
                 <a class="navItem toRight">{{Auth::user()->name}}<div class="bottomBar"></div></a>
                 @endif
@@ -290,7 +290,14 @@
         @if(Auth::check())
             @if(Auth::user()->type)
             <!-- Here goes the admin options :O -->
-
+            <div class="menuPanel">
+                <div class="itemsContainer">
+                    <a href="#" id="1"  class="panelItem event">Prueba</a>
+                    <a href="#" id="1" class="panelSubItem" style="display:none">Hijo</a>
+                    <a href="/logout" class="panelItem">Log out</a>
+                </div>
+                <a href="/favorites" class="panelItem" style="position:absolute;bottom:72px;">Favorites</a>
+            </div>
 
             @else
             <!-- And here the user options :D -->
