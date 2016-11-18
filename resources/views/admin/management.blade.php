@@ -248,15 +248,15 @@ League management
             <div class="col-md-12 no-padding sub-module sub-module-active" id="addingModule" style="padding: 20px;">
                 <h3>New stadium</h3>
                 <div class="form-group col-md-7 col-sm-7 no-padding">
-                    <input type="text" name="name" value="" class="blackInput col-md-12 col-sm-12" placeholder="Pick a name...">
+                    <input type="text" name="stadium-name" value="" class="blackInput col-md-12 col-sm-12" placeholder="Pick a name...">
                 </div>
                 <div class="form-group col-md-5 col-sm-5">
-                    <button type="button" name="button" id="addBtn" class="blueBtn col-md-11 col-sm-8 col-sm-offset-3 col-md-offset-1">Add!</button>
+                    <button type="button" id="addBtn" class="blueBtn col-md-11 col-sm-8 col-sm-offset-3 col-md-offset-1">Add!</button>
                 </div>
                 <div class="form-group col-md-12 no-padding">
                     <div class="col-md-7 no-padding" id="file-container">
                         <p>Select a photo</p>
-                        <input type="file" name="photo" class="input-file">
+                        <input type="file" name="stadium-photo" class="input-file">
                     </div>
                     <div class="col-md-12"></div>
                     <p class="col-md-7" id="file-info">No file selected...</p>
@@ -333,7 +333,10 @@ League management
         var myLatLng = {lat: 40.416786, lng: -3.703788};
         map = new google.maps.Map($('#gmaps-container')[0], {
             zoom: 6,
-            center: myLatLng
+            center: myLatLng,
+            mapTypeControl: false,
+            scaleControl:false,
+            streetViewControl: false
         });
 
         marker = new google.maps.Marker({
@@ -389,23 +392,33 @@ League management
             }
             else if($('input[name=name]').val() == "") showMessages('Stop just there!','The stadium must have a name!','alert-card');
             else {
+                var formData = new FormData();
+                formData.append('photo' ,$('input[type=file][class=input-file]')[0].files[0]);
+                formData.append('location', JSON.stringify(marker.position));
+                formData.append('_token','{{csrf_token()}}');
+                formData.append('name', $('input[name=stadium-name]').val());
+                console.log(formData.get('photo'));
+                console.log(JSON.stringify(marker.position));
                 $.ajax({
                     url:'/addStadium',
                     type: 'post',
                     dataType:'json',
-                    data:{
-                        location: JSON.stringify(marker.position),
-                        _token: '{{csrf_token()}}'
-                    }
+                    data: formData,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false,  // tell jQuery not to set contentType
                 }).done(function (response) {
-                    //fix. add stadium tu map and show messages
-                    var mker = new google.maps.Marker({
-                        title: response['stadium']['name'],
-                        icon: response['stadium']['photo'],
-                        position: response['stadium']['location'],
-                        map: map,
-                        animation: google.maps.Animation.DROP
-                    });
+                    //fix. add stadium to map and show messages
+                    if(response['stadium']){
+                        marker.setPosition({lat: 40.416786, lng: -3.703788});
+                        map.setZoom(6);
+                        var mker = new google.maps.Marker({
+                            title: response['stadium']['name'],
+                            position: JSON.parse(response['stadium']['location']),
+                            icon: response['stadium']['photo'],
+                            map: map,
+                            animation: google.maps.Animation.DROP
+                        });
+                    }
                     showMessages(response['msgs']['title'], response['msgs']['content'][0], response['msgs']['type']);
                 });
             }

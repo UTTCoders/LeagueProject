@@ -7,7 +7,7 @@ Sign up on league-project
 @section('css')
 <style>
     body{
-        background-color: #222525;    
+        background-color: #222525;
     }
     #signupCard{
         margin-bottom: 80px;
@@ -30,8 +30,8 @@ Sign up on league-project
         color: white;
     }
     #signupContainer{
-        padding-top:90px; 
-        background-color: transparent; 
+        padding-top:90px;
+        background-color: transparent;
         width: 100%;
         -webkit-transition: padding .6s, opacity 1s;
         opacity: 0;
@@ -130,6 +130,9 @@ Sign up on league-project
     .success{
         color: #6d9;
     }
+    .myInputWhite{
+        color: #444;
+    }
 </style>
 @endsection
 
@@ -199,7 +202,7 @@ Sign up on league-project
                 <div class="form-group">
                     <button id="myLogBtn" class="btn col-md-12 col-xs-12">Log in</button>
                 </div>
-            </form> 
+            </form>
             <br>
         </div>
     </div>
