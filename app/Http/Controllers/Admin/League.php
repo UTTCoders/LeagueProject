@@ -51,7 +51,7 @@ class League extends Controller
             'photo' => $path,
             'location' => json_encode($loc)
         ]);
-        return [$stadium->team];
+        
         return [
             'msgs' => ['title' => 'Good done!' ,'type' => 'success-card' ,'content' => ['Success!']],
             'stadium' => $stadium

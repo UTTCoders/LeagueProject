@@ -364,6 +364,9 @@ League management
             var mker = new google.maps.Marker({
                 position: JSON.parse(e['location']),
                 map: map,
+                icon: {
+                    url: "img/icons/ic_place_black_24dp_1x.png"
+                },
                 title: e['name']
             });
         });
@@ -397,8 +400,6 @@ League management
                 formData.append('location', JSON.stringify(marker.position));
                 formData.append('_token','{{csrf_token()}}');
                 formData.append('name', $('input[name=stadium-name]').val());
-                console.log(formData.get('photo'));
-                console.log(JSON.stringify(marker.position));
                 $.ajax({
                     url:'/addStadium',
                     type: 'post',
@@ -414,7 +415,7 @@ League management
                         var mker = new google.maps.Marker({
                             title: response['stadium']['name'],
                             position: JSON.parse(response['stadium']['location']),
-                            icon: response['stadium']['photo'],
+                            icon: "img/icons/ic_place_black_24dp_1x.png",
                             map: map,
                             animation: google.maps.Animation.DROP
                         });
