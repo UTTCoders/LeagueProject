@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\League\Stadium;
 use Validator;
+use Storage;
 
 class League extends Controller
 {
@@ -42,14 +43,17 @@ class League extends Controller
                 'stadium' => null
             ];
         }
-        $path = $request->photo->store('img/stadiums','public');
+
+        $path = $request->file('photo')->store('img/stadiums','public');
+
         $stadium = Stadium::create([
             'name' => $request->name,
             'photo' => $path,
-            'location' => $loc,
+            'location' => json_encode($loc)
         ]);
+        
         return [
-            'msgs' => ['title' => 'Good done!' ,'type' => 'error-card' ,'content' => ['Success!']],
+            'msgs' => ['title' => 'Good done!' ,'type' => 'success-card' ,'content' => ['Success!']],
             'stadium' => $stadium
         ];
     }

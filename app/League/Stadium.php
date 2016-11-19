@@ -11,6 +11,6 @@ class Stadium extends Model
     public $timestamps = false;
 
     public function team(){
-        return $this->has('App\League\Team');
+        return $this->hasOne('App\League\Team');
     }
 }
