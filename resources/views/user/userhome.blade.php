@@ -11,7 +11,7 @@
 }
 html, body { 
 	height: 100%;
-	width: 100%
+	width: 100%;
 	margin: 0; 
 	padding: 0;
 	background-image: url(/img/c2.jpg);
@@ -30,7 +30,11 @@ html, body {
     padding: 10px;
     -webkit-transition: background-color .4s;
     margin-bottom: 0;
-}   
+}
+.footer{
+	display: block;
+	background-color: #212121;
+}
 </style>
 @endsection
 
