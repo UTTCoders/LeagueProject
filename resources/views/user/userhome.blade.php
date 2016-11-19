@@ -4,12 +4,35 @@
 
 @section('css')
 <link rel="stylesheet" type="text/css" href="/css/someanyicss.css">
-<style type="text/css"></style>
+<style type="text/css">
+#map{
+	margin-top: 70px;
+	width: 100%;
+	height: 90%;
+}
+html, body { 
+	height: 100%;
+	margin: 0; 
+	padding: 0;
+	background-color: #212121;
+}
+.navBar{
+	width: 100%;
+	top: 0px;
+    left: 0px;
+    position: fixed;
+    z-index: 1;
+    background-color: #000;
+    display: inline-block;
+    padding: 10px;
+    -webkit-transition: background-color .4s;
+}      
+</style>
 @endsection
 
 @section('body')
-<div class="coverContainer">
-    <h2 style="color:white; margin-top: 100px;" id="mainTitle">Get in news about your favorite teams, follow their matches in real time,<br>view statistics and more...</h2>
+<div class="container">
+   	<h2 style="color:white; margin-top: 140px;" id="mainTitle">Follow your passion!<br>Here you can see all of the stadiums.</h2>
 </div>
 <div id="map"></div>
 @endsection
