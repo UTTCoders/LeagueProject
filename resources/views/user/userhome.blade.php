@@ -11,9 +11,9 @@
 }
 html, body { 
 	height: 100%;
+	width: 100%
 	margin: 0; 
 	padding: 0;
-	background-color: #212121;
 	background-image: url(/img/c2.jpg);
 	background-repeat: no-repeat;
 	background-position: center;
@@ -29,16 +29,14 @@ html, body {
     display: inline-block;
     padding: 10px;
     -webkit-transition: background-color .4s;
-}    
-.footer{
-	display: block;
-}
+    margin-bottom: 0;
+}   
 </style>
 @endsection
 
 @section('body')
-<div class="container" style="margin-top: 50px;">
-<div align="center">
+<div class="container">
+<div align="center" style="margin-top: 50px;">
 	<img src="/img/Logo La Liga Spain.png" style="width: 30%; color: white;">
 </div>
    	<h2 style="color:white; margin-top: 0;" id="mainTitle">Follow your passion!<br>Here you can visit all of the stadiums!</h2>
