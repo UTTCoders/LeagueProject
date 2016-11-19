@@ -14,10 +14,10 @@ html, body {
 	width: 100%;
 	margin: 0; 
 	padding: 0;
-	background-image: url(/img/c2.jpg);
+	background-image: url(/img/stadium.jpg);
 	background-repeat: no-repeat;
-	background-position: center;
 	background-size: 100%;
+	background-position: center;
 }
 .navBar{
 	width: 100%;
@@ -35,12 +35,19 @@ html, body {
 	display: block;
 	background-color: #212121;
 }
+#mainTitle{
+	text-align: center;
+	color: rgba(255,255,255,0);
+	margin-top: 200px;
+	text-shadow: 0px 0px 5px #000;
+	-webkit-transition: margin-top .9s, color .8s;
+}
 </style>
 @endsection
 
 @section('body')
 <div class="container">
-<div align="center" style="margin-top: 120px;">
+<div align="center" style="margin-top: 150px;">
 	<img src="/img/cucu3.gif" style="width: 15%; color: white;">
 </div>
    	<h2 style="color:white; margin-top: 0;" id="mainTitle">Follow your passion!<br>Here you can visit all of the stadiums!</h2>
