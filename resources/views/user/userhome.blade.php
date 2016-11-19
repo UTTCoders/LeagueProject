@@ -40,8 +40,8 @@ html, body {
 
 @section('body')
 <div class="container">
-<div align="center" style="margin-top: 50px;">
-	<img src="/img/Logo La Liga Spain.png" style="width: 30%; color: white;">
+<div align="center" style="margin-top: 120px;">
+	<img src="/img/cucu3.gif" style="width: 15%; color: white;">
 </div>
    	<h2 style="color:white; margin-top: 0;" id="mainTitle">Follow your passion!<br>Here you can visit all of the stadiums!</h2>
 </div>
