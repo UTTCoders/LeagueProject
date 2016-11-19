@@ -6,7 +6,6 @@
 <link rel="stylesheet" type="text/css" href="/css/someanyicss.css">
 <style type="text/css">
 #map{
-	margin-top: 70px;
 	width: 100%;
 	height: 90%;
 }
@@ -15,6 +14,10 @@ html, body {
 	margin: 0; 
 	padding: 0;
 	background-color: #212121;
+	background-image: url(/img/c2.jpg);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 100%;
 }
 .navBar{
 	width: 100%;
@@ -26,13 +29,23 @@ html, body {
     display: inline-block;
     padding: 10px;
     -webkit-transition: background-color .4s;
-}      
+}    
+.footer{
+	display: block;
+}
 </style>
 @endsection
 
 @section('body')
-<div class="container">
-   	<h2 style="color:white; margin-top: 140px;" id="mainTitle">Follow your passion!<br>Here you can see all of the stadiums.</h2>
+<div class="container" style="margin-top: 50px;">
+<div align="center">
+	<img src="/img/Logo La Liga Spain.png" style="width: 30%; color: white;">
+</div>
+   	<h2 style="color:white; margin-top: 0;" id="mainTitle">Follow your passion!<br>Here you can visit all of the stadiums!</h2>
+</div>
+<br><br><br>
+<div style="margin-bottom: 0; background-color:#B71C1C; " class="jumbotron">
+	
 </div>
 <div id="map"></div>
 @endsection

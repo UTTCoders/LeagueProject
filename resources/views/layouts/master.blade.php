@@ -305,9 +305,9 @@
                     <div class="itemsContainer">
                         <a href="#" id="1"  class="panelItem event">Prueba</a>
                         <a href="#" id="1" class="panelSubItem" style="display:none">Hijo</a>
+                        <a href="/favorites" class="panelItem">Favorites</a>
                         <a href="/logout" class="panelItem">Log out</a>
                     </div>
-                    <a href="/favorites" class="panelItem" style="position:absolute;bottom:72px;">Favorites</a>
                 </div>
             @endif
         @endif
