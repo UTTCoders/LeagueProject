@@ -10,6 +10,7 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="{{elixir('css/app.css')}}">
+        <link rel="icon" href="/img/cucu3.gif">
         <!-- Styles -->
         <style>
             .title {
@@ -305,9 +306,9 @@
                     <div class="itemsContainer">
                         <a href="#" id="1"  class="panelItem event">Prueba</a>
                         <a href="#" id="1" class="panelSubItem" style="display:none">Hijo</a>
+                        <a href="/favorites" class="panelItem">Favorites</a>
                         <a href="/logout" class="panelItem">Log out</a>
                     </div>
-                    <a href="/favorites" class="panelItem" style="position:absolute;bottom:72px;">Favorites</a>
                 </div>
             @endif
         @endif
