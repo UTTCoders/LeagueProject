@@ -33,9 +33,11 @@ Route::group(['middleware' => ['authen']], function(){
 				return view('admin.calendar');
 		})->middleware('admin');
 
-		Route::post('/getStadiums','Admin\League@getStadiums');
+		Route::post('/getStadiums','Admin\League@getStadiums')->middleware('admin');
 
-		Route::post('/addStadium','Admin\League@addStadium');
+		Route::post('/addStadium','Admin\League@addStadium')->middleware('admin');
+
+		Route::post('/getStadium','Admin\League@getStadiumByLocation')->middleware('admin');
 
 });
 
