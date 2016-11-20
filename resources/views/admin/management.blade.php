@@ -183,10 +183,16 @@ League management
       padding: 5px;
     }
     #gmaps-container{
-      height: 300px;
-      border-radius: 3px;
-      box-shadow: 0px 1px 6px 0px #000;
-      margin-bottom: 10px;
+        margin-bottom: 10px;
+    }
+    #gmaps-container2{
+        margin: 0px 0px 15px 15px;
+    }
+    .gmaps-container{
+        height: 300px;
+        border-radius: 3px;
+        box-shadow: 0px 1px 6px 0px #000;
+        overflow: hidden;
     }
     .alert-card{
         background-color: #da2;
@@ -224,6 +230,16 @@ League management
         width: 100%;
         background-color: rgba(0, 0, 0, .6)
     }
+    #gmap{
+        height: 100%;
+        width: 100%;
+    }
+    #editingStadiumDiv{
+        display: none;
+    }
+    #photo-holder{
+        margin-bottom: 15px;
+    }
 </style>
 @endsection
 
@@ -240,18 +256,21 @@ League management
 <div class="col-md-12 col-sm-12 no-padding">
     <div class="col-md-7 col-md-offset-1 col-sm-10 col-sm-offset-0">
         <div class="col-md-12 col-sm-12 no-padding module module-active" id="stadiumsModule">
+            <!-- tabs -->
             <div class="tabsContainer no-padding col-md-12">
                 <a href="#" class="tab tab-active col-md-4 col-sm-4" id="addingLauncher">Add</a>
                 <a href="#" class="tab col-md-4 col-sm-4" id="editingLauncher">Edit</a>
                 <a href="#" class="tab col-md-4 col-sm-4" id="deletingLauncher">Remove</a>
             </div>
+            <!---->
+            <!-- adding -->
             <div class="col-md-12 no-padding sub-module sub-module-active" id="addingModule" style="padding: 20px;">
                 <h3>New stadium</h3>
                 <div class="form-group col-md-7 col-sm-7 no-padding">
                     <input type="text" name="stadium-name" value="" class="blackInput col-md-12 col-sm-12" placeholder="Pick a name...">
                 </div>
                 <div class="form-group col-md-5 col-sm-5">
-                    <button type="button" id="addBtn" class="blueBtn col-md-11 col-sm-8 col-sm-offset-3 col-md-offset-1">Add!</button>
+                    <button type="button" id="addStadiumBtn" class="blueBtn col-md-11 col-sm-8 col-sm-offset-3 col-md-offset-1">Add!</button>
                 </div>
                 <div class="form-group col-md-12 no-padding">
                     <div class="col-md-7 no-padding" id="file-container">
@@ -262,8 +281,10 @@ League management
                     <p class="col-md-7" id="file-info">No file selected...</p>
                 </div>
                 <label for="" class="col-md-7 no-padding">Select the location...</label>
-                <div class="col-md-7 no-padding" id="gmaps-container">
+                <div class="col-md-7 no-padding gmaps-container" id="gmaps-container">
+                    <div id="gmap">
 
+                    </div>
                 </div>
                 <div class="form-group col-md-5">
                   <div class="alert-card col-md-11 col-md-offset-1">
@@ -274,16 +295,41 @@ League management
                   </div>
                 </div>
             </div>
+            <!---->
+            <!-- editing -->
             <div class="col-md-12 no-padding sub-module" id="editingModule">
-                <p>
-                  editing
-                </p>
+                <h3 class="col-md-12">Select one...</h3>
+                <div class="col-md-6 no-padding gmaps-container" id="gmaps-container2">
+
+                </div>
+                <div class="col-md-5" id="editingStadiumDiv">
+                    <p class="col-md-12">Modify the information</p>
+                    <img id="photo-holder" class="col-md-10" src="">
+                    <div class="form-group col-md-12">
+                        <input type="text" name="newStadiumName" value="" placeholder="Name..." class="myInputWhite col-md-10">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <div class="col-md-10" id="file-container">
+                            <p>Select a photo</p>
+                            <input type="file" name="stadium-photo" class="input-file">
+                        </div>
+                        <div class="col-md-12"></div>
+                        <p class="col-md-12" id="file-info">No file selected...</p>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <button type="button" class="btnBlue" name="editStadiumBtn">Accept</button>
+                    </div>
+                </div>
+
             </div>
+            <!---->
+            <!-- deleting -->
             <div class="col-md-12 no-padding sub-module" id="deletingModule">
                 <p>
                   deleting
                 </p>
             </div>
+            <!---->
         </div>
         <div class="col-md-12 no-padding module" id="coachesModule">
             <div class="tabsContainer no-padding col-md-12">
@@ -328,10 +374,11 @@ League management
 
 @section('js')
 <script type="text/javascript">
-    var marker, map;
+    var marker, map, myLatLng, stadiumsMarkers = [];
+    var mapDiv = $('.gmaps-container > #gmap')[0];
     function initMap() {
-        var myLatLng = {lat: 40.416786, lng: -3.703788};
-        map = new google.maps.Map($('#gmaps-container')[0], {
+        myLatLng = {lat: 40.416786, lng: -3.703788};
+        map = new google.maps.Map(mapDiv, {
             zoom: 6,
             center: myLatLng,
             mapTypeControl: false,
@@ -369,6 +416,7 @@ League management
                 },
                 title: e['name']
             });
+            stadiumsMarkers.push(mker);
         });
     });
 
@@ -386,43 +434,64 @@ League management
         });
 
         var alertClass = "";
-        $('#addBtn').click(function () {
-            if(map.zoom < 15){
-                showMessages('Stop just there!','You need to aument the zoom for select accurately!','alert-card');
-            }
-            else if(!$('input[type=file][class=input-file]')[0].files[0]){
-                showMessages('Stop just there!','You must to select a photo!','alert-card');
-            }
-            else if($('input[name=name]').val() == "") showMessages('Stop just there!','The stadium must have a name!','alert-card');
-            else {
-                var formData = new FormData();
-                formData.append('photo' ,$('input[type=file][class=input-file]')[0].files[0]);
-                formData.append('location', JSON.stringify(marker.position));
-                formData.append('_token','{{csrf_token()}}');
-                formData.append('name', $('input[name=stadium-name]').val());
-                $.ajax({
-                    url:'/addStadium',
-                    type: 'post',
-                    dataType:'json',
-                    data: formData,
-                    processData: false,  // tell jQuery not to process the data
-                    contentType: false,  // tell jQuery not to set contentType
-                }).done(function (response) {
-                    //fix. add stadium to map and show messages
-                    if(response['stadium']){
-                        marker.setPosition({lat: 40.416786, lng: -3.703788});
-                        map.setZoom(6);
-                        var mker = new google.maps.Marker({
-                            title: response['stadium']['name'],
-                            position: JSON.parse(response['stadium']['location']),
-                            icon: "img/icons/ic_place_black_24dp_1x.png",
-                            map: map,
-                            animation: google.maps.Animation.DROP
-                        });
+        $('#addStadiumBtn').click(function () {
+            $.ajax({
+                url:'https://maps.googleapis.com/maps/api/geocode/json?latlng='+marker.getPosition().lat()+','+marker.getPosition().lng()+'&key=AIzaSyC9fuikPcHicK9HnQSzmHM-iZikumk6710',
+                type:'post',
+                dataType:'json'
+            }).done(function (response) {
+                if(response.status == 'OK'){
+                    var arr = $.grep(response.results, function (obj) {
+                        return ($.inArray('country',obj.types) != -1);
+                    });
+                    if(arr[0].formatted_address == 'España' || arr[0].formatted_address == 'Spain'){
+                        if(map.zoom < 15){
+                            showMessages('Stop just there!','You need to aument the zoom for select accurately!','alert-card');
+                        }
+                        else if(!$('input[type=file][class=input-file]')[0].files[0]){
+                            showMessages('Stop just there!','You must to select a photo!','alert-card');
+                        }
+                        else if($('input[name=name]').val() == "") showMessages('Stop just there!','The stadium must have a name!','alert-card');
+                        else {
+                            var formData = new FormData();
+                            formData.append('photo' ,$('input[type=file][class=input-file]')[0].files[0]);
+                            formData.append('lat', marker.getPosition().lat());
+                            formData.append('lng', marker.getPosition().lng());
+                            formData.append('_token','{{csrf_token()}}');
+                            formData.append('name', $('input[name=stadium-name]').val());
+                            $.ajax({
+                                url:'/addStadium',
+                                type: 'post',
+                                dataType:'json',
+                                data: formData,
+                                processData: false,  // tell jQuery not to process the data
+                                contentType: false,  // tell jQuery not to set contentType
+
+                            }).done(function (response) {
+                                //fix. add stadium to map and show messages
+                                if(response['stadium']){
+                                    marker.setPosition({lat: 40.416786, lng: -3.703788});
+                                    map.setZoom(6);
+                                    var mker = new google.maps.Marker({
+                                        title: response['stadium']['name'],
+                                        position: JSON.parse(response['stadium']['location']),
+                                        icon: "img/icons/ic_place_black_24dp_1x.png",
+                                        map: map,
+                                        animation: google.maps.Animation.DROP
+                                    });
+                                    stadiumsMarkers.push(mker);
+                                }
+                                showMessages(response['msgs']['title'], response['msgs']['content'][0], response['msgs']['type']);
+                            });
+                        }
                     }
-                    showMessages(response['msgs']['title'], response['msgs']['content'][0], response['msgs']['type']);
-                });
-            }
+                    else showMessages('Ups!',['The stadiums must be only from Spain.'],'error-card');
+                }
+                else{
+                    showMessages('Ups!',['Have been an error! Select a valid point.'],'error-card');
+                }
+            });
+
         });
 
         function showMessages(title, msg){
@@ -461,15 +530,17 @@ League management
                 $('nav[class=navBar]').css('background-color', 'transparent');
             }
         });
+
         $('input[type=file][class=input-file]').change(function () {
             var file = this.files[0];
             if(file){
-                $('#file-info').text("1 selected ("+file.name+").");
+                $(this).parent().parent().children('#file-info').text("1 selected ("+file.name+").");
             }
             else{
-                $('#file-info').text("No file selected.");
+                $(this).parent().parent().children('#file-info').text("No file selected.");
             }
         });
+
         $.each($('.manageMenuItem'), function (index, element) {
             $(element).click(function () {
                 if(!$(this).hasClass('item-active')){
@@ -489,19 +560,55 @@ League management
                 }
             });
         });
+
         $.each($('.tab'), function (index, element) {
             $(element).click(function () {
                 if(!$(element).hasClass('tab-active')){
-                    $.each($('.tab'),function (i,elem) {
+                    $.each($(element).parent().children('.tab'),function (i,elem) {
                         $(elem).removeClass('tab-active');
                     });
-                    $.each($('.sub-module'),function (i,elem) {
+                    $.each($(element).parent().parent().children('.sub-module'),function (i,elem) {
                         $(elem).fadeOut(0, function () {
                             $(elem).removeClass('sub-module-active');
                         });
                     });
                     $(this).addClass('tab-active');
                     var subMod = $(element).parent().parent().children('#'+$(this).attr('id').replace('Launcher','Module'));
+                    subMod.children('.gmaps-container').append(mapDiv);
+                    if(subMod.parent().attr('id') == 'stadiumsModule'){
+                        if(subMod.attr('id').toLowerCase().indexOf('adding') < 0){
+                            marker.setVisible(false);
+                            $.each(stadiumsMarkers, function (i, elem) {
+                                elem.addListener('click', function () {
+                                    if($('#editingStadiumDiv').css('display') == 'none'){
+                                        $('#editingStadiumDiv').fadeIn('fast');
+                                    }
+                                    $.ajax({
+                                        url:'/getStadium',
+                                        dataType:'json',
+                                        type:'post',
+                                        data:{
+                                            _token: '{{csrf_token()}}',
+                                            location: elem.position.toJSON()
+                                        }
+                                    }).done(function (response) {
+                                        if(response['stadium']){
+                                            console.log(response['stadium'].photo);
+                                            $('#editingStadiumDiv').children('img').attr('src','storage/'+response['stadium'].photo);
+                                            //show name and edit location
+                                        }
+                                        else showMessages('Ups!',['Have been an error! Try again.'],'error-card');
+                                    });
+                                });
+                            });
+                        }
+                        else{
+                            marker.setVisible(true);
+                            $.each(stadiumsMarkers, function (i, elem) {
+                                google.maps.event.clearListeners(elem, 'click');
+                            });
+                        }
+                    }
                     subMod.fadeIn("slow", function () {
                         subMod.addClass('sub-module-active');
                     });
@@ -511,5 +618,5 @@ League management
     });
 </script>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9fuikPcHicK9HnQSzmHM-iZikumk6710&signed_in=false&callback=initMap"></script>
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9fuikPcHicK9HnQSzmHM-iZikumk6710&callback=initMap"></script>
 @endsection
