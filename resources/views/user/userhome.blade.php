@@ -14,6 +14,7 @@ html, body {
 	width: 100%;
 	margin: 0; 
 	padding: 0;
+	background-color: #212121;
 	background-image: url(/img/stadium.jpg);
 	background-repeat: no-repeat;
 	background-size: 100%;
@@ -41,6 +42,10 @@ html, body {
 	margin-top: 200px;
 	text-shadow: 0px 0px 5px #000;
 	-webkit-transition: margin-top .9s, color .8s;
+}
+#map{
+	border: 5px solid #212121;
+	border-radius: 0;
 }
 </style>
 @endsection
