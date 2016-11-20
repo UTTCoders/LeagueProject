@@ -44,7 +44,7 @@ html, body {
 	-webkit-transition: margin-top .9s, color .8s;
 }
 #map{
-	border: 5px solid #212121;
+	border: 3px solid #B71C1C;
 	border-radius: 0;
 }
 </style>
@@ -69,5 +69,6 @@ html, body {
 
 @section('js')
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqiB2cyhlFaZJmw6_x1Cz7-AvGH5dkTLU&callback=initMap&language=EN" async defer></script>
+<script src="/js/usermapoptions.js"></script>
 <script src="/js/usermap.js"></script>
 @endsection
