@@ -53,21 +53,16 @@ html, body {
    	<h2 style="color:white; margin-top: 0;" id="mainTitle">Follow your passion!<br>Here you can visit all of the stadiums!</h2>
 </div>
 <br><br><br>
-<div style="margin-bottom: 0; background-color:#B71C1C; " class="jumbotron">
-	
+<div style="color: #eee; margin-bottom: 0; background-color:#B71C1C; " class="jumbotron">
+<div class="container">	
+	<h3>Checkout our google map to visit your favorite stadiums!</h3>
+	<hr>
+</div>
 </div>
 <div id="map"></div>
 @endsection
 
 @section('js')
-<script>
-var map;
-function initMap() {
-	map = new google.maps.Map(document.getElementById('map'), {
-		center: {lat: 0, lng: 0},
-        zoom: 6
-    });
-}
-</script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqiB2cyhlFaZJmw6_x1Cz7-AvGH5dkTLU&callback=initMap&language=EN" async defer></script>
+<script src="/js/usermap.js"></script>
 @endsection
