@@ -57,3 +57,7 @@ Route::get('/prueba1','Admin\League@addStadium');
 Route::get('/prueba2', function(){
     return view('admin.calendar');
 });
+
+Route::get('/prueba3',function(){
+	return view('user.userhome');
+});
