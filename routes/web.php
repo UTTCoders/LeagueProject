@@ -43,6 +43,8 @@ Route::group(['middleware' => ['authen']], function(){
 
 		Route::post('/getStadiumById','Admin\League@getStadiumById');
 
+		Route::post('/deleteStadium','Admin\League@deleteStadium');
+
 });
 
 //Route for the login needs to get inside the app without middleware

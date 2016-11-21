@@ -186,7 +186,6 @@ League management
         margin-bottom: 10px;
     }
     #gmaps-container2{
-        margin: 0px 0px 15px 15px;
     }
     .gmaps-container{
         height: 300px;
@@ -236,9 +235,19 @@ League management
     }
     #editingStadiumDiv{
         display: none;
+        padding-right: 0;
     }
     #photo-holder{
         margin-bottom: 15px;
+    }
+    #editingModule{
+        padding: 15px;
+    }
+    .no-padd-right{
+        padding-right: 0;
+    }
+    #deletingModule{
+      padding: 15px;
     }
 </style>
 @endsection
@@ -298,29 +307,29 @@ League management
             <!---->
             <!-- editing -->
             <div class="col-md-12 no-padding sub-module" id="editingModule">
-                <h3 class="col-md-12">Select one...</h3>
-                <div class="col-md-6 no-padding gmaps-container" id="gmaps-container2">
+                <h3 class="">Select one...</h3>
+                <div class="col-md-7 no-padding gmaps-container" id="gmaps-container2">
 
                 </div>
                 <div class="col-md-5" id="editingStadiumDiv">
-                    <p class="col-md-10 col-md-offset-2">Modify the information</p>
-                    <div class="form-group col-md-10 col-md-offset-2 no-padding">
-                        <img id="photo-holder" class="col-md-12" src="">
+                    <p class="col-md-12 no-padding col-md-offset-0">Modify the information</p>
+                    <div class="form-group col-md-12 col-md-offset-0 no-padding">
+                        <img id="photo-holder" class="col-md-12 no-padding" src="">
                     </div>
-                    <div class="form-group col-md-10 col-md-offset-2">
+                    <div class="form-group col-md-12 no-padding col-md-offset-0">
                         <input type="text" name="newStadiumName" value="" id="name" placeholder="Name..." class="myInputWhite col-md-12">
                     </div>
-                    <div class="form-group col-md-10 col-md-offset-2">
+                    <div class="form-group col-md-12 no-padding col-md-offset-0">
                         <div class="col-md-12" id="file-container">
                             <p>Select a photo</p>
                             <input type="file" name="newStadiumPhoto" id="newStadiumPhoto" class="input-file">
                         </div>
                         <p class="col-md-12" style="text-align:center;font-size:12px;" id="file-info">No file selected...</p>
                     </div>
-                    <div class="form-group col-md-10 col-md-offset-2">
+                    <div class="form-group col-md-12 no-padding col-md-offset-0">
                         <input type="checkbox" name="changeLocation" id="changeStadiumLocation" value=""><span style="margin-left: 5px; ;position:absolute; top:2px; font-size:12px; padding-top:0px;"> Change location</span>
                     </div>
-                    <div class="form-group col-md-10 col-md-offset-2">
+                    <div class="form-group col-md-12 no-padding col-md-offset-0">
                         <button type="button" class="btnBlue col-md-12" id="editStadiumBtn" name="editStadiumBtn">Accept</button>
                     </div>
                 </div>
@@ -329,9 +338,18 @@ League management
             <!---->
             <!-- deleting -->
             <div class="col-md-12 no-padding sub-module" id="deletingModule">
-                <p>
-                  deleting
-                </p>
+                <div class="col-md-7 no-padding gmaps-container" id="gmaps-container3">
+
+                </div>
+                <div class="col-md-5 no-padd-right" id="deletingStadiumDiv" style="display:none;">
+                    <div class="form-group col-md-12 no-padding">
+                      <img src="" class="col-md-12 no-padding" alt="" />
+                    </div>
+                    <h4 class="" id="stadium-name"></h4>
+                    <div class="form-group col-md-12 no-padding">
+                        <button type="button" name="button" class="col-md-12 no-padding btnBlue" id="deleteStadiumBtn">Delete</button>
+                    </div>
+                </div>
             </div>
             <!---->
         </div>
@@ -572,7 +590,7 @@ League management
             });
         });
 
-        var stadiumToEdit;
+        var stadiumToEdit, stadiumToDelete, clickedMarker;
         $.each($('.tab'), function (index, element) {
             $(element).click(function () {
                 if(!$(element).hasClass('tab-active')){
@@ -588,7 +606,11 @@ League management
                     var subMod = $(element).parent().parent().children('#'+$(this).attr('id').replace('Launcher','Module'));
                     subMod.children('.gmaps-container').append(mapDiv);
                     if(subMod.parent().attr('id') == 'stadiumsModule'){
-                        if(subMod.attr('id').toLowerCase().indexOf('adding') < 0){
+                        if(subMod.attr('id').toLowerCase().indexOf('editing') > -1){
+                            marker.setVisible(true);
+                            $.each(stadiumsMarkers, function (i, elem) {
+                                google.maps.event.clearListeners(elem, 'click');
+                            });
                             if($('#editingStadiumDiv').css('display') == 'none'){
                                 marker.setVisible(false);
                             }
@@ -615,6 +637,36 @@ League management
                                             $('#editingStadiumDiv').children('div').children('img').attr('src','storage/'+response['stadium'].photo);
                                             $('#editingStadiumDiv').children('div').children('input[type=text][id=name]').first().val(response['stadium'].name);
                                             marker.setVisible(true);
+                                        }
+                                        else showMessages('Ups!',['Have been an error! Try again.'],'error-card');
+                                    });
+                                });
+                            });
+                        }
+                        else if(subMod.attr('id').toLowerCase().indexOf('deleting') > -1){
+                            marker.setVisible(false);
+                            $.each(stadiumsMarkers, function (i, elem) {
+                                google.maps.event.clearListeners(elem, 'click');
+                                elem.addListener('click', function () {
+                                    $.ajax({
+                                        url:'/getStadium',
+                                        type:'post',
+                                        dataType:'json',
+                                        data: {
+                                            _token: '{{csrf_token()}}',
+                                            location: elem.position.toJSON()
+                                        }
+                                    }).done(function (response) {
+                                        if(response['stadium']){
+                                            $('#deletingStadiumDiv').fadeIn('fast');
+                                            clickedMarker = elem;
+                                            stadiumToDelete = response['stadium'];
+                                            stadiumToDelete.location = JSON.parse(stadiumToDelete.location);
+                                            stadiumToDelete.location.lat = parseFloat(stadiumToDelete.location.lat);
+                                            stadiumToDelete.location.lng = parseFloat(stadiumToDelete.location.lng);
+                                            //$('#editingStadiumDiv').attr('name',response['stadium'].id);
+                                            $('#deletingStadiumDiv').children('div').children('img').attr('src','storage/'+response['stadium'].photo);
+                                            $('#deletingStadiumDiv').children('h4').first().text(response['stadium'].name);
                                         }
                                         else showMessages('Ups!',['Have been an error! Try again.'],'error-card');
                                     });
@@ -698,6 +750,28 @@ League management
               }
               else showMessages('Ups!',['There has been an error! Select a valid point.'],'error-card');
           });
+        });
+
+        $('#deleteStadiumBtn').click(function () {
+            if(stadiumToDelete && clickedMarker){
+                $.ajax({
+                  url:'/deleteStadium',
+                  type:'post',
+                  data:{
+                    _token:'{{csrf_token()}}',
+                    id: stadiumToDelete.id
+                  }
+                }).done(function (response) {
+                  $('#deletingStadiumDiv').fadeOut('fast');
+                  clickedMarker.setMap(null);
+                  stadiumsMarkers = $.grep(stadiumsMarkers, function (mrk) {
+                      return (mrk != clickedMarker);
+                  });
+                  clickedMarker = null;
+                  showMessages('OK!',['Stadium successfully delete.'],'success-card');
+                });
+            }
+            else showMessages('Ups!',['Have been an error! Try again.'],'error-card');
         });
 
     });
