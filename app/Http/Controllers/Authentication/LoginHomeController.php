@@ -12,7 +12,6 @@ use App\League\Stadium;
 class LoginHomeController extends Controller
 {
     public function FirstRequest(Request $r){
-        return Stadium::all();
     	$rules=[
     		"email"=>"email|required",
     		"password"=>"required"

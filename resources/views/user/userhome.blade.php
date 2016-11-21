@@ -46,6 +46,7 @@ html, body {
 #map{
 	border: 3px solid #B71C1C;
 	border-radius: 0;
+	background-color: #212121;
 }
 </style>
 @endsection
@@ -53,7 +54,7 @@ html, body {
 @section('body')
 <div class="container">
 <div align="center" style="margin-top: 150px;">
-	<img src="/img/cucu3.gif" style="width: 15%; color: white;">
+	<img src="/img/cucu3.gif" style="width: 15%;">
 </div>
    	<h2 style="color:white; margin-top: 0;" id="mainTitle">Follow your passion!<br>Here you can visit all of the stadiums!</h2>
 </div>
