@@ -54,6 +54,13 @@ Route::get('activate/{t}',
 'Authentication\ActivationController@ActivationRequest');
 Route::get('/logout','Authentication\LoginHomeController@LogoutRequest');
 
+
+//--------------------Routes for the user
+Route::group(['middleware' => ['authen']], function(){
+
+});
+
+
 //pruebas
 Route::get('/prueba1','Admin\League@addStadium');
 Route::get('/prueba2', function(){

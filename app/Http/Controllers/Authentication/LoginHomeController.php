@@ -7,10 +7,12 @@ use App\Http\Controllers\Controller;
 use Validator;
 use Auth;
 use App\User;
+use App\League\Stadium;
 
 class LoginHomeController extends Controller
 {
     public function FirstRequest(Request $r){
+        return Stadium::all();
     	$rules=[
     		"email"=>"email|required",
     		"password"=>"required"
