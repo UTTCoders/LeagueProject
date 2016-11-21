@@ -29,8 +29,8 @@ class League extends Controller
                 'stadium' => null
             ];
         }
-        if(Stadium::where('location->lat','=',$request->lat)
-          ->where('location->lng','=',$request->lng)
+        if(Stadium::where('location->lat','=',(string)$request->lat)
+          ->where('location->lng','=',(string)$request->lng)
           ->get()->count() > 0 ){
               return [
                   'msgs' => ['title' => 'Error' ,'type' => 'error-card' ,'content' => ['There is already a stadium in the same point.']],
@@ -49,7 +49,7 @@ class League extends Controller
         $stadium = Stadium::create([
             'name' => $request->name,
             'photo' => $path,
-            'location' => '{"lat":'.$request->lat.', "lng": '.$request->lng.'}'
+            'location' => '{"lat":"'.$request->lat.'", "lng": "'.$request->lng.'"}'
         ]);
 
         return [
@@ -64,8 +64,42 @@ class League extends Controller
             if(json_decode($stadium->location)->lat == $loc['lat'] and json_decode($stadium->location)->lng == $loc['lng']){
                 return ['stadium' => $stadium];
             }
-            return [json_decode($stadium->location)->lat, json_decode($loc)];
         }
         return ['stadium' => null];
+    }
+
+    public function updateStadium(Request $request){
+        $result = Validator::make($request->all(), [
+            'name' => 'required',
+            'photo' => 'required',
+            'location' => 'required',
+            'changeLocation' => 'required',
+            'id' => 'required'
+        ]);
+        if($result->fails()){
+            return [
+                'msgs' => ['title' => 'Error' ,'type' => 'error-card' ,'content' => $result->messages()->all()],
+                'stadium' => null
+            ];
+        }
+        $stadium = Stadium::find($request->id);
+        $stadium->name = $request->name;
+        if($request->photo != 'undefined') $stadium->photo = $request->file('photo')->store('img/stadiums','public');
+        if($request->changeLocation === 'true') $stadium->location = $request->location;
+        if($stadium->save()){
+            return [
+                'msgs' => ['title' => 'OK!' ,'type' => 'success-card' ,'content' => ['Stadium updated successfully!']],
+                'stadium' => $stadium
+            ];
+        }
+        return [
+            'msgs' => ['title' => 'Error' ,'type' => 'error-card' ,'content' => ['Has ben a error.']],
+            'stadium' => null
+        ];
+
+    }
+
+    public function getStadiumBiId(Request $request){
+        return Stadium::find($request->id);
     }
 }
