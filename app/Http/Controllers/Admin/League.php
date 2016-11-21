@@ -102,4 +102,8 @@ class League extends Controller
     public function getStadiumBiId(Request $request){
         return Stadium::find($request->id);
     }
+
+    public function deleteStadium(Request $request){
+        Stadium::find($request->id)->delete();
+    }
 }
