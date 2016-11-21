@@ -11,6 +11,55 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => ['checklog']], function(){
+
+		Route::get('/home', function () {
+		    return view('welcome');
+		});
+
+    Route::match(['GET','POST'],'/signup',
+    'Authentication\RegController@RegRequest');
+});
+
+Route::group(['middleware' => ['authen']], function(){
+
+    Route::get('/',function(){
+        if (Auth::user()->type)
+            return view('admin.management');
+        return view('user.userhome');
+    });
+
+		Route::get('/manage_cal', function () {
+				return view('admin.calendar');
+		})->middleware('admin');
+
+		Route::post('/getStadiums','Admin\League@getStadiums')->middleware('admin');
+
+		Route::post('/addStadium','Admin\League@addStadium')->middleware('admin');
+
+		Route::post('/getStadium','Admin\League@getStadiumByLocation')->middleware('admin');
+
+		Route::post('/updateStadium','Admin\League@updateStadium');
+
+		Route::post('/getStadiumById','Admin\League@getStadiumById');
+
+		Route::post('/deleteStadium','Admin\League@deleteStadium');
+
+});
+
+//Route for the login needs to get inside the app without middleware
+Route::post('/','Authentication\LoginHomeController@FirstRequest');
+//Activation route
+Route::get('activate/{t}',
+'Authentication\ActivationController@ActivationRequest');
+Route::get('/logout','Authentication\LoginHomeController@LogoutRequest');
+
+//pruebas
+Route::get('/prueba1','Admin\League@addStadium');
+Route::get('/prueba2', function(){
+    return view('admin.calendar');
+});
+
+Route::get('/prueba3',function(){
+	return view('user.userhome');
 });

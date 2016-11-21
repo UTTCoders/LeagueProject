@@ -1,2 +1,8 @@
 /vendor
 .env
+<<<<<<< HEAD
+=======
+/.vscode
+/public/storage
+/storage/app/public
+>>>>>>> 5656ef3b7aa1c4f042c884ce4c8ecfca020537e5
