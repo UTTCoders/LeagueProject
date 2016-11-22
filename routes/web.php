@@ -55,9 +55,9 @@ Route::get('activate/{t}',
 Route::get('/logout','Authentication\LoginHomeController@LogoutRequest');
 
 
-//--------------------Routes for the user
+//--------------------Routes for the user----------------------!
 Route::group(['middleware' => ['authen']], function(){
-
+	Route::post('/getuserstadiums','User\MapController@getUserStadiums');
 });
 
 

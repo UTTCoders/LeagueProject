@@ -8,7 +8,7 @@ use App\League\Stadium;
 
 class MapController extends Controller
 {
-    public function getStadiums(){
-    	
+    public function getUserStadiums(){
+    	return Stadium::all();
     }
 }

@@ -60,9 +60,13 @@ html, body {
 </div>
 <br><br><br>
 <div style="color: #eee; margin-bottom: 0; background-color:#B71C1C; " class="jumbotron">
-<div class="container">	
-	<h3>Checkout our google map to visit your favorite stadiums!</h3>
-	<hr>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2">	
+		<h3 align="center">Checkout our google map to visit your favorite stadiums!</h3>
+		<hr>
+		</div>
+	</div>
 </div>
 </div>
 <div id="map"></div>
@@ -70,6 +74,6 @@ html, body {
 
 @section('js')
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqiB2cyhlFaZJmw6_x1Cz7-AvGH5dkTLU&callback=initMap&language=EN" async defer></script>
-<script src="/js/usermapoptions.js"></script>
-<script src="/js/usermap.js"></script>
+<script src="/js/user/usermapoptions.js"></script>
+<script src="/js/user/usermap.js"></script>
 @endsection

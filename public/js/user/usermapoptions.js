@@ -1,6 +1,6 @@
 function mapoptions(){
 	return options={
-		center: {lat: 40, lng: -3},
+		center: {lat: 40.416786, lng: -3.703788},
         zoom: 6,
         scrollwheel:false,
         maxZoom:9,
