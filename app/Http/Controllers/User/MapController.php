@@ -13,6 +13,11 @@ class MapController extends Controller
     }
 
     public function requestStadium(Request $r, $id){
-    	return view('user.stadiumview');
+    	$thestadium=Stadium::find($id);
+    	if ($thestadium) {
+    		return view('user.stadiumview')
+    		->with("stadium",$thestadium);
+    	}
+    	return view('errors.404error');
     }
 }

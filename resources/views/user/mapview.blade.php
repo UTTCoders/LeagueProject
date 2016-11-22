@@ -68,27 +68,35 @@ html, body {
 				</div>
 			</div>
 		</div>
+		@if(App\League\Stadium::all()->count()==0)
+		<br>
+		<h3 align="center">Wait for the Stadiums map! Soon! ;)</h3>
+		@endif
 	</div>
 </div>
-<div align="right" class="col-md-5" id="other">
-	<h2>See all the stadiums!</h2>
-	<div class="col-md-11 col-md-offset-1">
-		<p style="font-size: 20px;">Here you can see all of the stadiums.</p>
-		<div class="thumbnail">
-			<div style="font-size: 15px; color: #000; padding-right: 10px; padding-top: 20px; padding-bottom: 15px;">
-				<p><span class="glyphicon glyphicon-asterisk"></span> Do click on a stadium to go to check its events and more information.</p>
+@if(App\League\Stadium::all()->count()>0)
+	<div align="right" class="col-md-5 col-sm-6" id="other">
+		<h2>See all the stadiums!</h2>
+		<div class="col-md-11 col-md-offset-1">
+			<p style="font-size: 20px;">Here you can see all of the stadiums.</p>
+			<div class="thumbnail">
+				<div style="font-size: 15px; color: #000; padding-right: 10px; padding-top: 20px; padding-bottom: 15px;">
+					<p><span class="glyphicon glyphicon-asterisk"></span> Do click on a stadium to go to check its events and more information.</p>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<div class="col-md-7"  id="here">
-	<div id="map"></div>
-</div>
+	<div class="col-md-7 col-sm-6"  id="here">
+		<div id="map"></div>
+	</div>
+@endif
 @endsection
 
 @section('js2')
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqiB2cyhlFaZJmw6_x1Cz7-AvGH5dkTLU&callback=initMap&language=EN" async defer></script>
-<script src="/js/user/usermapoptions.js"></script>
-<script src="/js/user/stadiumsajax.js"></script>
-<script src="/js/user/usermap.js"></script>
+	@if(App\League\Stadium::all()->count()>0)
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqiB2cyhlFaZJmw6_x1Cz7-AvGH5dkTLU&callback=initMap&language=EN" async defer></script>
+	<script src="/js/user/usermapoptions.js"></script>
+	<script src="/js/user/stadiumsajax.js"></script>
+	<script src="/js/user/usermap.js"></script>
+	@endif
 @endsection
