@@ -1,4 +1,4 @@
-function mapoptions(){
+function mapOptions(){
 	return options={
 		center: {lat: 40.416786, lng: -3.703788},
         zoom: 7,
@@ -11,8 +11,9 @@ function mapoptions(){
         },
         zoomControl: true,
 	    zoomControlOptions: {
-	        position: google.maps.ControlPosition.LEFT_CENTER
+	        position: google.maps.ControlPosition.LEFT_TOP
 	    },
-	    streetViewControl:false
+	    streetViewControl:false,
+        mapTypeControl:false
     }
 }

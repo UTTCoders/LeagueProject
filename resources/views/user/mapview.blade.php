@@ -75,9 +75,9 @@ html, body {
 	<div class="col-md-11 col-md-offset-1">
 		<p style="font-size: 20px;">Here you can see all of the stadiums.</p>
 		<div class="thumbnail">
-		<div style="font-size: 15px; color: #000; padding-right: 10px;">
-			<p><span class="glyphicon glyphicon-asterisk"></span> Do click on a stadium to go to check its events and more information.</p>
-		</div>
+			<div style="font-size: 15px; color: #000; padding-right: 10px; padding-top: 20px; padding-bottom: 15px;">
+				<p><span class="glyphicon glyphicon-asterisk"></span> Do click on a stadium to go to check its events and more information.</p>
+			</div>
 		</div>
 	</div>
 </div>
