@@ -17,6 +17,10 @@ function getStadiums(google, map){
 				},
 				map:map
 			});
+			Stadiums[index].id=val.id;
+			Stadiums[index].addListener('click',function(){
+				alert(this.id);
+			});
 		});
 	});
 	return Stadiums;

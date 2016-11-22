@@ -11,6 +11,7 @@ class MapController extends Controller
     public function getUserStadiums(){
     	return [
     		"obj"=>[
+    			"id"=>2,
     			"location"=>[
     				"lat"=>40,
     				"lng"=>-1

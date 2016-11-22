@@ -10,11 +10,13 @@ function initMap() {
 			position:{
 				lat:e.latLng.lat(),lng:e.latLng.lng()
 			},
-			map:map
+			map:map,
+			icon:""
 		});
 		m.hola="holaa";
 		console.log(m.hola);
-		console.log(getStadiums(google,map));
+		
 	});
+	console.log(getStadiums(google,map));
 	
 }
