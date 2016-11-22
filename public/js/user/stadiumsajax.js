@@ -1,7 +1,6 @@
 function getStadiums(google, map){
 	var Stadiums=[];
 	var tok=$("meta[name='toktok']").attr("content");
-	alert(tok);
 	$.ajax({
 		url:"/getuserstadiums",
 		method:"post",

@@ -3,11 +3,15 @@
 namespace App\League;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Team extends Model
 {
+    use SoftDeletes;
+
     public $timestamps = false;
     protected $fillable = ['name','logo','fundation_date','coach_id','stadium_id'];
+    protected $dates = ['deleted_at'];
 
     public function stadium(){
         return $this->belongsTo('App\League\Stadium');
