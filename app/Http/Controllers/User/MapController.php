@@ -9,15 +9,10 @@ use App\League\Stadium;
 class MapController extends Controller
 {
     public function getUserStadiums(){
-    	return [
-    		"obj"=>[
-    			"id"=>2,
-    			"location"=>[
-    				"lat"=>40,
-    				"lng"=>-1
-    			]
-    		]
-    	];
     	return Stadium::all();
+    }
+
+    public function requestStadium(Request $r, $id){
+    	return view('user.stadiumview');
     }
 }

@@ -8,25 +8,30 @@ function getStadiums(google, map){
 			_token:tok
 		}
 	}).done(function(response){
+		console.log(response.length);
+		console.log(response);
+		var image={
+			url: '/img/icons/stadium8.png',
+			scaledSize: new google.maps.Size(70, 70),
+			origin: new google.maps.Point(0,0),
+			anchor: new google.maps.Point(0, 0)
+		}
 		$.each(response,function(index,val){
-			var image={
-				url: '/img/icons/stadium8.png',
-				// This marker is 20 pixels wide by 32 pixels high.
-				scaledSize: new google.maps.Size(65, 65), // scaled size
-			    origin: new google.maps.Point(0,0), // origin
-			    anchor: new google.maps.Point(0, 0)
-			}
+			var latLng=JSON.parse(val.location);
 			Stadiums[index]=new google.maps.Marker({
 				position:{
-					lat:val.location.lat,
-					lng:val.location.lng
+					lat:Number(latLng.lat),
+					lng:Number(latLng.lng)
 				},
 				map:map,
-				icon: image
+				icon: image,
+				title:"Stadium: "+val.name,
+				animation: google.maps.Animation.DROP,
 			});
 			Stadiums[index].id=val.id;
+			Stadiums[index].name=val.name;
 			Stadiums[index].addListener('click',function(){
-				alert(this.id);
+				document.location.href="/stadium/"+this.id;
 			});
 		});
 	});

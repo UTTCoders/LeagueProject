@@ -26,7 +26,7 @@ Route::group(['middleware' => ['authen']], function(){
     Route::get('/',function(){
         if (Auth::user()->type)
             return view('admin.management');
-        return view('user.userhome');
+        return view('user.mapview');
     });
 
 		Route::get('/manage_cal', function () {
@@ -58,6 +58,7 @@ Route::get('/logout','Authentication\LoginHomeController@LogoutRequest');
 //--------------------Routes for the user----------------------!
 Route::group(['middleware' => ['authen']], function(){
 	Route::post('/getuserstadiums','User\MapController@getUserStadiums');
+	Route::get('/stadium/{id}','User\MapController@requestStadium');
 });
 
 
