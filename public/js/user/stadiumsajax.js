@@ -9,12 +9,20 @@ function getStadiums(google, map){
 		}
 	}).done(function(response){
 		$.each(response,function(index,val){
+			var image={
+				url: '/img/icons/stadium8.png',
+				// This marker is 20 pixels wide by 32 pixels high.
+				scaledSize: new google.maps.Size(65, 65), // scaled size
+			    origin: new google.maps.Point(0,0), // origin
+			    anchor: new google.maps.Point(0, 0)
+			}
 			Stadiums[index]=new google.maps.Marker({
 				position:{
 					lat:val.location.lat,
 					lng:val.location.lng
 				},
-				map:map
+				map:map,
+				icon: image
 			});
 			Stadiums[index].id=val.id;
 			Stadiums[index].addListener('click',function(){
