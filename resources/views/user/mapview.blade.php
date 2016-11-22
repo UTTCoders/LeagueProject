@@ -32,7 +32,7 @@ html, body {
 }
 #other{
 	color:#eee; 
-	padding-top: 20px;
+	padding-top: 80px;
 	padding-right: 50px;
 	height: 80%;
 	background-color: #388E3C;
@@ -45,14 +45,27 @@ html, body {
 	<div align="center">
 		<img src="/img/cucu3.gif" style="width: 15%;">
 	</div>
-	<h2 style="color:#eee; margin-top: 0; margin-bottom: 0;" id="mainTitle">Follow your passion!<br>The house of your favorite teams of the Spain Soccer League!</h2>
+	<h2 style="color:#eee; margin-top: 0; margin-bottom: 0;" id="mainTitle">Follow your passion!<br>The house of your favorite teams of the Spain League!</h2>
 </div>
 <div style="color: #eee; margin-top: 0; margin-bottom: 0; background-color:#B71C1C;" class="jumbotron">
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">	
-				<h3 align="left">Thanks for being part of League-project.com</h3>
+				<h3 align="left">Thanks for being part of the League Project!</h3>
 				<hr>
+				<div class="col-md-6">
+					<img class="img-responsive" style="border: 5px solid black;" src="/img/biglogo.jpg">
+					<h5>© The League-project.com</h5>
+				</div>
+				<div class="col-md-6">
+				<br class="hidden-md hidden-lg">
+					<h4>Some information of the site</h4>
+					<p align="justify" style="font-size: 15px; font-weight: normal;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur.</p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -61,9 +74,9 @@ html, body {
 	<h2>See all the stadiums!</h2>
 	<div class="col-md-11 col-md-offset-1">
 		<p style="font-size: 20px;">Here you can see all of the stadiums.</p>
-		<div class="thumbnail">	
-		<div style="font-size: 15px;">
-			<p><span class=""></span> Do click on a stadium to go to check its events and more information.</p>
+		<div class="thumbnail">
+		<div style="font-size: 15px; color: #000; padding-right: 10px;">
+			<p><span class="glyphicon glyphicon-asterisk"></span> Do click on a stadium to go to check its events and more information.</p>
 		</div>
 		</div>
 	</div>
