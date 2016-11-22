@@ -75,5 +75,6 @@ html, body {
 @section('js')
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqiB2cyhlFaZJmw6_x1Cz7-AvGH5dkTLU&callback=initMap&language=EN" async defer></script>
 <script src="/js/user/usermapoptions.js"></script>
+<script src="/js/user/stadiumsajax.js"></script>
 <script src="/js/user/usermap.js"></script>
 @endsection
