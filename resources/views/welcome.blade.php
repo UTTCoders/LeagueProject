@@ -178,9 +178,9 @@ Welcome to the official site of the spain league
                     <p>Email</p>
                 </div>
                 @if(Session::has('emailreg'))
-                    <input value="{{Session::get('emailreg')}}" type="email" class="myInput" name="email">
+                    <input value="{{Session::get('emailreg')}}" type="email" class="myInput" name="email" autofocus>
                 @else
-                    <input type="email" class="myInput" name="email" value="{{old('email')}}">
+                    <input type="email" class="myInput" name="email" value="{{old('email')}}" autofocus>
                 @endif
             </div>
             <div class="form-group">
