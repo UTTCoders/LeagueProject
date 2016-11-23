@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\League\Stadium;
 use App\League\Team;
 use App\League\Match;
+use Carbon\Carbon;
 
 class MapController extends Controller
 {
@@ -22,6 +23,14 @@ class MapController extends Controller
     	if ($thestadium->team==null) {
     		return view('errors.404error');
     	}
+    	if ($thestadium->team->matches->count() > 0) {
+    		$today=Carbon::today('America/Monterrey')->toDateString();
+	    	if ($thestadium->team->matches->whereDate('start_date',$today)
+	    		->count()>0) {
+
+	    	}
+    	}
+    	
     	return view('user.stadiumview')
     	->with("stadium",$thestadium);
     }
