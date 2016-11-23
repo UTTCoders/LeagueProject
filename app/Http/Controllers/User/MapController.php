@@ -14,12 +14,9 @@ class MapController extends Controller
     public function getUserStadiums(){
     	$Stadiums=[];
     	$Teams=[];
-    	foreach (Stadium::has('team')->whereNull('deleted_at')
-    		->get() as $key => $stadium) {
-    		if ($stadium->team->deleted_at==null || $stadium->team->deleted_at=="") {
-    			$Stadiums[]=$stadium;
-    			$Teams[]=$stadium->team;
-    		}
+    	foreach (Stadium::has('team')->get() as $key => $stadium) {
+    		$Stadiums[]=$stadium;
+    		$Teams[]=$stadium->team;
     	}
     	return [
     		"stadiums"=>$Stadiums,

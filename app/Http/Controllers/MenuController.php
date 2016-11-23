@@ -16,12 +16,8 @@ class MenuController extends Controller
     	if (Auth::user()->type)
             return view('admin.management');
 
-        return Stadium::has('team')->whereNull('deleted_at')->get();
-        return Team::has('matches')->get();
-
-        return Auth::user()->teams->first()->matches->count();
         if (Auth::user()->teams->count()>0) {
-        	self::checkTeamMatches();
+
         }
 
         $today=Carbon::today('America/Monterrey')->toDateString();
@@ -34,21 +30,11 @@ class MenuController extends Controller
         	}
         }
 
-        return view('user.mapview')
-        ->with('thereAreStadiums',self::thereAreStadiums());
-    }
-
-    public function thereAreStadiums(){
-    	foreach (Stadium::has('team')->whereNull('deleted_at')
-    		->get() as $key => $stadium) {
-    		if ($stadium->team->deleted_at==null || $stadium->team->deleted_at=="") {
-    			return true;
-    		}
-    	}
-    	return false;
+        return view('user.mapview');
     }
 
     private function checkTeamMatches(){
+    	$count=0;
     	foreach (Auth::user()->teams as $key => $team) {
     		if ($team->matches->count()>0) {
 
