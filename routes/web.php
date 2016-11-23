@@ -46,6 +46,8 @@ Route::group(['middleware' => ['authen']], function(){
 		Route::post('/deleteStadium','Admin\League@deleteStadium')->middleware('admin');
 
 		Route::post('/addCoach','Admin\League@addCoach');
+
+		Route::post('/updateCoachNames','Admin\League@updateCoachNames');
 		// end of Management by admin
 
 });

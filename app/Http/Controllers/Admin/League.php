@@ -108,8 +108,7 @@ class League extends Controller
         Stadium::find($request->id)->delete();
     }
 
-    public function addCoach(Request $request)
-    {
+    public function addCoach(Request $request){
         $result = Validator::make($request->all(), [
           'name' => 'required|string|min:1',
           'lastName' => 'required|string|min:1',
@@ -135,4 +134,32 @@ class League extends Controller
             'coach' => $coach
         ];
     }
+
+    public function updateCoachNames(Request $request){
+        $result = Validator::make($request->all(),[
+          'id' => 'required',
+          'name' => 'required',
+          'last_name' => 'required'
+        ]);
+        if($result->fails()) return [
+          'msg' => 'Provide all the data.',
+          'coach' => null,
+          'coachTeam' => null
+        ];
+        $coach = Coach::find($request->id);
+        if(!$coach) return [
+          'msg' => 'Coach not found.',
+          'coach' => null,
+          'coachTeam' => null
+        ];
+        $coach->name = $request->name;
+        $coach->last_name = $request->last_name;
+        $coach->save();
+        return [
+          'msg' => 'Success!',
+          'coach' => $coach,
+          'coachTeam' => $coach->team
+        ];
+    }
+
 }
