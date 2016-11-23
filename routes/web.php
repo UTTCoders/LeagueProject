@@ -23,11 +23,7 @@ Route::group(['middleware' => ['checklog']], function(){
 
 Route::group(['middleware' => ['authen']], function(){
 
-    Route::get('/',function(){
-        if (Auth::user()->type)
-            return view('admin.management');
-        return view('user.mapview');
-    });
+    Route::get('/','MenuController@MenuRequest');
 
 		Route::get('/manage_cal', function () {
 				return view('admin.calendar');
