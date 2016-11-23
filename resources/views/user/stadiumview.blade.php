@@ -24,7 +24,10 @@
 
 @section('body2')
 <div id="con">
-
+<div align="center">
+<h1 style="color:#eee; margin-top: 20px; margin-bottom: 0;" id="mainTitle">{{$stadium->name}}</h1>
+<img src="/img/soccerball.png" style="width: 20%;">
+</div>
 </div>
 <div class="">
 	
