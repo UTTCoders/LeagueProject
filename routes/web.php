@@ -55,6 +55,7 @@ Route::get('/logout','Authentication\LoginHomeController@LogoutRequest');
 Route::group(['middleware' => ['authen']], function(){
 	Route::post('/getuserstadiums','User\MapController@getUserStadiums');
 	Route::get('/stadiums/{id}','User\MapController@requestStadium');
+	Route::post('/matches/now','User\MatchesController@MatchesRequest');
 });
 
 
