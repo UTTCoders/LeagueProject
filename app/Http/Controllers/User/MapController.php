@@ -17,11 +17,11 @@ class MapController extends Controller
     public function requestStadium(Request $r, $id){
     	$thestadium=Stadium::find($id);
     	if ($thestadium==null) {
-
     		return view('errors.404error');
     	}
-
-
+    	if ($thestadium->team==null) {
+    		return view('errors.404error');
+    	}
     	return view('user.stadiumview')
     	->with("stadium",$thestadium);
     }
