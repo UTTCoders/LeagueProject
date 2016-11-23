@@ -1,7 +1,5 @@
 @extends('layouts.master')
 
-@section('title',Auth::user()->name." | Home")
-
 @section('css')
 <link rel="stylesheet" type="text/css" href="/css/someanyicss.css">
 <style type="text/css">

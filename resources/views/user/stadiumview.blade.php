@@ -1,5 +1,7 @@
 @extends('user.userhome')
 
+@section('title',$stadium->name." | Stadium")
+
 @section('css2')
 <style type="text/css">
 	#con{

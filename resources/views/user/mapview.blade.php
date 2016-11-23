@@ -1,5 +1,7 @@
 @extends('user.userhome')
 
+@section('title',Auth::user()->name." | Home")
+
 @section('css2')
 <style type="text/css">
 #map{
