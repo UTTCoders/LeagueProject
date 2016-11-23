@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\League\Stadium;
+use App\League\Coach;
 use Validator;
 use Storage;
 
@@ -105,5 +106,33 @@ class League extends Controller
 
     public function deleteStadium(Request $request){
         Stadium::find($request->id)->delete();
+    }
+
+    public function addCoach(Request $request)
+    {
+        $result = Validator::make($request->all(), [
+          'name' => 'required|string|min:1',
+          'lastName' => 'required|string|min:1',
+          'photo' => 'required'
+        ]);
+        if($result->fails())
+            return [
+                'msgs' => ['title' => 'Ups!', 'content' => $results->messages()->all(), 'type' => 'alert-card'],
+                'coach' => null
+            ];
+        if(Coach::where('name',$request->name)->where('last_name',$request->lastName)->get()->count() > 0)
+            return [
+                'msgs' => ['title' => 'Ups!', 'content' => ['There is already a coach with the given names.'], 'type' => 'error-card'],
+                'coach' => null
+            ];
+        $coach = Coach::create([
+            'name' => $request->name,
+            'last_name' => $request->lastName,
+            'photo' => $request->file('photo')->store('img/coaches','public')
+        ]);
+        return [
+            'msgs' => ['title' => 'OK!', 'content' => ['Successfully added!'], 'type' => 'success-card'],
+            'coach' => $coach
+        ];
     }
 }
