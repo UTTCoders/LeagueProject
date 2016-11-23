@@ -70,13 +70,13 @@ html, body {
 				</div>
 			</div>
 		</div>
-		@if(App\League\Stadium::has('team')->get()->count()==0)
+		@if(!$thereAreStadiums)
 		<br>
 		<h3 align="center">Wait for the Stadiums map! Soon! ;)</h3>
 		@endif
 	</div>
 </div>
-@if(App\League\Stadium::has('team')->get()->count()>0)
+@if($thereAreStadiums)
 	<div align="right" class="col-md-5 col-sm-6" id="other">
 		<h2>See all the stadiums!</h2>
 		<div class="col-md-11 col-md-offset-1">
@@ -95,7 +95,7 @@ html, body {
 @endsection
 
 @section('js2')
-	@if(App\League\Stadium::has('team')->get()->count()>0)
+	@if($thereAreStadiums)
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqiB2cyhlFaZJmw6_x1Cz7-AvGH5dkTLU&callback=initMap&language=EN" async defer></script>
 	<script src="/js/user/usermapoptions.js"></script>
 	<script src="/js/user/stadiumsajax.js"></script>

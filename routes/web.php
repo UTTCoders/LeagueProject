@@ -54,7 +54,7 @@ Route::get('/logout','Authentication\LoginHomeController@LogoutRequest');
 //--------------------Routes for the user----------------------!
 Route::group(['middleware' => ['authen']], function(){
 	Route::post('/getuserstadiums','User\MapController@getUserStadiums');
-	Route::get('/stadium/{id}','User\MapController@requestStadium');
+	Route::get('/stadiums/{id}','User\MapController@requestStadium');
 });
 
 

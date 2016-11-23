@@ -16,8 +16,10 @@ function getStadiums(google, map){
 			origin: new google.maps.Point(0,0),
 			anchor: new google.maps.Point(0, 0)
 		}
-		$.each(response,function(index,val){
+		$.each(response.stadiums,function(index,val){
 			var latLng=JSON.parse(val.location);
+			var title="Stadium: "+val.name+
+			"\nTeam: "+response.teams[index].name;
 			Stadiums[index]=new google.maps.Marker({
 				position:{
 					lat:Number(latLng.lat),
@@ -25,13 +27,13 @@ function getStadiums(google, map){
 				},
 				map:map,
 				icon: image,
-				title:"Stadium: "+val.name,
+				title:title,
 				animation: google.maps.Animation.DROP,
 			});
 			Stadiums[index].id=val.id;
 			Stadiums[index].name=val.name;
 			Stadiums[index].addListener('click',function(){
-				document.location.href="/stadium/"+this.id;
+				document.location.href="/stadiums/"+this.id;
 			});
 		});
 	});
