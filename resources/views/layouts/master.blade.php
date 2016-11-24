@@ -316,10 +316,12 @@
                     <i class="material-icons pull-right" id="hideBtn" style="margin-right:15px;font-size:28px;cursor:pointer;">arrow_forward</i>
                     <div class="itemsContainer">
                         <a href="/favorites" class="panelItem"><span class="glyphicon glyphicon-star-empty"></span> My favorite teams</a>
-                        <a href="/matches" class="panelItem">See matches</a>
-                        <a href="/logout" class="panelItem">Log out</a>
+                        <a href="/matches" class="panelItem"><span class="glyphicon glyphicon-th"></span> See all matches</a>
                         <a href="#" id="1"  class="panelItem event">Prueba</a>
                         <a href="#" id="1" class="panelSubItem" style="display:none">Hijo</a>
+                    </div>
+                    <div class="bottomContainer col-md-12 no-padding" style="position:absolute;bottom:0px;">
+                      <a href="/logout" class="panelItem">Log out</a>
                     </div>
                 </div>
             @endif
