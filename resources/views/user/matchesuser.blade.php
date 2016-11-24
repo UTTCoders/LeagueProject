@@ -69,6 +69,7 @@
 	a[class*=Selected]{
 		color:#111;
 	}
+
 </style>
 @endsection
 
@@ -103,7 +104,7 @@
 							<div class="col-sm-5 col-xs-6" id="imgcard" style="background-image: url({{'/storage/'.$match->teams[0]->stadium->photo}});" align="center">
 								<img src="/img/soccerball.png" style="width: 60%">
 							</div>
-							<div class="col-sm-7 col-xs-6">
+							<div class="col-sm-7 col-xs-6 padData">
 								<h3 align="center">{{$match->teams[0]->name}} VS {{$match->teams[1]->name}}</h3>
 								<div class="hidden-xs">	
 								<p><strong>Stadium: </strong>{{$match->teams[0]->stadium->name}}</p>
@@ -113,7 +114,7 @@
 							<div class="col-sm-5 col-xs-6" id="imgcard" style="background-image: url({{'/storage/'.$match->teams[1]->stadium->photo}});" align="center">
 								<img src="/img/soccerball.png" style="width: 60%">
 							</div>
-							<div class="col-sm-7 col-xs-6">
+							<div class="col-sm-7 col-xs-6 padData">
 								<h3 align="center">{{$match->teams[0]->name}} VS {{$match->teams[1]->name}}</h3>
 								<div class="hidden-xs">	
 								<p><strong>Stadium: </strong>{{$match->teams[1]->stadium->name}}</p>
