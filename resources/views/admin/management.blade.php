@@ -12,6 +12,7 @@ League management
     }
     .coverContainer{
         height: 400px;
+        background-size: cover;
         background-image: url("{{asset('img/management.jpg')}}");
         box-shadow: inset 0px -2px 8px 0px #222;
     }
@@ -175,7 +176,6 @@ League management
     }
     input[type=file].input-file{
         opacity: 0;
-        background-color: red;
         margin-left: -100%;
         width: 200%;
         height: 120%;
@@ -251,10 +251,12 @@ League management
     .coachCard{
       background-color: #111;
       border-radius: 2px;
+      width: 100%;
+      height: 100%;
       box-shadow: 0px 0px 3px 0px #000;
     }
     .coachCard > img{
-      width: 100%;
+      width: 107%;
     }
     .coachCard > div{
       position: absolute;
@@ -277,12 +279,20 @@ League management
     }
     .photo-btn{
       top: 8px;
-      left: 8px;
+      left: -50px;
       overflow: hidden;
+      -webkit-transition: left .4s;
     }
     .edit-btn{
       top: 8px;
+      right: -50px;
+      -webkit-transition: right .4s;
+    }
+    .cardParent:hover div div .edit-btn{
       right: 8px;
+    }
+    .cardParent:hover div div .photo-btn{
+      left: 8px;
     }
     .dark-tranparent-back{
       display: none;
@@ -339,6 +349,18 @@ League management
     .btnBlue2:hover{
       background: linear-gradient(to bottom, #2fa1ff,#1b81ee);
     }
+    .btnRed2{
+      background: linear-gradient(to bottom, #b13,#823);
+      border-radius: 2px;
+      border: 0px;
+      border-top: 1px solid #b45;
+      border-bottom: 1px solid #934;
+      padding: 3px 10px 3px 10px;
+      -webkit-transition: background .4s;
+    }
+    .btnRed2:hover{
+      background: linear-gradient(to bottom, #c24,#934);
+    }
     .close-btn{
       border-radius: 100%;
       background-color: white;
@@ -367,6 +389,44 @@ League management
       cursor: pointer;
       opacity: 0;
     }
+    .coachCard2{
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0px 0px 2px 0px #000;
+      padding: 0;
+      margin: 0;
+    }
+    .coachCard2 > img{
+      width: 106%;
+    }
+    .coachCard2 > div{
+      position: absolute;
+      font-size: 12px;
+      background: rgba(0,0,0,.2);
+      display: inline;
+      bottom: -1px;
+      overflow: hidden;
+      left: 0;
+      box-shadow: 0px 0px 2px 0px #000;
+      text-shadow: 0px 0px 1px #000;
+    }
+    .coachCard2 > .material-icons{
+      position: absolute;
+      cursor: pointer;
+      text-shadow: 0px 0px 2px #000;
+    }
+    .coachCard2 > .material-icons:hover{
+      color:white;
+    }
+    .delete-btn{
+      top: 8px;
+      right: -50px;
+      -webkit-transition: right .4s;
+    }
+    .coachCard2:hover .delete-btn{
+      right: 8px;
+    }
+
 </style>
 @endsection
 
@@ -404,14 +464,39 @@ League management
     </div>
   </div>
 </div>
+
+<div class="dark-tranparent-back" id="delete-coach-back">
+  <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12 no-padding dialog-card">
+    <div id="header">
+      <h3>Are you sure?</h3>
+      <div class="close-btn"><p>x</p></div>
+    </div>
+    <div class="body">
+      <div class="form-group col-sm-12 col-sm-12 col-xs-12">
+        <p>The coach will be deleted</p>
+      </div>
+    </div>
+    <div class="btns-back">
+      <div class="col-md-12">
+        <div class="col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-2" style="padding-right:0;">
+          <button type="button" name="deleteCoachBtn" id="" class="btnRed2 col-md-12 col-sm-4">Accept</button>
+        </div>
+        <div id="cancelContainer" class="col-md-4 col-md-offset-0 col-sm-4 col-sm-offset-0" style="padding-right:0;">
+          <button type="button" name="closeDialog" id="" class="btnBlue2 col-md-12 col-sm-4">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="col-md-12 col-sm-12 no-padding">
     <div class="col-md-7 col-md-offset-1 col-sm-10 col-sm-offset-0">
-        <div class="col-md-12 col-sm-12 no-padding module module-active" id="stadiumsModule">
+        <div class="col-md-12  col-sm-12 col-xs-12 no-padding module module-active" id="stadiumsModule">
             <!-- tabs -->
-            <div class="tabsContainer no-padding col-md-12">
-                <a href="#" class="tab tab-active col-md-4 col-sm-4" id="addingLauncher">Add</a>
-                <a href="#" class="tab col-md-4 col-sm-4" id="editingLauncher">Edit</a>
-                <a href="#" class="tab col-md-4 col-sm-4" id="deletingLauncher">Remove</a>
+            <div class="tabsContainer no-padding col-md-12 col-xs-12 col-sm-12">
+                <a href="#" class="tab tab-active col-md-4 col-sm-4 col-xs-4" id="addingLauncher">Add</a>
+                <a href="#" class="tab col-md-4 col-sm-4 col-xs-4" id="editingLauncher">Edit</a>
+                <a href="#" class="tab col-md-4 col-sm-4 col-xs-4" id="deletingLauncher">Remove</a>
             </div>
             <!---->
             <!-- adding -->
@@ -419,9 +504,6 @@ League management
                 <h3>New stadium</h3>
                 <div class="form-group col-md-7 col-sm-7 no-padding">
                     <input type="text" name="stadium-name" value="" class="blackInput col-md-12 col-sm-12" placeholder="Pick a name...">
-                </div>
-                <div class="form-group col-md-5 col-sm-5">
-                    <button type="button" id="addStadiumBtn" class="blueBtn col-md-11 col-sm-8 col-sm-offset-3 col-md-offset-1">Add!</button>
                 </div>
                 <div class="form-group col-md-12 no-padding">
                     <div class="col-md-7 no-padding" id="file-container">
@@ -445,16 +527,17 @@ League management
                     <p>3. Once you get ready, and you have filled all the information, click add!</p>
                   </div>
                 </div>
+                <div class="form-group col-md-5 col-sm-5">
+                    <button type="button" id="addStadiumBtn" class="btnBlue2 col-md-11 col-sm-8 col-sm-offset-3 col-md-offset-1">Add!</button>
+                </div>
             </div>
             <!---->
             <!-- editing -->
             <div class="col-md-12 no-padding sub-module" id="editingModule" style="padding:15px;">
-                <h3 class="">Select one...</h3>
                 <div class="col-md-7 no-padding gmaps-container" id="gmaps-container2">
 
                 </div>
                 <div class="col-md-5" id="editingStadiumDiv">
-                    <p class="col-md-12 no-padding col-md-offset-0">Modify the information</p>
                     <div class="form-group col-md-12 col-md-offset-0 no-padding">
                         <img id="photo-holder" class="col-md-12 no-padding" src="">
                     </div>
@@ -472,7 +555,7 @@ League management
                         <input type="checkbox" name="changeLocation" id="changeStadiumLocation" value=""><span style="margin-left: 5px; ;position:absolute; top:2px; font-size:12px; padding-top:0px;"> Change location</span>
                     </div>
                     <div class="form-group col-md-12 no-padding col-md-offset-0">
-                        <button type="button" class="btnBlue col-md-12" id="editStadiumBtn" name="editStadiumBtn">Accept</button>
+                        <button type="button" class="btnBlue2 col-md-12" id="editStadiumBtn" name="editStadiumBtn">Accept</button>
                     </div>
                 </div>
 
@@ -489,20 +572,20 @@ League management
                     </div>
                     <h4 class="" id="stadium-name"></h4>
                     <div class="form-group col-md-12 no-padding">
-                        <button type="button" name="button" class="col-md-12 no-padding btnBlue" id="deleteStadiumBtn">Delete</button>
+                        <button type="button" name="button" class="col-md-12 no-padding btnRed2" id="deleteStadiumBtn">Delete</button>
                     </div>
                 </div>
             </div>
             <!---->
         </div>
-        <div class="col-md-12 no-padding module" id="coachesModule">
-            <div class="tabsContainer no-padding col-md-12">
-                <a href="#" class="tab tab-active col-md-4" id="addingLauncher">Add</a>
-                <a href="#" class="tab col-md-4" id="editingLauncher">Edit</a>
-                <a href="#" class="tab col-md-4" id="deletingLauncher">Remove</a>
+        <div class="col-md-12 col-sm-12 col-xs-12 no-padding module" id="coachesModule">
+            <div class="tabsContainer no-padding col-md-12 col-sm-12 col-xs-12">
+                <a href="#" class="tab tab-active col-md-4 col-sm-4 col-xs-4" id="addingLauncher">Add</a>
+                <a href="#" class="tab col-md-4 col-sm-4 col-xs-4" id="editingLauncher">Edit</a>
+                <a href="#" class="tab col-md-4 col-sm-4 col-xs-4" id="deletingLauncher">Remove</a>
             </div>
-            <div class="col-md-12 no-padding sub-module sub-module-active" id="addingModule">
-                <div class="col-md-12" style="padding-top:15px;">
+            <div class="col-md-12 col-xs-12 col-sm-12 no-padding sub-module sub-module-active" id="addingModule">
+                <div class="col-md-12" style="padding-top:15px;padding-bottom:15px;">
                     <h4 class="col-md-12">Coach information</h4>
                     <div class="form-group col-md-12">
                         <input type="text" name="coachName" id="coachName" value="" placeholder="Name..." class="myInputWhite col-md-6">
@@ -518,76 +601,97 @@ League management
                         <p class="col-md-12" style="text-align:center;font-size:12px;" id="file-info">No file selected...</p>
                     </div>
                     <div class="form-group col-md-12">
-                        <button type="button" name="addCoachBtn" class="blueBtn col-md-6" id="addCoachBtn">Accept</button>
+                        <button type="button" name="addCoachBtn" class="btnBlue2 col-md-6" id="addCoachBtn">Accept</button>
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 no-padding sub-module" id="editingModule">
-                @foreach(App\League\Coach::get() as $i => $coach)
-                  <div class="col-md-3" style="padding:15px;">
-                    <div class="col-md-12 no-padding" style="overflow: hidden;">
-                      <div class="coachCard no-padding" id="{{$coach->id}}">
-                          <img src="{{asset('storage/'.$coach->photo)}}" alt="" class=""/>
-                          <i class="material-icons photo-btn" id="{{$coach->id}}">photo_camera<input class="file" id="coachHiddenFile" type="file"></input></i>
-                          <i class="material-icons edit-btn" id="{{$coach->id}}">mode_edit</i>
-                          <div class="col-md-12">
-                            <h5>{{$coach->name." ".$coach->last_name}}</h5>
-                            @if($coach->team)
-                            <p id="team">{{$coach->team->name}}</p>
-                            @else
-                            <p id="team">No team</p>
-                            @endif
-                          </div>
+            <div class="col-md-12 col-xs-12 col-sm-12 no-padding sub-module" id="editingModule">
+                @if(App\League\Coach::get()->count() < 1)
+                  <h3 style="text-align: center;">Empty</h3>
+                @else
+                  @foreach(App\League\Coach::get() as $i => $coach)
+                    <div class="col-md-3 col-xs-12 col-sm-4 cardParent" style="padding:15px; ;overflow: hidden;">
+                      <div class="col-md-12 col-sm-12 col-xs-12 no-padding" style="height:100%;overflow: hidden;box-shadow: 0px 0px 3px 0px #000;">
+                        <div class="coachCard col-md-12 col-sm-12 col-xs-12 no-padding" id="{{$coach->id}}">
+                            <img src="{{asset('storage/'.$coach->photo)}}" alt="" width="120%" class=""/>
+                            <i class="material-icons photo-btn" id="{{$coach->id}}">photo_camera<input class="file" id="coachHiddenFile" type="file"></input></i>
+                            <i class="material-icons edit-btn" id="{{$coach->id}}">mode_edit</i>
+                            <div class="col-md-12 col-xs-12 col-sm-12">
+                              <h5>{{$coach->name." ".$coach->last_name}}</h5>
+                              @if($coach->team)
+                              <p id="team">{{$coach->team->name}}</p>
+                              @else
+                              <p id="team">No team</p>
+                              @endif
+                            </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                @endforeach
+                  @endforeach
+                @endif
             </div>
-            <div class="col-md-12 no-padding sub-module" id="deletingModule">
-              <p>
-                delete
-              </p>
+            <div class="col-md-12 col-xs-12 no-padding sub-module" id="deletingModule">
+              @if(App\League\Coach::get()->count() < 1)
+                <h3 style="text-align: center;">Empty</h3>
+              @else
+                @foreach(App\League\Coach::get() as $i => $coach)
+                    <div class="coachCard2 col-md-3 col-sm-4 col-xs-6" id="8">
+                        <img src="{{asset('storage/'.$coach->photo)}}" alt="" class="col-md-12 no-padding"/>
+                        <i class="material-icons delete-btn" id="{{$coach->id}}">delete</i>
+                        <div class="col-md-12 col-xs-12 col-sm-12">
+                          <h5>{{$coach->name." ".$coach->last_name}}</h5>
+                          @if($coach->team)
+                          <p id="team">{{$coach->team->name}}</p>
+                          @else
+                          <p id="team">No team</p>
+                          @endif
+                        </div>
+                    </div>
+                @endforeach
+              @endif
             </div>
         </div>
-        <div class="col-md-12 no-padding module" id="teamsModule">
-            <div class="tabsContainer no-padding col-md-12">
-                <a href="#" class="tab tab-active col-md-4" id="addingLauncher">Add</a>
-                <a href="#" class="tab col-md-4" id="editingLauncher">Edit</a>
-                <a href="#" class="tab col-md-4" id="deletingLauncher">Remove</a>
+        <div class="col-md-12 col-sm-12 col-xs-12 no-padding module" id="teamsModule">
+            <div class="tabsContainer no-padding col-md-12 col-sm-12 col-xs-12">
+                <a href="#" class="tab tab-active col-md-4 col-sm-4 col-xs-4" id="addingLauncher">Add</a>
+                <a href="#" class="tab col-md-4 col-sm-4 col-xs-4" id="editingLauncher">Edit</a>
+                <a href="#" class="tab col-md-4 col-sm-4 col-xs-4" id="deletingLauncher">Remove</a>
             </div>
             <p>
               Teams
             </p>
         </div>
-        <div class="col-md-12 no-padding module" id="playersModule">
-            <div class="tabsContainer no-padding col-md-12">
-                <a href="#" class="tab tab-active col-md-4" id="addingLauncher">Add</a>
-                <a href="#" class="tab col-md-4" id="editingLauncher">Edit</a>
-                <a href="#" class="tab col-md-4" id="deletingLauncher">Remove</a>
+        <div class="col-md-12 col-sm-12 col-xs-12 no-padding module" id="playersModule">
+            <div class="tabsContainer no-padding col-md-12 col-sm-12 col-xs-12">
+                <a href="#" class="tab tab-active col-md-4 col-sm-4 col-xs-4" id="addingLauncher">Add</a>
+                <a href="#" class="tab col-md-4 col-sm-4 col-xs-4" id="editingLauncher">Edit</a>
+                <a href="#" class="tab col-md-4 col-sm-4 col-xs-4" id="deletingLauncher">Remove</a>
             </div>
             <p>
               Players
             </p>
         </div>
     </div>
-    <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0" id="manageMenu">
-        <a class="manageMenuHeader col-md-12 col-sm-12">Manage...</a>
-        <a href="#" id="stadiumsLauncher" class="manageMenuItem item-active col-md-12 col-sm-12">Stadiums</a>
-        <a href="#" id="coachesLauncher" class="manageMenuItem col-md-12 col-sm-12">Coaches</a>
-        <a href="#" id="teamsLauncher" class="manageMenuItem col-md-12 col-sm-12">Teams</a>
-        <a href="#" id="playersLauncher" class="manageMenuItem col-md-12 col-sm-12">Players</a>
+    <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0 col-xs-10 col-xs-offset-1" id="manageMenu">
+        <a class="manageMenuHeader col-md-12 col-sm-12 col-xs-12">Manage...</a>
+        <a href="#" id="stadiumsLauncher" class="manageMenuItem item-active col-md-12 col-sm-12 col-xs-12">Stadiums</a>
+        <a href="#" id="coachesLauncher" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Coaches</a>
+        <a href="#" id="teamsLauncher" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Teams</a>
+        <a href="#" id="playersLauncher" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Players</a>
     </div>
 </div>
 @endsection
 
 @section('js')
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9fuikPcHicK9HnQSzmHM-iZikumk6710&callback=initMap"></script>
 <script type="text/javascript">
     var marker, map, myLatLng, stadiumsMarkers = [];
     var mapDiv = $('.gmaps-container > #gmap')[0];
     function initMap() {
         myLatLng = {lat: 40.416786, lng: -3.703788};
         map = new google.maps.Map(mapDiv, {
-            zoom: 6,
+            zoom: 5,
             center: myLatLng,
             mapTypeControl: false,
             scaleControl:false,
@@ -608,12 +712,13 @@ League management
     }
 
     $(function($){
-        $(window).on('load',function () {
-          $('.coachCard').height($('.coachCard').parent().parent().parent().parent().parent().width()/4-30);
-          $('.coachCard').height($('.coachCard').parent().parent().parent().parent().parent().width()/4-30);
+        $('.coachCard2').height(($('.module').width()-30)*($('.coachCard2').width()/100));
+        $.each($('.cardParent'),function (i,e) {
+          $(e).height(($('.module').width())*($(e).width()/100)-30);
         });
         $(window).resize(function () {
-            $('.coachCard').height($('.coachCard').width());
+            $('.cardParent').height($('.cardParent').width());
+            $('.coachCard2').height($('.coachCard2').width());
         });
         $.ajax({
             url: '/getStadiums',
@@ -700,7 +805,6 @@ League management
                                         animation: google.maps.Animation.DROP
                                     });
                                     stadiumsMarkers.push(mker);
-                                    console.log(mker);
                                 }
                                 showMessages(response['msgs']['title'], response['msgs']['content'][0], response['msgs']['type']);
                             });
@@ -714,19 +818,6 @@ League management
             });
 
         });
-
-        function showMessages(title, msg){
-            var parent = $('.dark-block');
-            var children = parent.children('#msgs-card');
-            children.children('h4').text(title);
-            children.children('p').text(msg);
-            children.css('bottom','0px');
-            children.fadeIn(200,function () {
-                parent.fadeIn('fast',function () {
-                    parent.css('display','initial');
-                });
-            });
-        }
 
         function showMessages(title, msg, type){
             var parent = $('.dark-block');
@@ -765,6 +856,10 @@ League management
         $.each($('.manageMenuItem'), function (index, element) {
             $(element).click(function () {
                 if(!$(this).hasClass('item-active')){
+                    $('.coachCard2').height(($('.module').width()-30)*($('.coachCard2').width()/100));
+                    $.each($('.cardParent'),function (i,e) {
+                      $(e).height(($('.module').width())*($(e).width()/100)-30);
+                    });
                     $.each($('.manageMenuItem'),function (i,elem) {
                         $(elem).removeClass('item-active');
                     });
@@ -786,6 +881,10 @@ League management
         $.each($('.tab'), function (index, element) {
             $(element).click(function () {
                 if(!$(element).hasClass('tab-active')){
+                    $('.coachCard2').height(($('.module').width()-30)*($('.coachCard2').width()/100));
+                    $.each($('.cardParent'),function (i,e) {
+                      $(e).height(($('.module').width())*($(e).width()/100)-30);
+                    });
                     $.each($(element).parent().children('.tab'),function (i,elem) {
                         $(elem).removeClass('tab-active');
                     });
@@ -993,7 +1092,7 @@ League management
                     if(response['coachTeam']){
                       team = response['coachTeam'].name;
                     }
-                    $('#coachesModule').children('#editingModule').append('<div class="col-md-3" style="padding:15px;"><div class="col-md-12 no-padding" style="overflow: hidden;"><div class="coachCard no-padding" id="'+response['coach'].id+'"><img src="storage/'+response['coach'].photo+'" alt="" class=""/><i class="material-icons photo-btn" id="'+response['coach'].id+'">photo_camera</i><i class="material-icons edit-btn" id="'+response['coach'].id+'">mode_edit</i><div class="col-md-12"><h5>'+response['coach'].name+" "+response['coach'].last_name+'</h5><p id="team">'+team+'</p></div></div></div></div>');
+                    $('#coachesModule').children('#editingModule').append('<div class="col-md-3 col-xs-12 col-sm-4 cardParent" style="padding:15px;"><div class="col-md-12 col-sm-12 col-xs-12 no-padding" style="overflow: hidden;box-shadow: 0px 0px 3px 0px #000;"><div class="coachCard no-padding" id="'+response['coach'].id+'"><img src="storage/'+response['coach'].photo+'" alt="" class=""/><i class="material-icons photo-btn" id="'+response['coach'].id+'">photo_camera<input class="file" id="coachHiddenFile" type="file"></input></i><i class="material-icons edit-btn" id="'+response['coach'].id+'">mode_edit</i><div class="col-md-12 col-xs-12 col-sm-12"><h5>'+response['coach'].name+" "+response['coach'].last_name+'</h5><p id="team">'+team+'</p></div></div></div>');
                     $('.edit-btn').unbind('click');
                     $.each($('.edit-btn'),function (index,element) {
                       $(element).click(function () {
@@ -1003,28 +1102,58 @@ League management
                         $('button[name=updateCoachNamesBtn]').attr('id',$(this).attr('id'));
                       });
                     });
-                    //////// add event of photo btn
+                    $('.photo-btn').unbind('click');
+                    setPhotoEvent();
                   }
                   showMessages(response['msgs']['title'], response['msgs']['content'], response['msgs']['type']);
               });
             }
         });
 
-        $.each($('.photo-btn'),function (i, e) {
-          $(e).click(function () {
-            $(this).children('input[type=file]').change(function () {
-              /////////////////////////////////////
-              console.log($(this));
+        function setPhotoEvent() {
+          $.each($('.photo-btn'),function (i, e) {
+            $(e).click(function () {
+              $(this).children('input[type=file]').change(function () {
+                if(this.files[0]){
+                  var formData = new FormData();
+                  formData.append('photo', this.files[0]);
+                  formData.append('_token','{{csrf_token()}}');
+                  formData.append('id',$(e).attr('id'));
+                  $.ajax({
+                    url:'/updateCoachPhoto',
+                    type:'post',
+                    dataType: 'json',
+                    data:formData,
+                    processData:false,
+                    contentType:false
+                  }).done(function (response) {
+                    if(response['photo']){
+                      $(e).parent().children('img').attr('src','storage/'+response['photo']);
+                    }
+                  });
+                }
+              });
             });
           });
-        });
+        }
+
+        setPhotoEvent();
 
         $.each($('.edit-btn'),function (i, e) {
           $(e).click(function () {
-            $('.dark-tranparent-back').fadeIn('fast',function () {
-              $('.dialog-card').css('opacity',1).css('margin-top','20%');
+            $('#edit-coach-back').fadeIn('fast',function () {
+              $('#edit-coach-back').children('.dialog-card').css('opacity',1).css('margin-top','20%');
             });
             $('button[name=updateCoachNamesBtn]').attr('id',$(this).attr('id'));
+          });
+        });
+
+        $.each($('.delete-btn'),function (i, e) {
+          $(e).click(function () {
+            $('#delete-coach-back').fadeIn('fast',function () {
+              $('#delete-coach-back').children('.dialog-card').css('opacity',1).css('margin-top','20%');
+            });
+            $('button[name=deleteCoachBtn]').attr('id',$(this).attr('id'));
           });
         });
 
@@ -1036,6 +1165,11 @@ League management
           $.each($('.dialog-card').children('#messageBox').children(), function (i,e) {
             $(e).remove();
           });
+        });
+
+        $('.dialog-card').children('div.btns-back').children('div').children('div#cancelContainer').children('button').click(function () {
+          $('.dialog-card').css('opacity',0).css('margin-top','10%');
+          $('.dark-tranparent-back').fadeOut('fast');
         });
 
         $('.dark-tranparent-back').click(function (e) {
@@ -1079,7 +1213,6 @@ League management
                 last_name:$('input[name=newCoachLastName]').val()
               }
             }).done(function (response) {
-              console.log(response);
               $.each($('.dialog-card').children('#messageBox').children(), function (i,e) {
                 $(e).remove();
               });
@@ -1091,8 +1224,10 @@ League management
           }
         });
 
+        $('button[name=deleteCoachBtn]').click(function () {
+          //////////////////////////
+        });
+
     });
 </script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9fuikPcHicK9HnQSzmHM-iZikumk6710&callback=initMap"></script>
 @endsection

@@ -50,7 +50,7 @@
                 padding: 10px;
                 cursor: pointer;
                 color: white;
-                text-shadow: 1px 1px 4px #111;
+                text-shadow: 0px 0px 2px #000;
                 -webkit-transition: border-bottom .1s;
             }
             .navItem:hover div.bottomBar{
@@ -238,6 +238,7 @@
             }
             .menuBar{
                 background-color: white;
+                box-shadow: 0px 0px 2px 0px #222;
                 height: 3px;
                 margin-bottom: 4px;
                 -webkit-transition: background-color .9s;
@@ -279,7 +280,7 @@
                 <div class="menuBar"></div>
             </div>
                 @if(Auth::user()->type)
-                <a class="navItem toRight">{{Auth::user()->name}} (admin)<div class="bottomBar"></div></a>
+                <a class="navItem toRight">{{Auth::user()->name}}<div class="bottomBar"></div></a>
                 @else
                 <a class="navItem toRight">{{Auth::user()->name}}<div class="bottomBar"></div></a>
                 @endif

@@ -161,5 +161,29 @@ class League extends Controller
           'coachTeam' => $coach->team
         ];
     }
+    public function updateCoachPhoto(Request $request)
+    {
+        $result = Validator::make($request->all(), [
+          'id' => 'required',
+          'photo' => 'required'
+        ]);
+        if($result->fails()) return [
+          'msg' => 'Has been a error. Try again.',
+          'photo' => null
+        ];
+        if(!$coach = Coach::find($request->id)) return [
+          'msg' => 'Has been a error. Try again.',
+          'photo' => null
+        ];
+        $coach->photo = $request->photo->store('img/coaches','public');
+        if($coach->save()) return [
+          'msg' => 'Has been a error. Try again.',
+          'photo' => $coach->photo
+        ];
+        return [
+          'msg' => 'Has been a error. Try again.',
+          'photo' => null
+        ];
+    }
 
 }

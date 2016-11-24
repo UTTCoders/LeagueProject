@@ -48,6 +48,8 @@ Route::group(['middleware' => ['authen']], function(){
 		Route::post('/addCoach','Admin\League@addCoach');
 
 		Route::post('/updateCoachNames','Admin\League@updateCoachNames');
+
+		Route::post('/updateCoachPhoto','Admin\League@updateCoachPhoto');
 		// end of Management by admin
 
 });
