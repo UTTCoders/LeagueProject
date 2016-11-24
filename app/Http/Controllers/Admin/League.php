@@ -161,8 +161,7 @@ class League extends Controller
           'coachTeam' => $coach->team
         ];
     }
-    public function updateCoachPhoto(Request $request)
-    {
+    public function updateCoachPhoto(Request $request){
         $result = Validator::make($request->all(), [
           'id' => 'required',
           'photo' => 'required'
@@ -184,6 +183,15 @@ class League extends Controller
           'msg' => 'Has been a error. Try again.',
           'photo' => null
         ];
+    }
+
+    public function deleteCoach(Request $request){
+        $result = Validator::make($request->all(),[
+          'id' => 'required|numeric'
+        ]);
+        if($result->fails()) return ['title' => 'Ups!', 'content' => 'Something went wrong!', 'type' => 'error-card'];
+        Coach::find($request->id)->delete();
+        return ['title' => 'Ok!', 'content' => 'Coach deleted!', 'type' => 'success-card'];
     }
 
 }

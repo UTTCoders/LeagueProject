@@ -126,16 +126,17 @@ League management
         display: initial;
     }
     .blackInput{
-        background-color: #222;
-        box-shadow: 0px 1px 1px 0px rgba(0,0,0,.2);
-        border: 1px solid rgba(0,0,0,.4);
+        background-color: #ddd;
+        box-shadow: 0px 1px 4px 0px #111;
+        border:0;
+        font-weight: 400;
         border-radius: 3px;
         padding: 5px 10px 5px 10px;
-        color: #ddd;
+        color: #555;
         -webkit-transition: color .3s;
     }
     .blackInput:hover{
-        color: white;
+        color: black;
     }
     .blueBtn{
         background-color: dodgerblue;
@@ -537,6 +538,7 @@ League management
                 <div class="col-md-7 no-padding gmaps-container" id="gmaps-container2">
 
                 </div>
+                <h3 style="text-align:center;" class="emptyAdvice">Empty</h3>
                 <div class="col-md-5" id="editingStadiumDiv">
                     <div class="form-group col-md-12 col-md-offset-0 no-padding">
                         <img id="photo-holder" class="col-md-12 no-padding" src="">
@@ -566,6 +568,7 @@ League management
                 <div class="col-md-7 no-padding gmaps-container" id="gmaps-container3">
 
                 </div>
+                <h3 class="emptyAdvice" style="text-align:center;">Empty</h3>
                 <div class="col-md-5 no-padd-right" id="deletingStadiumDiv" style="display:none;">
                     <div class="form-group col-md-12 no-padding">
                       <img src="" class="col-md-12 no-padding" alt="" />
@@ -610,7 +613,7 @@ League management
                   <h3 style="text-align: center;">Empty</h3>
                 @else
                   @foreach(App\League\Coach::get() as $i => $coach)
-                    <div class="col-md-3 col-xs-12 col-sm-4 cardParent" style="padding:15px; ;overflow: hidden;">
+                    <div class="col-md-3 col-xs-12 col-sm-4 cardParent" name="{{$coach->id}}" style="padding:15px; ;overflow: hidden;">
                       <div class="col-md-12 col-sm-12 col-xs-12 no-padding" style="height:100%;overflow: hidden;box-shadow: 0px 0px 3px 0px #000;">
                         <div class="coachCard col-md-12 col-sm-12 col-xs-12 no-padding" id="{{$coach->id}}">
                             <img src="{{asset('storage/'.$coach->photo)}}" alt="" width="120%" class=""/>
@@ -635,7 +638,7 @@ League management
                 <h3 style="text-align: center;">Empty</h3>
               @else
                 @foreach(App\League\Coach::get() as $i => $coach)
-                    <div class="coachCard2 col-md-3 col-sm-4 col-xs-6" id="8">
+                    <div class="coachCard2 col-md-3 col-sm-4 col-xs-6" name="{{$coach->id}}" id="">
                         <img src="{{asset('storage/'.$coach->photo)}}" alt="" class="col-md-12 no-padding"/>
                         <i class="material-icons delete-btn" id="{{$coach->id}}">delete</i>
                         <div class="col-md-12 col-xs-12 col-sm-12">
@@ -729,6 +732,9 @@ League management
             }
         }).done(function(response){
             $.each(response ,function (i, e) {
+                if($('.emptyAdvice').css('display') != 'none'){
+                  $('.emptyAdvice').fadeOut();
+                }
                 var stadiumLocation = JSON.parse(e['location']);
                 stadiumLocation.lat = parseFloat(stadiumLocation.lat);
                 stadiumLocation.lng = parseFloat(stadiumLocation.lng);
@@ -805,6 +811,9 @@ League management
                                         animation: google.maps.Animation.DROP
                                     });
                                     stadiumsMarkers.push(mker);
+                                    if($('.emptyAdvice').css('display') != 'none'){
+                                      $('.emptyAdvice').fadeOut('fast');
+                                    }
                                 }
                                 showMessages(response['msgs']['title'], response['msgs']['content'][0], response['msgs']['type']);
                             });
@@ -833,15 +842,6 @@ League management
                 });
             });
         }
-
-        $(window).scroll(function () {
-            if($(this).scrollTop() > $('.coverContainer').height() - 50){
-                $('nav[class=navBar]').css('background-color', 'black');
-            }
-            else{
-                $('nav[class=navBar]').css('background-color', 'transparent');
-            }
-        });
 
         $('input[type=file][class=input-file]').change(function () {
             var file = this.files[0];
@@ -1060,6 +1060,11 @@ League management
                   });
                   clickedMarker = null;
                   showMessages('OK!',['Stadium successfully delete.'],'success-card');
+                  console.log(stadiumsMarkers.length);
+                  if(stadiumsMarkers.length < 1){
+                    $('.emptyAdvice').fadeIn('fast');
+                  }
+                  $('#editingStadiumDiv').fadeOut();
                 });
             }
             else showMessages('Ups!',['Have been an error! Try again.'],'error-card');
@@ -1225,7 +1230,23 @@ League management
         });
 
         $('button[name=deleteCoachBtn]').click(function () {
-          //////////////////////////
+          var id = $(this).attr('id');
+          $.ajax({
+            url:'/deleteCoach',
+            dataType:'json',
+            type:'post',
+            data:{
+              _token: '{{csrf_token()}}',
+              id: id
+            }
+          }).done(function (response) {
+              $('.dialog-card').css('opacity',0).css('margin-top','10%');
+              $('.dark-tranparent-back').fadeOut('fast');
+              showMessages(response['title'],response['content'],response['type']);
+              $('div[name='+id+']').fadeOut('fast',function () {
+                $(this).remove();
+              });
+          });
         });
 
     });
