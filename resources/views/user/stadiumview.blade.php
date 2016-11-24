@@ -38,10 +38,10 @@
 	@endif
 	</div>
 </div>
+<div class="jumbotron" style="background-color: #004D40; margin-bottom: 0;">
 @if(isset($match))
-	<div class="jumbotron" style="background-color: #004D40; margin-bottom: 0;">
 	<h1 align="center" style="color:#eee; font-size: 35px; text-shadow: 1px 1px 1px black;">A match is taking place right now <br>at {{$stadium->name}}!</h1>
-	</div>
 @else
 @endif
+</div>
 @endsection

@@ -35,14 +35,26 @@ class MapController extends Controller
     	if ($thestadium->team->matches->count() > 0) {
     		$res=self::checkStadiumMatches($thestadium);
     		if ($res["there_is"]) {
-    			return view('user.stadiumview')
-    			->with("stadium",$thestadium)
-    			->with("match",$res["match"]);
+    			if (self::checkLocalTeam($res["match"],$thestadium->team)) {
+    				return view('user.stadiumview')
+	    			->with("stadium",$thestadium)
+	    			->with("match",$res["match"]);
+    			}
     		}
     	}
-    	
     	return view('user.stadiumview')
     	->with("stadium",$thestadium);
+    }
+
+    private function checkLocalTeam($match,$theStadiumsTeam){
+    	foreach ($match->teams as $key => $team) {
+    		if ($team->pivot->local) {
+    			if ($team->id==$theStadiumsTeam->id) {
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
     }
 
     private function checkStadiumMatches($thestadium){
