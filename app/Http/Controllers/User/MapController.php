@@ -33,15 +33,12 @@ class MapController extends Controller
     		return view('errors.404error');
     	}
     	if ($thestadium->team->matches->count() > 0) {
-    		return "hola";
     		$res=self::checkStadiumMatches($thestadium);
     		if ($res["there_is"]) {
-    			
+    			return view('user.stadiumview')
+    			->with("stadium",$thestadium)
+    			->with("match",$res["match"]);
     		}
-	    	if ($thestadium->team->matches->where('start_date',$today)
-	    		->count()>0) {
-	    		return "hola";
-	    	}
     	}
     	
     	return view('user.stadiumview')
