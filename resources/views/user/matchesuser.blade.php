@@ -1,6 +1,6 @@
 @extends('user.userhome')
 
-@section('title'," | Stadium")
+@section('title',"All matches")
 
 @section('css2')
 <style type="text/css">
@@ -48,6 +48,8 @@
 	#infoside{
 		border-radius: 0;
 	}
+
+	/*CSS For the matches menu*/
 	#matchesMenu{
 		background-color: #111;
 		margin-bottom: 20px;
@@ -60,7 +62,9 @@
 	.activeOp{
 		background-color: #eee;
 	}
-	a[class=optionM_S]{
+
+	/*Select al classes containing ‘keyword’ whether it’s first, last or part of a name*/
+	a[class*=Selected]{
 		color:#111;
 	}
 </style>
@@ -74,7 +78,7 @@
 		<div class="thumbnail col-md-8 col-xs-12" id="contcards">
 			<div id="matchesMenu" class="col-xs-12">
 				<ul class="nav nav-pills">
-				  <li role="presentation" class="activeOp"><a href="#" class="optionM_S">Right now!</a></li>
+				  <li role="presentation" class="activeOp"><a href="#" class="optionM Selected">Right now!</a></li>
 				  <li role="presentation"><a href="#" class="optionM">History</a></li>
 				</ul>
 			</div>
@@ -116,4 +120,20 @@
 		</div>
 	</div>
 </div>
+@endsection
+
+@section('js2')
+<script>
+$(document).ready(function(){
+$(".optionM").click(function(){
+	if (!$(this).hasClass('Selected')) {
+		$(".Selected").parent().removeClass('activeOp');
+		$(".Selected").removeClass('Selected');
+		$(this).addClass('Selected');
+		$(this).parent().addClass('activeOp');
+	}
+});
+
+});
+</script>
 @endsection
