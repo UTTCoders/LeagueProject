@@ -38,7 +38,7 @@
                 left: 0px;
                 position: fixed;
                 z-index: 1;
-                background-color: rgba(255, 255, 255, .0);
+                background-color: transparent;
                 display: inline-block;
                 padding: 10px;
                 -webkit-transition: background-color .4s;
@@ -50,7 +50,7 @@
                 padding: 10px;
                 cursor: pointer;
                 color: white;
-                text-shadow: 1px 1px 4px #111;
+                text-shadow: 0px 0px 2px #000;
                 -webkit-transition: border-bottom .1s;
             }
             .navItem:hover div.bottomBar{
@@ -163,21 +163,20 @@
                 color: white;
             }
             .menuPanel{
-                margin-top: 62px;
                 position: fixed;
                 float: right;
-                background-color: #000;
+                background-color: #111;
                 height: 100%;
                 width: 210px;
                 right: -210px;
                 -webkit-transition: right .6s;
-                padding-top: 20px;
-                z-index: 9;
+                padding-top: 15px;
+                z-index: 10;
                 box-shadow: -1px 0px 2px #000;
             }
             .panelItem{
                 position: relative;
-                background-color: #000;
+                background-color: #111;
                 text-align: center;
                 padding-top: 7px;
                 padding-bottom: 7px;
@@ -188,11 +187,11 @@
             }
             .panelItem:link,.panelItem:active,.panelItem:visited{
                 text-decoration: none;
-                color: #6f9;
+                color: white;
             }
             .panelItem:hover{
                 -webkit-transition: background-color 1s, width .6s, border-left .1s;
-                color: #6f9;
+                color: white;
                 background-color: #000;
                 box-shadow: inset 0px 0px 5px 0px #000;
                 text-decoration: none;
@@ -238,6 +237,7 @@
             }
             .menuBar{
                 background-color: white;
+                box-shadow: 0px 0px 2px 0px #222;
                 height: 3px;
                 margin-bottom: 4px;
                 -webkit-transition: background-color .9s;
@@ -266,6 +266,12 @@
                 display: block;
                 background-color:white;
             }
+            #hideBtn{
+              margin-bottom: 15px;
+            }
+            #hideBtn:hover{
+              color: white;
+            }
         </style>
         @yield('css')
     </head>
@@ -279,7 +285,7 @@
                 <div class="menuBar"></div>
             </div>
                 @if(Auth::user()->type)
-                <a class="navItem toRight">{{Auth::user()->name}} (admin)<div class="bottomBar"></div></a>
+                <a class="navItem toRight">{{Auth::user()->name}}<div class="bottomBar"></div></a>
                 @else
                 <a class="navItem toRight">{{Auth::user()->name}}<div class="bottomBar"></div></a>
                 @endif
@@ -293,17 +299,21 @@
             @if(Auth::user()->type)
             <!-- Here goes the admin options :O -->
             <div class="menuPanel">
+                <i class="material-icons pull-right" id="hideBtn" style="margin-right:15px;font-size:28px;cursor:pointer;">arrow_forward</i>
                 <div class="itemsContainer">
                     <a href="#" id="1"  class="panelItem event">Prueba</a>
                     <a href="#" id="1" class="panelSubItem" style="display:none">Hijo</a>
-                    <a href="/logout" class="panelItem">Log out</a>
                 </div>
-                <a href="/favorites" class="panelItem" style="position:absolute;bottom:72px;">Favorites</a>
+                <div class="bottomContainer col-md-12 no-padding" style="position:absolute;bottom:0px;background-color:red;">
+                  <a href="/favorites" class="panelItem" style="">Favorites</a>
+                  <a href="/logout" class="panelItem">Log out</a>
+                </div>
             </div>
 
             @else
             <!-- And here the user options :D -->
                 <div class="menuPanel">
+                    <i class="material-icons pull-right" id="hideBtn" style="margin-right:15px;font-size:28px;cursor:pointer;">arrow_forward</i>
                     <div class="itemsContainer">
                         <a href="/favorites" class="panelItem"><span class="glyphicon glyphicon-star-empty"></span> My favorite teams</a>
                         <a href="/matches" class="panelItem">See matches</a>
@@ -326,24 +336,37 @@
         @yield('js')
         <script>
             $(function($){
+                if($('.coverContainer').length > 0){
+                  if($(this).scrollTop() > $('.coverContainer').height() - 50){
+                      $('nav[class=navBar]').css('background-color', '#111');
+                  }
+                  else{
+                      $('nav[class=navBar]').css('background-color', 'transparent');
+                  }
+                  $(window).scroll(function () {
+                      if($(this).scrollTop() > $('.coverContainer').height() - 50){
+                          $('nav[class=navBar]').css('background-color', '#111');
+                      }
+                      else{
+                          $('nav[class=navBar]').css('background-color', 'transparent');
+                      }
+                  });
+                }
                 //menu
                 $('.menu').hover(function(){
                     $('.menu').css('cursor','pointer');
-                    $(this).children('.menuBar').css('background-color','dodgerblue').css('cursor','pointer');
+                    $(this).children('.menuBar').css('cursor','pointer');
                 });
                 $('.menu').mouseleave(function(){
-                    $(this).children('.menuBar').css('background-color','white');
                 });
                 var active=false;
                 $('.menu').click(function(){
                     if(active){
                         active=false;
-                        $(this).children('.menuBar').css('background-color','#1d80dd');
-                        $('.menuPanel').css('right','-210px');
+                        $('.menuPanel').css('right','-211px');
                     }
                     else{
                         active=true;
-                        $(this).children('.menuBar').css('background-color','dodgerblue');
                         $('.menuPanel').css('right','0px');
                     }
                 });
@@ -353,6 +376,10 @@
                             $(subElement).slideToggle('fast');
                         });
                     });
+                });
+                $('#hideBtn').click(function () {
+                  active=false;
+                  $(this).parent().css('right','-211px');
                 });
             });
         </script>

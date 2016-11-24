@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $('.menu').hover(function(){
         $('.menu').css('cursor','pointer');
-        $(this).children('.menuBar').css('background-color','aquamarine').css('cursor','pointer');
+        $(this).children('.menuBar').css('cursor','pointer');
     });
     $('.menu').mouseleave(function(){
         $(this).children('.menuBar').css('background-color','white');
@@ -10,12 +10,10 @@ $(document).ready(function(){
     $('.menu').click(function(){
         if(active){
             active=false;
-            $(this).children('.menuBar').css('background-color','skyblue');
             $('.menuPanel').css('right','-210px');
         }
         else{
             active=true;
-            $(this).children('.menuBar').css('background-color','dodgerblue');
             $('.menuPanel').css('right','0px');
         }
     });
