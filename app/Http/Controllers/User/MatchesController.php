@@ -18,7 +18,7 @@ class MatchesController extends Controller
 				->with('favorites',$res["matches"]);
 			}
 		}
-
+		
 		return view('user.matchesuser')
 		->with('matches',Match::where('state','>',0)
 		->where('state','<',4)->get());
