@@ -58,6 +58,7 @@
 	.optionM:hover{
 		border-radius: 0;
 		color: #111;
+		cursor:pointer;
 	}
 	.activeOp{
 		background-color: #eee;
@@ -78,37 +79,39 @@
 		<div class="thumbnail col-md-8 col-xs-12" id="contcards">
 			<div id="matchesMenu" class="col-xs-12">
 				<ul class="nav nav-pills">
-				  <li role="presentation" class="activeOp"><a href="#" class="optionM Selected">Right now!</a></li>
-				  <li role="presentation"><a href="#" class="optionM">History</a></li>
+				  <li role="presentation" class="activeOp"><a class="optionM Selected" id="now">Right now!</a></li>
+				  <li role="presentation"><a class="optionM" id="history">History</a></li>
+				  <li role="presentation"><a class="optionM" id="history"><span class="glyphicon glyphicon-star-empty"></span><span class="hidden-xs"> My favorites</span></a></li>
 				</ul>
 			</div>
-
-			<div class="row">
-				<div id="matchcard" class="thumbnail col-xs-12">
-					<div class="col-sm-5 col-xs-6" id="imgcard" align="center">
-						<img src="/img/soccerball.png" style="width: 60%">
-					</div>
-					<div class="col-sm-7 col-xs-6">
-						<h3 align="center">Cucu Rucu Cu</h3>
-						<div class="hidden-xs">	
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-						tempor incididunt ut labore et dolore magna aliqua.</p>
+			<div id="menuResults">	
+				<div class="row">
+					<div id="matchcard" class="thumbnail col-xs-12">
+						<div class="col-sm-5 col-xs-6" id="imgcard" align="center">
+							<img src="/img/soccerball.png" style="width: 60%">
+						</div>
+						<div class="col-sm-7 col-xs-6">
+							<h3 align="center">Cucu Rucu Cu</h3>
+							<div class="hidden-xs">	
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+							tempor incididunt ut labore et dolore magna aliqua.</p>
+							</div>
 						</div>
 					</div>
 				</div>
+				<!--<div class="row">	
+					<div id="matchcard" class="thumbnail col-xs-12">
+						<div class="col-sm-7 col-xs-6">
+							<h3 align="center">Cucu Rucu Cu</h3>
+							<p align="justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+							tempor incididunt ut labore et dolore magna aliqua.</p>
+						</div>
+						<div class="col-sm-5 col-xs-6" id="imgcard" align="center">
+							<img src="/img/soccerball.png" style="width: 60%">
+						</div>
+					</div>
+				</div>-->
 			</div>
-			<!--<div class="row">	
-				<div id="matchcard" class="thumbnail col-xs-12">
-					<div class="col-sm-7 col-xs-6">
-						<h3 align="center">Cucu Rucu Cu</h3>
-						<p align="justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-						tempor incididunt ut labore et dolore magna aliqua.</p>
-					</div>
-					<div class="col-sm-5 col-xs-6" id="imgcard" align="center">
-						<img src="/img/soccerball.png" style="width: 60%">
-					</div>
-				</div>
-			</div>-->
 		</div>
 		<div class="thumbnail col-md-3 col-md-offset-1 col-xs-12" id="infoside">
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
