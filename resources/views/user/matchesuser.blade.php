@@ -70,6 +70,10 @@
 		color:#111;
 	}
 
+	.padData{
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
 </style>
 @endsection
 
@@ -94,35 +98,23 @@
 			<div id="menuResults">
 				<div id="menuContent">
 				@if(isset($favorites))
-
+				
 				@else
 					@if($matches->count()>0)
 					@foreach($matches as $match)
 					<div class="row">
 						<div id="matchcard" class="thumbnail col-xs-12">
-							<div class="col-sm-5 col-xs-6" id="imgcard" style="background-image: url('{{'/storage/'.$match->teams->where('pivot.local',false)->first()->stadium->photo}}');" align="center">
+							<div class="col-sm-5 col-xs-6" id="imgcard" style="background-image: url('{{'/storage/'.$match->teams->where('pivot.local',true)->first()->stadium->photo}}');" align="center">
 								<img src="/img/soccerball.png" style="width: 60%">
 							</div>
 							<div class="col-sm-7 col-xs-6 padData">
-								<h3 align="center">{{$match->teams[0]->name}} VS {{$match->teams[1]->name}}</h3>
+								<h3 align="center"><strong>{{$match->teams->where('pivot.local',true)->first()->name}}</strong> VS {{$match->teams->where('pivot.local',false)->first()->name}}</h3>
 								<div class="hidden-xs">	
-								<p><strong>Stadium: </strong>{{$match->teams[0]->stadium->name}}</p>
+								<p><strong>Stadium: </strong>{{$match->teams->where('pivot.local',true)->first()->stadium->name}}</p>
 								</div>
 							</div>
 						</div>
 					</div>
-					<!--<div class="row">	
-						<div id="matchcard" class="thumbnail col-xs-12">
-							<div class="col-sm-7 col-xs-6">
-								<h3 align="center">Cucu Rucu Cu</h3>
-								<p align="justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-								tempor incididunt ut labore et dolore magna aliqua.</p>
-							</div>
-							<div class="col-sm-5 col-xs-6" id="imgcard" align="center">
-								<img src="/img/soccerball.png" style="width: 60%">
-							</div>
-						</div>
-					</div>-->
 					@endforeach
 					@else
 					@endif

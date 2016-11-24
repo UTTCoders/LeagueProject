@@ -9,6 +9,7 @@ use App\League\Match;
 use App\User;
 use Carbon\Carbon;
 use Auth;
+use Session;
 
 class MenuController extends Controller
 {
@@ -17,7 +18,8 @@ class MenuController extends Controller
             return view('admin.management');
 
         if (Auth::user()->teams->count()>0) {
-        	if (self::checkTeamMatches()) {
+        	if (self::checkTeamMatches() && !Session::has('first')) {
+        		Session::put('first',1);
         		return redirect('/matches');
         	}
         }

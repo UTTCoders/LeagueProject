@@ -8,6 +8,7 @@ use Validator;
 use Auth;
 use App\User;
 use App\League\Stadium;
+use Session;
 
 class LoginHomeController extends Controller
 {
@@ -43,6 +44,9 @@ class LoginHomeController extends Controller
     }
 
     public function LogoutRequest(){
+        if (Session::has('first')) {
+            Session::forget('first');
+        }
         Auth::logout();
         return redirect('/home');
     }

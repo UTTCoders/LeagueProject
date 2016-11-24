@@ -11,14 +11,13 @@ use Carbon\Carbon;
 class MatchesController extends Controller
 {
 	public function MatchesRequest(Request $r){
-		if (!Auth::user()->teams->count()>0) {
+		if (!Auth::user()->teams->count()>0) {//change thiiiis!
 			$res=self::checkMatches();
 			if ($res["count"]>0) {
 				return view('user.matchesuser')
 				->with('favorites',$res["matches"]);
 			}
-		}
-		
+		}		
 		return view('user.matchesuser')
 		->with('matches',Match::where('state','>',0)
 		->where('state','<',4)->get());
