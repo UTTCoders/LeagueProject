@@ -23,9 +23,10 @@ Route::group(['middleware' => ['checklog']], function(){
 
 Route::group(['middleware' => ['authen']], function(){
 
-    Route::get('/','MenuController@MenuRequest');
+    	Route::get('/','MenuController@MenuRequest');
 
-		Route::get('/manage_cal', function () {
+		// Management by admin
+		Route::get('/manage_calendar', function () {
 				return view('admin.calendar');
 		})->middleware('admin');
 
@@ -35,11 +36,16 @@ Route::group(['middleware' => ['authen']], function(){
 
 		Route::post('/getStadium','Admin\League@getStadiumByLocation')->middleware('admin');
 
-		Route::post('/updateStadium','Admin\League@updateStadium');
+		Route::post('/updateStadium','Admin\League@updateStadium')->middleware('admin');
 
-		Route::post('/getStadiumById','Admin\League@getStadiumById');
+		Route::post('/getStadiumById','Admin\League@getStadiumById')->middleware('admin');
 
-		Route::post('/deleteStadium','Admin\League@deleteStadium');
+		Route::post('/deleteStadium','Admin\League@deleteStadium')->middleware('admin');
+
+		Route::post('/addCoach','Admin\League@addCoach');
+
+		Route::post('/updateCoachNames','Admin\League@updateCoachNames');
+		// end of Management by admin
 
 });
 

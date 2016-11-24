@@ -11,7 +11,12 @@ class Coach extends Model
 
     public $timestamps = false;
     public $table = "coaches";
+
     protected $dates = ['deleted_at'];
+
+    protected $fillable = [
+      'name','last_name','photo'
+    ];
 
     public function team(){
         return $this->hasOne('App\League\Team');

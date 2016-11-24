@@ -63,6 +63,8 @@ League management
         display: none;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
         background-color: rgba(0,0,0,.1);
         margin-top: 50px;
         box-shadow: 0px 1px 1px 0px rgba(0,0,0,.2);
@@ -240,14 +242,130 @@ League management
     #photo-holder{
         margin-bottom: 15px;
     }
-    #editingModule{
-        padding: 15px;
-    }
     .no-padd-right{
         padding-right: 0;
     }
     #deletingModule{
       padding: 15px;
+    }
+    .coachCard{
+      background-color: #111;
+      border-radius: 2px;
+      box-shadow: 0px 0px 3px 0px #000;
+    }
+    .coachCard > img{
+      width: 100%;
+    }
+    .coachCard > div{
+      position: absolute;
+      font-size: 12px;
+      background: rgba(0,0,0,.2);
+      display: inline;
+      bottom: -1px;
+      overflow: hidden;
+      left: 0;
+      box-shadow: 0px 0px 2px 0px #000;
+      text-shadow: 0px 0px 1px #000;
+    }
+    .coachCard > .material-icons{
+      position: absolute;
+      cursor: pointer;
+      text-shadow: 0px 0px 2px #000;
+    }
+    .coachCard > .material-icons:hover{
+      color:white;
+    }
+    .photo-btn{
+      top: 8px;
+      left: 8px;
+      overflow: hidden;
+    }
+    .edit-btn{
+      top: 8px;
+      right: 8px;
+    }
+    .dark-tranparent-back{
+      display: none;
+      z-index: 4;
+      top: 0px;
+      left: 0px;
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, .8)
+    }
+    .dialog-card{
+      background-color: #222;
+      border-radius: 2px;
+      opacity: 0;
+      box-shadow: 0px 0px 3px #111;
+      overflow: hidden;
+      margin-top: 10%;
+      -webkit-transition: margin-top .4s, opacity .3s;
+    }
+    .dialog-card > #header{
+      background-color: dodgerblue;
+      width: 100%;
+      padding: 12px 12px 1px 12px;
+      margin: 0;
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+    .dialog-card > #header > h3{
+      margin-top: 0;
+      padding: 0;
+    }
+    .dialog-card > .btns-back{
+      box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,.5);
+      background: rgba(0, 0, 0, 0.3);
+      margin: 0;
+      margin-left: -5%;
+      padding: 15px;
+      padding-left: 5%;
+      padding-right: 5%;
+      width: 110%;
+      position: relative;
+      float: left;
+    }
+    .btnBlue2{
+      background: linear-gradient(to bottom, dodgerblue,#0c70dd);
+      border-radius: 2px;
+      border: 0px;
+      border-top: 1px solid skyblue;
+      border-bottom: 1px solid dodgerblue;
+      padding: 3px 10px 3px 10px;
+      -webkit-transition: background .4s;
+    }
+    .btnBlue2:hover{
+      background: linear-gradient(to bottom, #2fa1ff,#1b81ee);
+    }
+    .close-btn{
+      border-radius: 100%;
+      background-color: white;
+      color:dodgerblue;
+      font-weight: 600;
+      width: 19px;
+      height: 19px;
+      padding: 0;
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      cursor: pointer;
+    }
+    .close-btn>p{
+      padding: 0;
+      text-align: center;
+      position: absolute;
+      top: -2px;
+      left: 6px;
+      margin: 0;
+    }
+    #coachHiddenFile{
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+      opacity: 0;
     }
 </style>
 @endsection
@@ -261,6 +379,30 @@ League management
         <h4>Title</h4>
         <p>Message</p>
     </div>
+</div>
+<div class="dark-tranparent-back" id="edit-coach-back">
+  <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12 no-padding dialog-card">
+    <div id="header">
+      <h3>Edit coach name</h3>
+      <div class="close-btn"><p>x</p></div>
+    </div>
+    <div class="body">
+      <div class="form-group col-sm-12 col-sm-12 col-xs-12">
+        <input type="text" name="newCoachName" value="" class="myInputWhite col-md-12 col-sm-12 col-xs-12" placeholder="new name...">
+      </div>
+      <div class="form-group col-sm-12 col-sm-12 col-xs-12">
+        <input type="text" name="newCoachLastName" value="" class="myInputWhite col-md-12 col-sm-12 col-xs-12" placeholder="new last name...">
+      </div>
+    </div>
+    <div class="form-group col-md-12" id="messageBox">
+
+    </div>
+    <div class="btns-back">
+      <div class="col-md-12">
+        <button type="button" name="updateCoachNamesBtn" id="" class="btnBlue2 col-md-3 col-md-offset-9 col-sm-4 col-sm-offset-8">Accept</button>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="col-md-12 col-sm-12 no-padding">
     <div class="col-md-7 col-md-offset-1 col-sm-10 col-sm-offset-0">
@@ -306,7 +448,7 @@ League management
             </div>
             <!---->
             <!-- editing -->
-            <div class="col-md-12 no-padding sub-module" id="editingModule">
+            <div class="col-md-12 no-padding sub-module" id="editingModule" style="padding:15px;">
                 <h3 class="">Select one...</h3>
                 <div class="col-md-7 no-padding gmaps-container" id="gmaps-container2">
 
@@ -359,9 +501,53 @@ League management
                 <a href="#" class="tab col-md-4" id="editingLauncher">Edit</a>
                 <a href="#" class="tab col-md-4" id="deletingLauncher">Remove</a>
             </div>
-            <p>
-              coaches
-            </p>
+            <div class="col-md-12 no-padding sub-module sub-module-active" id="addingModule">
+                <div class="col-md-12" style="padding-top:15px;">
+                    <h4 class="col-md-12">Coach information</h4>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="coachName" id="coachName" value="" placeholder="Name..." class="myInputWhite col-md-6">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="coachLastName" id="coachLastName" value="" placeholder="Last name..." class="myInputWhite col-md-6">
+                    </div>
+                    <div class="form-group col-md-6 no-padd-right col-md-offset-0">
+                        <div class="col-md-12" id="file-container">
+                            <p>Select a photo</p>
+                            <input type="file" name="coachPhoto" id="coachPhoto" class="input-file">
+                        </div>
+                        <p class="col-md-12" style="text-align:center;font-size:12px;" id="file-info">No file selected...</p>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <button type="button" name="addCoachBtn" class="blueBtn col-md-6" id="addCoachBtn">Accept</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 no-padding sub-module" id="editingModule">
+                @foreach(App\League\Coach::get() as $i => $coach)
+                  <div class="col-md-3" style="padding:15px;">
+                    <div class="col-md-12 no-padding" style="overflow: hidden;">
+                      <div class="coachCard no-padding" id="{{$coach->id}}">
+                          <img src="{{asset('storage/'.$coach->photo)}}" alt="" class=""/>
+                          <i class="material-icons photo-btn" id="{{$coach->id}}">photo_camera<input class="file" id="coachHiddenFile" type="file"></input></i>
+                          <i class="material-icons edit-btn" id="{{$coach->id}}">mode_edit</i>
+                          <div class="col-md-12">
+                            <h5>{{$coach->name." ".$coach->last_name}}</h5>
+                            @if($coach->team)
+                            <p id="team">{{$coach->team->name}}</p>
+                            @else
+                            <p id="team">No team</p>
+                            @endif
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                @endforeach
+            </div>
+            <div class="col-md-12 no-padding sub-module" id="deletingModule">
+              <p>
+                delete
+              </p>
+            </div>
         </div>
         <div class="col-md-12 no-padding module" id="teamsModule">
             <div class="tabsContainer no-padding col-md-12">
@@ -423,31 +609,37 @@ League management
         });
     }
 
-    $.ajax({
-        url: '/getStadiums',
-        type:'post',
-        dataType:'json',
-        data: {
-            _token: '{{csrf_token()}}'
-        }
-    }).done(function(response){
-        $.each(response ,function (i, e) {
-            var stadiumLocation = JSON.parse(e['location']);
-            stadiumLocation.lat = parseFloat(stadiumLocation.lat);
-            stadiumLocation.lng = parseFloat(stadiumLocation.lng);
-            var mker = new google.maps.Marker({
-                position: stadiumLocation,
-                map: map,
-                icon: {
-                    url: "img/icons/ic_place_black_24dp_1x.png"
-                },
-                title: e['name']
-            });
-            stadiumsMarkers.push(mker);
-        });
-    });
-
     $(function($){
+        $(window).on('load',function () {
+          $('.coachCard').height($('.coachCard').parent().parent().parent().parent().parent().width()/4-30);
+          $('.coachCard').height($('.coachCard').parent().parent().parent().parent().parent().width()/4-30);
+        });
+        $(window).resize(function () {
+            $('.coachCard').height($('.coachCard').width());
+        });
+        $.ajax({
+            url: '/getStadiums',
+            type:'post',
+            dataType:'json',
+            data: {
+                _token: '{{csrf_token()}}'
+            }
+        }).done(function(response){
+            $.each(response ,function (i, e) {
+                var stadiumLocation = JSON.parse(e['location']);
+                stadiumLocation.lat = parseFloat(stadiumLocation.lat);
+                stadiumLocation.lng = parseFloat(stadiumLocation.lng);
+                var mker = new google.maps.Marker({
+                    position: stadiumLocation,
+                    map: map,
+                    icon: {
+                        url: "img/icons/ic_place_black_24dp_1x.png"
+                    },
+                    title: e['name']
+                });
+                stadiumsMarkers.push(mker);
+            });
+        });
         $('.dark-block').click(function () {
             var parent = $(this);
             var children = parent.children('#msgs-card');
@@ -774,6 +966,131 @@ League management
                 });
             }
             else showMessages('Ups!',['Have been an error! Try again.'],'error-card');
+        });
+
+        $('#addCoachBtn').click(function () {
+            var nameInput = $('#coachName').first();
+            var lastNameInput = $('#coachLastName').first();
+            var photoInput = $('#coachPhoto')[0];
+            if(nameInput.val() == '') showMessages('Stop just there!','You must to write a name!','alert-card');
+            else if (lastNameInput.val() == '') showMessages('Stop just there!','You must to write a last name!','alert-card');
+            else if(!photoInput.files[0]) showMessages('Stop just there!','You must to select a photo!','alert-card');
+            else{
+              var formData = new FormData();
+              formData.append('name',nameInput.val());
+              formData.append('lastName',lastNameInput.val());
+              formData.append('_token','{{csrf_token()}}');
+              formData.append('photo',photoInput.files[0]);
+              $.ajax({
+                url:'/addCoach',
+                dataType:'json',
+                type:'post',
+                data:formData,
+                processData: false,
+                contentType: false
+
+              }).done(function (response) {
+                  if(response['coach']){
+                    var team = "";
+                    if(response['coachTeam']){
+                      team = response['coachTeam'].name;
+                    }
+                    $('#coachesModule').children('#editingModule').append('<div class="col-md-3" style="padding:15px;"><div class="col-md-12 no-padding" style="overflow: hidden;"><div class="coachCard no-padding" id="'+response['coach'].id+'"><img src="storage/'+response['coach'].photo+'" alt="" class=""/><i class="material-icons photo-btn" id="'+response['coach'].id+'">photo_camera</i><i class="material-icons edit-btn" id="'+response['coach'].id+'">mode_edit</i><div class="col-md-12"><h5>'+response['coach'].name+" "+response['coach'].last_name+'</h5><p id="team">'+team+'</p></div></div></div></div>');
+                    $('.edit-btn').unbind('click');
+                    $.each($('.edit-btn'),function (index,element) {
+                      $(element).click(function () {
+                        $('.dark-tranparent-back').fadeIn('fast',function () {
+                          $('.dialog-card').css('opacity',1).css('margin-top','20%');
+                        });
+                        $('button[name=updateCoachNamesBtn]').attr('id',$(this).attr('id'));
+                      });
+                    });
+                    //////// add event of photo btn
+                  }
+                  showMessages(response['msgs']['title'], response['msgs']['content'], response['msgs']['type']);
+              });
+            }
+        });
+
+        $.each($('.photo-btn'),function (i, e) {
+          $(e).click(function () {
+            $(this).children('input[type=file]').change(function () {
+              /////////////////////////////////////
+              console.log($(this));
+            });
+          });
+        });
+
+        $.each($('.edit-btn'),function (i, e) {
+          $(e).click(function () {
+            $('.dark-tranparent-back').fadeIn('fast',function () {
+              $('.dialog-card').css('opacity',1).css('margin-top','20%');
+            });
+            $('button[name=updateCoachNamesBtn]').attr('id',$(this).attr('id'));
+          });
+        });
+
+        $('.dialog-card').children('#header').children('.close-btn').click(function () {
+          $('.dialog-card').css('opacity',0).css('margin-top','10%');
+          $('.dark-tranparent-back').fadeOut('fast');
+          $('input[name=newCoachName]').val('');
+          $('input[name=newCoachLastName]').val('');
+          $.each($('.dialog-card').children('#messageBox').children(), function (i,e) {
+            $(e).remove();
+          });
+        });
+
+        $('.dark-tranparent-back').click(function (e) {
+          if(e.target === this){
+            $('.dialog-card').css('opacity',0).css('margin-top','10%');
+            $(this).fadeOut('fast');
+            $.each($('.dialog-card').children('#messageBox').children(), function (i,e) {
+              $(e).remove();
+            });
+          }
+        });
+
+        $('button[name=updateCoachNamesBtn]').click(function () {
+          if($('input[name=newCoachName]').val() == ''){
+            $.each($('.dialog-card').children('#messageBox').children(), function (i,e) {
+              $(e).remove();
+            });
+            $('.dialog-card').children('#messageBox').append('<p>Please write a name.</p>');
+          }
+          else if($('input[name=newCoachLastName]').val() == ''){
+            $.each($('.dialog-card').children('#messageBox').children(), function (i,e) {
+              $(e).remove();
+            });
+            $('.dialog-card').children('#messageBox').append('<p>Please write a last name...</p>');
+          }
+          else if($('button[name=updateCoachNamesBtn]').attr('id') == ''){
+            $.each($('.dialog-card').children('#messageBox').children(), function (i,e) {
+              $(e).remove();
+            });
+            $('.dialog-card').children('#messageBox').append('<p>Has been a error.</p>');
+          }
+          else{
+            $.ajax({
+              url:'/updateCoachNames',
+              type:'post',
+              dataType:'json',
+              data:{
+                _token:'{{csrf_token()}}',
+                id:$(this).attr('id'),
+                name:$('input[name=newCoachName]').val(),
+                last_name:$('input[name=newCoachLastName]').val()
+              }
+            }).done(function (response) {
+              console.log(response);
+              $.each($('.dialog-card').children('#messageBox').children(), function (i,e) {
+                $(e).remove();
+              });
+              $('.dialog-card').children('#messageBox').append('<p>'+response['msg']+'</p>');
+              if(response['coach']){
+                $('div[id='+response['coach'].id+']').children('div').children('h5').text(response['coach'].name +" "+ response['coach'].last_name);
+              }
+            });
+          }
         });
 
     });
