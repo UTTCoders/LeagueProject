@@ -11,7 +11,8 @@ use Carbon\Carbon;
 class MatchesController extends Controller
 {
 	public function MatchesRequest(Request $r){
-		if (!Auth::user()->teams->count()>0) {//change thiiiis!
+		//CHANGE THE NEXT LINE WHEN FINISHED MAKING MATCHES TESTS!
+		if (!Auth::user()->teams->count()>0) {//!
 			$res=self::checkMatches();
 			if ($res["count"]>0) {
 				return view('user.matchesuser')
