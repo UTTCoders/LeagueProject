@@ -28,7 +28,7 @@
 		background-color: #000;
 		padding:30px 20px;
 		height: 100%;
-		background-image: url('/img/stadium.jpg');
+		background-position: center;
 	}
 	#contcard{
 		padding-top: 20px;
@@ -44,6 +44,7 @@
 		background-color: #eee;
 		border-radius: 0;
 		box-shadow: 2px 2px 2px #111;
+		/*min-height: 200px;*/
 	}
 	#infoside{
 		border-radius: 0;
@@ -79,38 +80,65 @@
 		<div class="thumbnail col-md-8 col-xs-12" id="contcards">
 			<div id="matchesMenu" class="col-xs-12">
 				<ul class="nav nav-pills">
-				  <li role="presentation" class="activeOp"><a class="optionM Selected" id="now">Right now!</a></li>
-				  <li role="presentation"><a class="optionM" id="history">History</a></li>
-				  <li role="presentation"><a class="optionM" id="history"><span class="glyphicon glyphicon-star-empty"></span><span class="hidden-xs"> My favorites</span></a></li>
+					@if(isset($favorites))
+					<li role="presentation"><a class="optionM" id="now">Now!</a></li>
+				  	<li role="presentation" class="activeOp"><a class="optionM Selected" id="favorites"><span class="glyphicon glyphicon-star-empty"></span><span class="hidden-xs"> My favorites</span></a></li>
+					@else
+				  	<li role="presentation" class="activeOp"><a class="optionM Selected" id="now">Now!</a></li>
+				  	<li role="presentation"><a class="optionM" id="favorites"><span class="glyphicon glyphicon-star-empty"></span><span class="hidden-xs"> My favorites</span></a></li>
+				  	@endif
+				  	<li role="presentation"><a class="optionM" id="history">History</a></li>
 				</ul>
 			</div>
-			<div id="menuResults">	
-				<div class="row">
-					<div id="matchcard" class="thumbnail col-xs-12">
-						<div class="col-sm-5 col-xs-6" id="imgcard" align="center">
-							<img src="/img/soccerball.png" style="width: 60%">
+			<div id="menuResults">
+				<div id="menuContent">
+				@if(isset($favorites))
+
+				@else
+					@if($matches->count()>0)
+					@foreach($matches as $match)
+					<div class="row">
+						<div id="matchcard" class="thumbnail col-xs-12">
+						@if($match->teams[0]->local)
+							<div class="col-sm-5 col-xs-6" id="imgcard" style="background-image: url({{'/storage/'.$match->teams[0]->stadium->photo}});" align="center">
+								<img src="/img/soccerball.png" style="width: 60%">
+							</div>
+							<div class="col-sm-7 col-xs-6">
+								<h3 align="center">{{$match->teams[0]->name}} VS {{$match->teams[1]->name}}</h3>
+								<div class="hidden-xs">	
+								<p><strong>Stadium: </strong>{{$match->teams[0]->stadium->name}}</p>
+								</div>
+							</div>
+						@else
+							<div class="col-sm-5 col-xs-6" id="imgcard" style="background-image: url({{'/storage/'.$match->teams[1]->stadium->photo}});" align="center">
+								<img src="/img/soccerball.png" style="width: 60%">
+							</div>
+							<div class="col-sm-7 col-xs-6">
+								<h3 align="center">{{$match->teams[0]->name}} VS {{$match->teams[1]->name}}</h3>
+								<div class="hidden-xs">	
+								<p><strong>Stadium: </strong>{{$match->teams[1]->stadium->name}}</p>
+								</div>
+							</div>
+						@endif
 						</div>
-						<div class="col-sm-7 col-xs-6">
-							<h3 align="center">Cucu Rucu Cu</h3>
-							<div class="hidden-xs">	
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-							tempor incididunt ut labore et dolore magna aliqua.</p>
+					</div>
+					<!--<div class="row">	
+						<div id="matchcard" class="thumbnail col-xs-12">
+							<div class="col-sm-7 col-xs-6">
+								<h3 align="center">Cucu Rucu Cu</h3>
+								<p align="justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+								tempor incididunt ut labore et dolore magna aliqua.</p>
+							</div>
+							<div class="col-sm-5 col-xs-6" id="imgcard" align="center">
+								<img src="/img/soccerball.png" style="width: 60%">
 							</div>
 						</div>
-					</div>
+					</div>-->
+					@endforeach
+					@else
+					@endif
+				@endif
 				</div>
-				<!--<div class="row">	
-					<div id="matchcard" class="thumbnail col-xs-12">
-						<div class="col-sm-7 col-xs-6">
-							<h3 align="center">Cucu Rucu Cu</h3>
-							<p align="justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-							tempor incididunt ut labore et dolore magna aliqua.</p>
-						</div>
-						<div class="col-sm-5 col-xs-6" id="imgcard" align="center">
-							<img src="/img/soccerball.png" style="width: 60%">
-						</div>
-					</div>
-				</div>-->
 			</div>
 		</div>
 		<div class="thumbnail col-md-3 col-md-offset-1 col-xs-12" id="infoside">
@@ -134,6 +162,18 @@ $(".optionM").click(function(){
 		$(".Selected").removeClass('Selected');
 		$(this).addClass('Selected');
 		$(this).parent().addClass('activeOp');
+		var t=$("meta[name='toktok']").attr('content');
+		var op=$(this).attr('id');
+		$.ajax({
+			url:"/getmatches",
+			method:"post",
+			data:{
+				_token:t,
+				option:op
+			}
+		}).done(function(response){
+			$("#menuResults").children().slideUp('300').html(response).slideDown('300');
+		});
 	}
 });
 

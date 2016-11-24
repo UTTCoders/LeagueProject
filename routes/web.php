@@ -61,7 +61,8 @@ Route::get('/logout','Authentication\LoginHomeController@LogoutRequest');
 Route::group(['middleware' => ['authen']], function(){
 	Route::post('/getuserstadiums','User\MapController@getUserStadiums');
 	Route::get('/stadiums/{id}','User\MapController@requestStadium');
-	Route::post('/matches/now','User\MatchesController@MatchesRequest');
+	Route::get('/matches','User\MatchesController@MatchesRequest');
+	Route::post('/getmatches','User\MatchesController@getMatchesForMenu');
 });
 
 
@@ -72,5 +73,5 @@ Route::get('/prueba2', function(){
 });
 
 Route::get('/prueba3',function(){
-	return view('user.matchesuser');
+	return "cucu";
 });

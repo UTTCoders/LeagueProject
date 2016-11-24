@@ -305,10 +305,11 @@
             <!-- And here the user options :D -->
                 <div class="menuPanel">
                     <div class="itemsContainer">
+                        <a href="/favorites" class="panelItem"><span class="glyphicon glyphicon-star-empty"></span> My favorite teams</a>
+                        <a href="/matches" class="panelItem">See matches</a>
+                        <a href="/logout" class="panelItem">Log out</a>
                         <a href="#" id="1"  class="panelItem event">Prueba</a>
                         <a href="#" id="1" class="panelSubItem" style="display:none">Hijo</a>
-                        <a href="/favorites" class="panelItem">Favorites</a>
-                        <a href="/logout" class="panelItem">Log out</a>
                     </div>
                 </div>
             @endif
