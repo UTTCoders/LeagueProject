@@ -4,52 +4,51 @@
 
 @section('css2')
 <style type="text/css">
-#map{
-	width: 100%;
-	height: 100%;
-	background-color: #212121;
-}
-#here{
-	height: 80%;
-	background-color: background-color:#B71C1C;
-	padding: 0;
-}
-html, body { 
-	height: 100%;
-	width: 100%;
-	margin: 0; 
-	padding: 0;
-	background-color: #FFB74D;
-}
-.cont{
-	background-image: url(/img/stadium.jpg);
-	background-repeat: no-repeat;
-	background-size: 100%;
-	background-position: center;
-	margin-bottom: 0;
-	margin-top: 0;
-	border-bottom: 0;
-	padding-top:100px;
-	padding-bottom: 100px;
-}
-#other{
-	color:#eee; 
-	padding-top: 80px;
-	padding-right: 50px;
-	height: 80%;
-	background-color: #388E3C;
-}
+	#con{
+		background-color: #000;
+		width: 100%;
+		margin-top: 62px;/*size of the navbar*/
+		background-image: url(/img/stadium.jpg);
+		background-repeat: no-repeat;
+		background-size: 150%;
+		background-position: center;
+		margin-bottom: 0;
+		margin-top: 0;
+		border-bottom: 0;
+		padding-top:90px;
+		padding-bottom: 20px;
+	}
+	body,html{
+		background-color: #388E3C;
+		height: 100%;
+		width: 100%;
+		margin: 0; 
+		padding: 0;
+	}
+	#map{
+		width: 100%;
+		height: 100%;
+	}
+	#hereisthemap{
+		height: 80%;
+		background-color: #004D40;
+		padding: 0;
+	}
+	#nexttomap{
+		color:#eee;
+		padding:50px 30px 50px 30px;
+	}
 </style>
 @endsection
 
 @section('body2')
-<div class="cont">
+<div id="con">
 	<div align="center">
-		<img src="/img/cucu3.gif" style="width: 15%;">
+		<img src="/img/cucu3.gif" style="width: 20%;">
+		<h3 style="color:#eee; margin-top: 0; margin-bottom: 0;" id="mainTitle">Follow your passion!<br>The house of your favorite teams of the Spain League!</h3>
 	</div>
-	<h2 style="color:#eee; margin-top: 0; margin-bottom: 0;" id="mainTitle">Follow your passion!<br>The house of your favorite teams of the Spain League!</h2>
 </div>
-<div style="color: #eee; margin-top: 0; margin-bottom: 0; background-color:#B71C1C;" class="jumbotron">
+<div class="jumbotron" style="background-color: #B71C1C; margin-bottom: 0; color: #eee;">
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">	
@@ -77,18 +76,18 @@ html, body {
 	</div>
 </div>
 @if(App\League\Stadium::has('team')->get()->count()>0)
-	<div align="right" class="col-md-5 col-sm-6" id="other">
-		<h2>See all the stadiums!</h2>
+	<div align="center" class="col-md-5 col-sm-6" id="nexttomap">
 		<div class="col-md-11 col-md-offset-1">
+		<h2>See all the stadiums!</h2>
 			<p style="font-size: 20px;">Here you can see all of the stadiums.</p>
-			<div class="thumbnail">
-				<div style="font-size: 15px; color: #000; padding-right: 10px; padding-top: 20px; padding-bottom: 15px;">
+			<div class="thumbnail" style="border-radius: 0; box-shadow: 3px 3px 3px #1B5E20;">
+				<div style="font-size: 15px; color: #000; padding: 20px 10px;">
 					<p><span class="glyphicon glyphicon-asterisk"></span> Do click on a stadium to go to check its events and more information.</p>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-7 col-sm-6"  id="here">
+	<div class="col-md-7 col-sm-6" id="hereisthemap">
 		<div id="map"></div>
 	</div>
 @endif

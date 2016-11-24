@@ -395,6 +395,8 @@ League management
 @endsection
 
 @section('js')
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9fuikPcHicK9HnQSzmHM-iZikumk6710&callback=initMap"></script>
 <script type="text/javascript">
     var marker, map, myLatLng, stadiumsMarkers = [];
     var mapDiv = $('.gmaps-container > #gmap')[0];
@@ -776,6 +778,5 @@ League management
 
     });
 </script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9fuikPcHicK9HnQSzmHM-iZikumk6710&callback=initMap"></script>
+
 @endsection

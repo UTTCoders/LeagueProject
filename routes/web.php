@@ -66,5 +66,5 @@ Route::get('/prueba2', function(){
 });
 
 Route::get('/prueba3',function(){
-	return view('user.userhome');
+	return view('user.mapview2');
 });

@@ -19,10 +19,11 @@ class MenuController extends Controller
         if (Auth::user()->teams->count()>0) {
         	$res=self::checkTeamMatches();
         	if ($res["count"]>0) {
-        		
+        		//return redirect('/matches/now')
+        		//->with("matches",$res["matches"]);
         	}
         }
-        return view('user.mapview');
+        return view('user.mapview2');
     }
 
     private function checkTeamMatches(){

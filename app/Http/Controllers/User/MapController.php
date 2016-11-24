@@ -34,7 +34,7 @@ class MapController extends Controller
     	}
     	if ($thestadium->team->matches->count() > 0) {
     		$today=Carbon::today('America/Monterrey')->toDateString();
-	    	if ($thestadium->team->matches->whereDate('start_date',$today)
+	    	if ($thestadium->team->matches->where('start_date',$today)
 	    		->count()>0) {
 	    		return "hola";
 	    	}
