@@ -1,17 +1,12 @@
 @extends('user.userhome')
 
-@section('title',$stadium->name." | Stadium")
+@section('title'," | Stadium")
 
 @section('css2')
 <style type="text/css">
 	#con{
-		background-color: #000;
 		width: 100%;
 		margin-top: 62px;/*size of the navbar*/
-		background-image: url(/img/stadium.jpg);
-		background-repeat: no-repeat;
-		background-size: 150%;
-		background-position: center;
 		margin-bottom: 0;
 		margin-top: 0;
 		border-bottom: 0;
@@ -19,25 +14,39 @@
 		padding-bottom: 20px;
 	}
 	body{
-		background-color: white;
+		background-color: #388E3C;
+	}
+	#matchcard{
+		border-radius:0; 
+		border: 0px; 
+		padding:0px;
+	}
+	#imgcard{
+		background-color: #000;
+		padding:30px 20px;
+		height: 100%;
 	}
 </style>
 @endsection
 
 @section('body2')
 <div id="con">
-	<div align="center">
-	<h1 style="color:#eee; margin-top: 0px; margin-bottom: 0; text-shadow: 2px 2px 2px black;" id="mainTitle">HI!</h1>
-	<br>
-
-	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle">
-		<strong style="text-shadow: 2px 2px 2px black;">{{$stadium->team->name}}</strong> VS <span>Other team</span>
-	</h3>
+	<div class="container">
+		<div id="matchcard" class="thumbnail col-md-6 col-xs-12">
+			<div class="col-xs-6" id="imgcard" align="center">
+				<img src="/img/soccerball.png" style="width: 70%">
+			</div>
+			<div class="col-xs-6">
+				<h3 align="center">Cucu Rucu Cu</h3>
+				<p align="justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+				tempor incididunt ut labore et dolore magna aliqua.</p>
+			</div>
+		</div>
 	</div>
 </div>
 @if(isset($match))
 @else
-<div class="jumbotron" style="background-color: #004D40; margin-bottom: 0;">
+<div class="jumbotron" style="background-color: #eee; margin-bottom: 0;">
 <h1 align="center" style="color:#eee; font-size: 40px; text-shadow: 1px 1px 1px black;">OPtions!</h1>
 </div>
 @endif

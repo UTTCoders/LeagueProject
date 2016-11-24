@@ -72,5 +72,5 @@ Route::get('/prueba2', function(){
 });
 
 Route::get('/prueba3',function(){
-	return view('user.mapview2');
+	return view('user.matchesuser');
 });
