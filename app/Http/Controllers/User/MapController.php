@@ -33,7 +33,11 @@ class MapController extends Controller
     		return view('errors.404error');
     	}
     	if ($thestadium->team->matches->count() > 0) {
-    		$today=Carbon::today('America/Monterrey')->toDateString();
+    		return "hola";
+    		$res=self::checkStadiumMatches($thestadium);
+    		if ($res["there_is"]) {
+    			
+    		}
 	    	if ($thestadium->team->matches->where('start_date',$today)
 	    		->count()>0) {
 	    		return "hola";
@@ -42,5 +46,21 @@ class MapController extends Controller
     	
     	return view('user.stadiumview')
     	->with("stadium",$thestadium);
+    }
+
+    private function checkStadiumMatches($thestadium){
+    	$there_is=false;
+    	$thematch;
+    	foreach ($thestadium->team->matches as $key => $match) {
+    		if ($match->state>0 && $match->state<4) {
+    			$there_is=true;
+    			$thematch=$match;
+    		}
+    	}
+    	if ($there_is)
+    		return[
+    			"there_is"=>$there_is,"match"=>$thematch
+    		];
+    	return ["there_is"=>$there_is];
     }
 }
