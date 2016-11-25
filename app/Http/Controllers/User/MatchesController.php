@@ -11,12 +11,11 @@ use Carbon\Carbon;
 class MatchesController extends Controller
 {
 	public function MatchesRequest(Request $r){
-		//CHANGE THE NEXT LINE WHEN FINISHED MAKING MATCHES TESTS!
-		if (!Auth::user()->teams->count()>0) {//!
+		if (Auth::user()->teams->count()>0) {
 			$res=self::checkMatches();
 			if ($res["count"]>0) {
 				return view('user.matchesuser')
-				->with('favorites',$res["matches"]);
+				->with('favorites',$res);
 			}
 		}		
 		return view('user.matchesuser')
@@ -25,6 +24,16 @@ class MatchesController extends Controller
 	}
 
 	public function getMatchesForMenu(Request $r){
+		if ($r->option=="favorites") {
+			return view('user.favmatches')
+			->with("favorites",self::checkMatches());
+		}
+		if ($r->option=="now") {
+			return view('user.nowmatches')
+			->with('matches',
+			Match::where('state','>',0)->where('state','<',4)->get());
+		}
+
 		return "<h1>Heeeey</h1>";
 	}
 
@@ -39,6 +48,9 @@ class MatchesController extends Controller
     				if ($today==$matchdate) {
     					if ($match->state>0 && $match->state<4) {
     						$count++;
+    						$match["fav"]=$team;
+    						$noteam=$match->teams->where('id','!=',$team->id)->first();
+    						$match["nofav"]=$noteam;
     						$matches[]=$match;
     					}
     				}

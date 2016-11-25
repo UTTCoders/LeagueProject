@@ -16,15 +16,15 @@
 	body{
 		background-color: #B71C1C;
 	}
-	#matchcard{
+	.matchcard{
 		border-radius:0; 
 		border: 0px; 
 		padding:0px;
-		box-shadow: 3px 3px black;
 		background-color: #111;
 		color: #eee;
+  		transition: box-shadow 0.2s ease-in-out;
 	}
-	#imgcard{
+	.imgcard{
 		background-color: #000;
 		padding:30px 20px;
 		height: 100%;
@@ -44,7 +44,6 @@
 		background-color: #eee;
 		border-radius: 0;
 		box-shadow: 2px 2px 2px #111;
-		/*min-height: 200px;*/
 	}
 	#infoside{
 		border-radius: 0;
@@ -62,7 +61,7 @@
 		cursor:pointer;
 	}
 	.activeOp{
-		background-color: #CDDC39;
+		background-color: #FFEB3B;
 	}
 
 	/*Select al classes containing ‘keyword’ whether it’s first, last or part of a name*/
@@ -73,6 +72,11 @@
 	.padData{
 		padding-top: 10px;
 		padding-bottom: 10px;
+	}
+
+	.matchcard:hover{
+		box-shadow: 2px 2px 3px black;
+		cursor: pointer;
 	}
 </style>
 @endsection
@@ -86,11 +90,11 @@
 			<div id="matchesMenu" class="col-xs-12">
 				<ul class="nav nav-pills">
 					@if(isset($favorites))
-					<li role="presentation"><a class="optionM" id="now">Now!</a></li>
-				  	<li role="presentation" class="activeOp"><a class="optionM Selected" id="favorites"><span class="glyphicon glyphicon-star-empty"></span><span class="hidden-xs"> My favorites</span></a></li>
+						<li role="presentation"><a class="optionM" id="now">Now!</a></li>
+					  	<li role="presentation" class="activeOp"><a class="optionM Selected" id="favorites"><span class="glyphicon glyphicon-star-empty"></span><span class="hidden-xs"> My favorites</span></a></li>
 					@else
-				  	<li role="presentation" class="activeOp"><a class="optionM Selected" id="now">Now!</a></li>
-				  	<li role="presentation"><a class="optionM" id="favorites"><span class="glyphicon glyphicon-star-empty"></span><span class="hidden-xs"> My favorites</span></a></li>
+					  	<li role="presentation" class="activeOp"><a class="optionM Selected" id="now">Now!</a></li>
+					  	<li role="presentation"><a class="optionM" id="favorites"><span class="glyphicon glyphicon-star-empty"></span><span class="hidden-xs"> My favorites</span></a></li>
 				  	@endif
 				  	<li role="presentation"><a class="optionM" id="history">History</a></li>
 				</ul>
@@ -98,26 +102,9 @@
 			<div id="menuResults">
 				<div id="menuContent">
 				@if(isset($favorites))
-
+					@include('user.favmatches')
 				@else
-					@if($matches->count()>0)
-					@foreach($matches as $match)
-					<div class="row">
-						<div id="matchcard" class="thumbnail col-xs-12">
-							<div class="col-sm-5 col-xs-6" id="imgcard" style="background-image: url('{{'/storage/'.$match->teams->where('pivot.local',true)->first()->stadium->photo}}');" align="center">
-								<img src="/img/soccerball.png" style="width: 60%">
-							</div>
-							<div class="col-sm-7 col-xs-6 padData">
-								<h3 align="center"><strong>{{$match->teams->where('pivot.local',true)->first()->name}}</strong> VS {{$match->teams->where('pivot.local',false)->first()->name}}</h3>
-								<div class="hidden-xs">	
-								<p><strong>Stadium: </strong>{{$match->teams->where('pivot.local',true)->first()->stadium->name}}</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					@endforeach
-					@else
-					@endif
+					@include('user.nowmatches')
 				@endif
 				</div>
 			</div>
@@ -137,27 +124,26 @@
 @section('js2')
 <script>
 $(document).ready(function(){
-$(".optionM").click(function(){
-	if (!$(this).hasClass('Selected')) {
-		$(".Selected").parent().removeClass('activeOp');
-		$(".Selected").removeClass('Selected');
-		$(this).addClass('Selected');
-		$(this).parent().addClass('activeOp');
-		var t=$("meta[name='toktok']").attr('content');
-		var op=$(this).attr('id');
-		$.ajax({
-			url:"/getmatches",
-			method:"post",
-			data:{
-				_token:t,
-				option:op
-			}
-		}).done(function(response){
-			$("#menuResults").children().slideUp('300').html(response).slideDown('300');
-		});
-	}
-});
-
+	$(".optionM").click(function(){
+		if (!$(this).hasClass('Selected')) {
+			$(".Selected").parent().removeClass('activeOp');
+			$(".Selected").removeClass('Selected');
+			$(this).addClass('Selected');
+			$(this).parent().addClass('activeOp');
+			var t=$("meta[name='toktok']").attr('content');
+			var op=$(this).attr('id');
+			$.ajax({
+				url:"/getmatches",
+				method:"post",
+				data:{
+					_token:t,
+					option:op
+				}
+			}).done(function(response){
+				$("#menuResults").children().slideUp('300').html(response).slideDown('300');
+			});
+		}
+	});
 });
 </script>
 @endsection
