@@ -62,7 +62,7 @@
 		cursor:pointer;
 	}
 	.activeOp{
-		background-color: #eee;
+		background-color: #CDDC39;
 	}
 
 	/*Select al classes containing ‘keyword’ whether it’s first, last or part of a name*/
@@ -98,7 +98,7 @@
 			<div id="menuResults">
 				<div id="menuContent">
 				@if(isset($favorites))
-				
+
 				@else
 					@if($matches->count()>0)
 					@foreach($matches as $match)
