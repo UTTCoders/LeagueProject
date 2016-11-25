@@ -616,7 +616,7 @@ League management
                     <div class="col-md-3 col-xs-12 col-sm-4 cardParent" name="{{$coach->id}}" style="padding:15px; ;overflow: hidden;">
                       <div class="col-md-12 col-sm-12 col-xs-12 no-padding" style="height:100%;overflow: hidden;box-shadow: 0px 0px 3px 0px #000;">
                         <div class="coachCard col-md-12 col-sm-12 col-xs-12 no-padding" id="{{$coach->id}}">
-                            <img src="{{asset('storage/'.$coach->photo)}}" alt="" width="120%" class=""/>
+                            <img src="{{asset('storage/'.$coach->photo)}}" alt="" width="120%" class=""/ name="{{$coach->id}}">
                             <i class="material-icons photo-btn" id="{{$coach->id}}">photo_camera<input class="file" id="coachHiddenFile" type="file"></input></i>
                             <i class="material-icons edit-btn" id="{{$coach->id}}">mode_edit</i>
                             <div class="col-md-12 col-xs-12 col-sm-12">
@@ -639,7 +639,7 @@ League management
               @else
                 @foreach(App\League\Coach::get() as $i => $coach)
                     <div class="coachCard2 col-md-3 col-sm-4 col-xs-6" name="{{$coach->id}}" id="">
-                        <img src="{{asset('storage/'.$coach->photo)}}" alt="" class="col-md-12 no-padding"/>
+                        <img src="{{asset('storage/'.$coach->photo)}}" alt="" class="col-md-12 no-padding" name="{{$coach->id}}"/>
                         <i class="material-icons delete-btn" id="{{$coach->id}}">delete</i>
                         <div class="col-md-12 col-xs-12 col-sm-12">
                           <h5>{{$coach->name." ".$coach->last_name}}</h5>
@@ -1097,7 +1097,8 @@ League management
                     if(response['coachTeam']){
                       team = response['coachTeam'].name;
                     }
-                    $('#coachesModule').children('#editingModule').append('<div class="col-md-3 col-xs-12 col-sm-4 cardParent" style="padding:15px;"><div class="col-md-12 col-sm-12 col-xs-12 no-padding" style="overflow: hidden;box-shadow: 0px 0px 3px 0px #000;"><div class="coachCard no-padding" id="'+response['coach'].id+'"><img src="storage/'+response['coach'].photo+'" alt="" class=""/><i class="material-icons photo-btn" id="'+response['coach'].id+'">photo_camera<input class="file" id="coachHiddenFile" type="file"></input></i><i class="material-icons edit-btn" id="'+response['coach'].id+'">mode_edit</i><div class="col-md-12 col-xs-12 col-sm-12"><h5>'+response['coach'].name+" "+response['coach'].last_name+'</h5><p id="team">'+team+'</p></div></div></div>');
+                    $('#coachesModule').children('#editingModule').append('<div class="col-md-3 col-xs-12 col-sm-4 cardParent" name="'+response['coach'].id+'" style="padding:15px; ;overflow: hidden;"><div class="col-md-12 col-sm-12 col-xs-12 no-padding" style="height:100%;overflow: hidden;box-shadow: 0px 0px 3px 0px #000;"><div class="coachCard col-md-12 col-sm-12 col-xs-12 no-padding" id="'+response['coach'].id+'"><img src="storage/'+response['coach'].photo+'" alt="" width="120%" class=""/><i class="material-icons photo-btn" id="'+response['coach'].id+'">photo_camera<input class="file" id="coachHiddenFile" type="file"></input></i><i class="material-icons edit-btn" id="'+response['coach'].id+'">mode_edit</i><div class="col-md-12 col-xs-12 col-sm-12"><h5>'+response['coach'].name+" "+response["coach"].last_name+'</h5><p id="team">'+team+'</p></div></div></div></div>');
+                    $('#coachesModule').children('#deletingModule').append('<div class="coachCard2 col-md-3 col-sm-4 col-xs-6" name="{{$coach->id}}" id=""><img src="storage/'+response['coach'].photo+'" alt="" class="col-md-12 no-padding"/><i class="material-icons delete-btn" id="'+response['coach'].id+'">delete</i><div class="col-md-12 col-xs-12 col-sm-12"><h5>'+response['coach'].name+' '+response['coach'].last_name+'</h5><p id="team">'+team+'</p></div></div>');
                     $('.edit-btn').unbind('click');
                     $.each($('.edit-btn'),function (index,element) {
                       $(element).click(function () {
@@ -1120,10 +1121,11 @@ League management
             $(e).click(function () {
               $(this).children('input[type=file]').change(function () {
                 if(this.files[0]){
+                  var id = $(e).attr('id');
                   var formData = new FormData();
                   formData.append('photo', this.files[0]);
                   formData.append('_token','{{csrf_token()}}');
-                  formData.append('id',$(e).attr('id'));
+                  formData.append('id',id);
                   $.ajax({
                     url:'/updateCoachPhoto',
                     type:'post',
@@ -1133,7 +1135,7 @@ League management
                     contentType:false
                   }).done(function (response) {
                     if(response['photo']){
-                      $(e).parent().children('img').attr('src','storage/'+response['photo']);
+                      $('img[name='+id+']').attr('src','storage/'+response['photo']);
                     }
                   });
                 }
