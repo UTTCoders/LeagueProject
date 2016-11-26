@@ -69,9 +69,14 @@ Route::group(['middleware' => ['authen']], function(){
 	Route::post('/getmatches','User\MatchesController@getMatchesForMenu');
 });
 
+// fb
+Route::get('/fblogin','Auth\LoginFBController@redirectToProvider');
+Route::get('/callback','Auth\LoginFBController@handleProviderCallback');
+//
+
 
 //pruebas
-Route::get('/prueba1','Admin\League@addStadium');
+
 Route::get('/prueba2', function(){
     return view('admin.calendar');
 });

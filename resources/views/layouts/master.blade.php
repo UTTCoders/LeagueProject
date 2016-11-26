@@ -334,6 +334,29 @@
                 <a class="footerLink" style="position: absolute; right: 25%; top: 40px;" href="">privacity</a>
             </div>
         </div>
+        @if(session('gonnaLogin'))
+        <script type="text/javascript">
+          window.fbAsyncInit = function() {
+              FB.init({
+                appId      : '1767846576800416',
+                xfbml      : true,
+                version    : 'v2.8'
+              });
+              FB.AppEvents.logPageView();
+              FB.login(function (response) {
+                console.log(response);
+              });
+          };
+
+          (function(d, s, id){
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement(s); js.id = id;
+             js.src = "//connect.facebook.net/en_US/sdk.js";
+             fjs.parentNode.insertBefore(js, fjs);
+          }(document, 'script', 'facebook-jssdk'));
+        </script>
+        @endif
         <script src="{{elixir('js/jquery-3.1.0.min.js')}}"></script>
         @yield('js')
         <script>
