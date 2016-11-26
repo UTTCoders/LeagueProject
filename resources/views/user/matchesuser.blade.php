@@ -61,7 +61,7 @@
 		cursor:pointer;
 	}
 	.activeOp{
-		background-color: #FFEB3B;
+		background-color: #eee;
 	}
 
 	/*Select al classes containing ‘keyword’ whether it’s first, last or part of a name*/
@@ -75,7 +75,11 @@
 	}
 
 	.matchcard:hover{
-		box-shadow: 2px 2px 3px black;
+		box-shadow: 3px 3px 3px black;
+		cursor: pointer;
+	}
+
+	.t-row:hover{
 		cursor: pointer;
 	}
 </style>
@@ -86,7 +90,7 @@
 	<div class="container">
 		<h1 style="color:#eee; margin-top: 20px; margin-bottom: 30px; text-shadow: 3px 3px 3px black;" id="mainTitle">Follow your passion!<br>Here you can see, all of the matches!</h1>
 		<hr>
-		<div class="thumbnail col-md-8 col-xs-12" id="contcards">
+		<div class="thumbnail col-lg-8 col-xs-12" id="contcards">
 			<div id="matchesMenu" class="col-xs-12">
 				<ul class="nav nav-pills">
 					@if(isset($favorites))
@@ -100,16 +104,16 @@
 				</ul>
 			</div>
 			<div id="menuResults">
-				<div id="menuContent">
+
 				@if(isset($favorites))
 					@include('user.favmatches')
 				@else
 					@include('user.nowmatches')
 				@endif
-				</div>
+
 			</div>
 		</div>
-		<div class="thumbnail col-md-3 col-md-offset-1 col-xs-12" id="infoside">
+		<div class="thumbnail col-lg-3 col-lg-offset-1 hidden-xs hidden-sm hidden-md" id="infoside">
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -140,9 +144,15 @@ $(document).ready(function(){
 					option:op
 				}
 			}).done(function(response){
-				$("#menuResults").children().slideUp('300').html(response).slideDown('300');
+				//$("#menuResults").slideUp().html(response).slideDown();
+				$("#menuResults").html(response);
+				//.html(response).slideDown('300');
 			});
 		}
+	});
+
+	$("tr").click(function(){
+		document.location.href="/stadiums/"+$(this).attr('id');
 	});
 });
 </script>
