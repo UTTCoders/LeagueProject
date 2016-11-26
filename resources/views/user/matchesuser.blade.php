@@ -90,7 +90,7 @@
 	<div class="container">
 		<h1 style="color:#eee; margin-top: 20px; margin-bottom: 30px; text-shadow: 3px 3px 3px black;" id="mainTitle">Follow your passion!<br>Here you can see, all of the matches!</h1>
 		<hr>
-		<div class="thumbnail col-lg-8 col-xs-12" id="contcards">
+		<div class="thumbnail col-lg-9 col-xs-12" id="contcards">
 			<div id="matchesMenu" class="col-xs-12">
 				<ul class="nav nav-pills">
 					@if(isset($favorites))
@@ -113,7 +113,7 @@
 
 			</div>
 		</div>
-		<div class="thumbnail col-lg-3 col-lg-offset-1 hidden-xs hidden-sm hidden-md" id="infoside">
+		<div class="thumbnail col-lg-2 col-lg-offset-1 hidden-xs hidden-sm hidden-md" id="infoside">
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
