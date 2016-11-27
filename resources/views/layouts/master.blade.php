@@ -184,6 +184,7 @@
                 width: 100%;
                 font-size: 16px;
                 color: #eee;
+                cursor: pointer;
             }
             .panelItem:link,.panelItem:active,.panelItem:visited{
                 text-decoration: none;
@@ -306,7 +307,7 @@
                 </div>
                 <div class="bottomContainer col-md-12 no-padding" style="position:absolute;bottom:0px;background-color:red;">
                   <a href="/favorites" class="panelItem" style="">Favorites</a>
-                  <a href="/logout" class="panelItem">Log out</a>
+                  <a id="logOutBtn" class="panelItem">Log out</a>
                 </div>
             </div>
 
@@ -321,7 +322,7 @@
                         <a href="#" id="1" class="panelSubItem" style="display:none">Hijo</a>
                     </div>
                     <div class="bottomContainer col-md-12 no-padding" style="position:absolute;bottom:0px;">
-                      <a href="/logout" class="panelItem">Log out</a>
+                      <a id="logOutBtn" class="panelItem">Log out</a>
                     </div>
                 </div>
             @endif
@@ -334,6 +335,37 @@
                 <a class="footerLink" style="position: absolute; right: 25%; top: 40px;" href="">privacity</a>
             </div>
         </div>
+        <script type="text/javascript">
+          window.fbAsyncInit = function() {
+              FB.init({
+                appId      : '1767846576800416',
+                xfbml      : true,
+                cookie     : true,
+                version    : 'v2.8'
+              });
+              FB.AppEvents.logPageView();
+              
+              $('#logOutBtn').click(function () {
+                  FB.getLoginStatus(function (response) {
+                    if(response.status === 'connected'){
+                      FB.logout();
+                      console.log(response);
+                    }
+                    window.location.replace('/logout');
+                  },true);
+              });
+          };
+
+          (function(d, s, id){
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement(s); js.id = id;
+             js.src = "//connect.facebook.net/en_US/sdk.js";
+             fjs.parentNode.insertBefore(js, fjs);
+          }(document, 'script', 'facebook-jssdk'));
+
+        </script>
+
         <script src="{{elixir('js/jquery-3.1.0.min.js')}}"></script>
         @yield('js')
         <script>

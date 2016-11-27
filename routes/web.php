@@ -58,7 +58,7 @@ Route::post('/','Authentication\LoginHomeController@FirstRequest');
 //Activation route
 Route::get('activate/{t}',
 'Authentication\ActivationController@ActivationRequest');
-Route::get('/logout','Authentication\LoginHomeController@LogoutRequest');
+Route::get('/logout','Authentication\LoginHomeController@LogoutRequest')->middleware('auth');
 
 
 //--------------------Routes for the user----------------------!
@@ -69,9 +69,15 @@ Route::group(['middleware' => ['authen']], function(){
 	Route::post('/getmatches','User\MatchesController@getMatchesForMenu');
 });
 
+// fb
+Route::get('/fbloginSocialite','Auth\LoginFBController@redirectToProvider');
+Route::get('/callback','Auth\LoginFBController@handleProviderCallback');
+Route::post('/fblogin','Auth\LoginFBController@loginAsync')->middleware('guest');
+//
+
 
 //pruebas
-Route::get('/prueba1','Admin\League@addStadium');
+
 Route::get('/prueba2', function(){
     return view('admin.calendar');
 });

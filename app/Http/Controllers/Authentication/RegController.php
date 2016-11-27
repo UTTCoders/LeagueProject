@@ -37,6 +37,7 @@ class RegController extends Controller
         	$newuser->email=$r->input('email');
         	$newuser->password=Hash::make($r->input('password'));
         	$newuser->remember_token = $r->input('_token');
+          $newuser->fb_account = false;
 
           $msg = "";
       		if(User::all()->count() < 1){
