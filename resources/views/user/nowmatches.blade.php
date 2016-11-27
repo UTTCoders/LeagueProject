@@ -20,5 +20,8 @@
 </div>
 @endforeach
 @else
-<h1 align="center">Sorry dude :(</h1>
+<div style="color:#111; padding-top: 60px;" align="center">
+	<h2>There're no matches taking place right now!</h2>
+	<!--<h3>But you can see the calendar! ;)</h3>-->
+</div>
 @endif

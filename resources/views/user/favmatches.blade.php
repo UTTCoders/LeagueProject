@@ -53,5 +53,12 @@
 	</table>
 </div>
 @else
-<h1 align="center">Sorry dude :(</h1>
+<div style="color:#111; padding-top: 60px;" align="center">
+	@if(Auth::user()->teams->count()>0)
+	<h2>There're no matches of your favorite teams right now!</h2>
+	@else
+	<h2>You have no favorites dude! :'(</h2>
+	<!--<h3>Go to the Home menu and add some teams to your favs! <span class="glyphicon glyphicon-star-empty"></span></h3>-->
+	@endif
+</div>
 @endif

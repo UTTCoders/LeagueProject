@@ -47,6 +47,11 @@
 	}
 	#infoside{
 		border-radius: 0;
+		box-shadow: 2px 2px 2px #000;
+		padding: 10px 15px;
+		font-size: 13px;
+		text-align: justify;
+		color: #666;
 	}
 
 	/*CSS For the matches menu*/
@@ -114,12 +119,10 @@
 			</div>
 		</div>
 		<div class="thumbnail col-lg-2 col-lg-offset-1 hidden-xs hidden-sm hidden-md" id="infoside">
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+			<img src="/img/Logo La Liga Spain.png" class="img-responsive">
+			<p><span class="glyphicon glyphicon-euro"></span> Lorem ipsum dolor sit amet.<br>Ut enim ad minim veniam,
 			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			consequat.</p>
 		</div>
 	</div>
 </div>
