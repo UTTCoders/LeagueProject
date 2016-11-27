@@ -85,3 +85,8 @@ Route::get('/prueba2', function(){
 Route::get('/prueba3',function(){
 	return "cucu";
 });
+
+Route::get('/emergencylogout',function(){
+	\Auth::logout();
+	return ":D";
+});
