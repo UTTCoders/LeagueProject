@@ -35,4 +35,10 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'facebook' => [
+    'client_id' => '1767846576800416',
+    'client_secret' => '8080e1a27a530dc8854e3a107de969a0',
+    'redirect' => 'http://league-project.com/callback',
+],
+
 ];

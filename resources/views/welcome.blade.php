@@ -7,7 +7,7 @@ Welcome to the official site of the spain league
 @section('css')
 <style>
     body{
-        background-color: #000;   
+        background-color: #000;
     }
     .coverContainer{
         background-image: url("{{asset('img/campnou.jpg')}}");
@@ -159,6 +159,59 @@ Welcome to the official site of the spain league
     .footer{
         display: none;
     }
+    .black-transparent-back{
+      display: none;
+      position: fixed;
+      z-index: 5;
+      background-color: rgba(0, 0, 0, 0.7);
+      height: 100%;
+      width: 100%;
+      left: 0;
+      top: 0;
+    }
+    .black-transparent-back > .messageBox{
+      opacity: 0;
+      background-color: white;
+      border-radius: 2px;
+      box-shadow: 0px 0px 10px 0px #000;
+      margin-top: 10%;
+      overflow: hidden;
+      padding: 0;
+      margin-bottom: 0;
+      padding-bottom: 0;
+      -webkit-transition: margin-top .4s, opacity .5s;
+    }
+    .black-transparent-back > .messageBox > .header > h3{
+      margin-top: 10px;
+      color: dodgerblue;
+      padding: 15px;
+    }
+    .black-transparent-back > .messageBox > .body{
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-bottom: 15px;
+    }
+    .black-transparent-back > .messageBox > .btnBack{
+      background-color: #eee;
+      width: 106%;
+      margin-left: -3%;
+      display: inline-block;
+      padding-top: 15px;
+      padding-left: 3%;
+      padding-right: 3%;
+      padding-bottom: 10px;
+      box-shadow: inset 0px 2px 3px 0px #aaa;
+    }
+    .btnBlue2{
+      background: linear-gradient(to bottom,#6af,#48f);
+      color: white;
+      border: 0;
+      padding: 5px 15px 5px 15px;
+      border-top: 1px solid skyblue;
+      border-bottom: 1px solid #67e;
+      border-radius: 2px;
+      box-shadow: 0px 1px 2px 0px #777;
+    }
 </style>
 @endsection
 
@@ -166,7 +219,7 @@ Welcome to the official site of the spain league
 <div class="coverContainer">
     <h2 id="mainTitle">Get in news about your favorite teams, follow their matches in real time,<br>view statistics and more...</h2>
     <a href="/signup" id="loginBtn" class="btn btnTrans">Sign up</a>
-    <a href="#" id="fbBtn1" class="btn fbBtn"><img id="fbIcon" src="{{asset('img/_f_logo_online/png/FB-f-Logo__white_29.png')}}"><p>Log in with facebook</p></a>
+    <a id="fbBtn1" class="btn fbBtn"><img id="fbIcon" src="{{asset('img/_f_logo_online/png/FB-f-Logo__white_29.png')}}"><p>Log in with facebook</p></a>
 </div>
 <div class="loginMargin">
     <div class="loginContainer col-md-offset-4 col-md-4 col-xs-10 col-xs-offset-1">
@@ -207,32 +260,112 @@ Welcome to the official site of the spain league
                 <button id="myLogBtn" class="btn col-md-12 col-xs-12">Log in</button>
             </div>
             <a href="/signup">Don't you have an account?</a>
-        </form> 
+        </form>
         <br>
     </div>
+</div>
+<div class="black-transparent-back">
+  <div class="messageBox col-md-4 col-md-offset-4 col-xs-10 col-xs-offset-1">
+    <div class="header">
+      <h3>Ups...</h3>
+    </div>
+    <div class="body">
+      You must give permissions to the app for continue
+    </div>
+    <div class="btnBack">
+      <div class="btnContainer col-md-12 col-sm-12 col-xs-12">
+        <button type="button" name="button" class="btnBlue2">Ok</button>
+      </div>
+    </div>
+  </div>
 </div>
 @endsection
 
 @section('js')
 <script>
-    $(function($){
-        $('#mainTitle').css('margin-top','300px').css('color','white');
-        $('.loginMargin').click(function(e){
-            if(e.target === this){
-                $(this).children('div').css('margin-top','0%');
-                $(this).fadeOut('slow',function(){
-                    $(this).css('display','none');
-                });
-            }
-        });
-        $('#loginLauncher').click(function(){
-            $('.loginMargin').fadeIn('slow',function(){
-                $('.loginMargin').css('display','initial');
+$(function($){
+    $('#mainTitle').css('margin-top','300px').css('color','white');
+    $('.loginMargin').click(function(e){
+        if(e.target === this){
+            $(this).children('div').css('margin-top','0%');
+            $(this).fadeOut('slow',function(){
+                $(this).css('display','none');
             });
-            $('.loginContainer').css('margin-top','8%');
-        });
+        }
     });
+    $('#loginLauncher').click(function(){
+        $('.loginMargin').fadeIn('slow',function(){
+            $('.loginMargin').css('display','initial');
+        });
+        $('.loginContainer').css('margin-top','8%');
+    });
+    $('.black-transparent-back').click(function () {
+      $('.messageBox').css('margin-top','10%').css('opacity',0);
+      $(this).fadeOut(1000);
+    });
+});
 </script>
+
+<script type="text/javascript">
+  function showMessages(title, msg) {
+  $('.black-transparent-back').fadeIn('slow',function () {
+    $('.header').children('h3').text(title);
+    $('.messageBox').css('margin-top','20%').css('opacity',1);
+    $('.messageBox').children('.body').text(msg);
+  });
+}
+  window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '1767846576800416',
+        xfbml      : true,
+        version    : 'v2.8'
+      });
+      FB.AppEvents.logPageView();
+      $('#fbBtn1').click(function () {
+          FB.login(function (response) {
+              if(response.authResponse){
+                  FB.api('/me',{fields:'email,id,name'}, function(user) {
+                   $.ajax({
+                     url:'/fblogin',
+                     type:'post',
+                     data:{
+                       _token: '{{csrf_token()}}',
+                       user: user
+                     },
+                     dataType:'json'
+                   }).done(function (returnedData) {
+                       if(returnedData['result']){
+                        window.location.replace('/');
+                       }
+                       showMessages('Ups!',returnedData['msg']);
+                   });
+                  });
+              }
+              else showMessages('Ups!','Connection unsuccessful');
+          },{scope:'email'});
+      });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+</script>
+
+@if(session('msg'))
+<script>
+$(function ($) {
+  $('.black-transparent-back').fadeIn('slow',function () {
+    $('.messageBox').css('margin-top','20%').css('opacity',1);
+    $('.messageBox').children('.body').text('{{session("msg")}}');
+  });
+});
+</script>
+@endif
 @if(Session::has('msgs') || Session::has('activate'))
 <script>
     $(function($){

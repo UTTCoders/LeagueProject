@@ -27,11 +27,16 @@ class LoginHomeController extends Controller
     		return back()->with('msgs',["That email is not registered yet!"])
             ->withInput($r->except('password'));
     	}
-        $state=User::where('email',$r->input('email'))->get()->first()->active;
-        if (!$state) {
-            return back()->with('msgs',["Your account is not activated yet!"])
-            ->withInput($r->except('password'));
-        }
+      $isFbAccount = User::where('email',$r->input('email'))->get()->first()->fb_account;
+      if($isFbAccount){
+        return back()->with('msgs',["There is already an account registered with facebook using that email. Login with that instead."])
+        ->withInput($r->except('password'));
+      }
+      $state=User::where('email',$r->input('email'))->get()->first()->active;
+      if (!$state) {
+          return back()->with('msgs',["Your account is not activated yet!"])
+          ->withInput($r->except('password'));
+      }
     	$userData=[
     		"email"=>$r->input('email'),
     		"password"=>$r->input('password')
@@ -47,7 +52,9 @@ class LoginHomeController extends Controller
         if (Session::has('first')) {
             Session::forget('first');
         }
+        $fbAccount = Auth::user()->fb_account;
         Auth::logout();
+        if($fbAccount) redirect('/home')->with('gonnaLogOut',true);
         return redirect('/home');
     }
 }
