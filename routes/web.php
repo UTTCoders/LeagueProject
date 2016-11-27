@@ -58,7 +58,7 @@ Route::post('/','Authentication\LoginHomeController@FirstRequest');
 //Activation route
 Route::get('activate/{t}',
 'Authentication\ActivationController@ActivationRequest');
-Route::get('/logout','Authentication\LoginHomeController@LogoutRequest');
+Route::get('/logout','Authentication\LoginHomeController@LogoutRequest')->middleware('auth');
 
 
 //--------------------Routes for the user----------------------!
@@ -70,8 +70,9 @@ Route::group(['middleware' => ['authen']], function(){
 });
 
 // fb
-Route::get('/fblogin','Auth\LoginFBController@redirectToProvider');
+Route::get('/fbloginSocialite','Auth\LoginFBController@redirectToProvider');
 Route::get('/callback','Auth\LoginFBController@handleProviderCallback');
+Route::post('/fblogin','Auth\LoginFBController@loginAsync')->middleware('guest');
 //
 
 

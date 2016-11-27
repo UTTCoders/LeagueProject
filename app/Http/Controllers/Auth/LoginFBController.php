@@ -31,7 +31,7 @@ class LoginFBController extends Controller
           if(!$localUser->fb_account)
             return redirect('/home')->with('msg', 'There is an account registered with that email... Log in with your league-project account instead!');
           Auth::login($localUser);
-          return redirect('/');
+          return redirect('/')->with('gonnaLogin',true);
         }
         $admin = false;
         if(User::get()->count() < 1) $admin = true;
@@ -45,5 +45,29 @@ class LoginFBController extends Controller
         $newUser->save();
         Auth::login($newUser);
         return redirect('/')->with('gonnaLogin',true);
+    }
+
+    public function loginAsync(Request $request){
+        $result = \Validator::make($request->all(), ['user' => 'required']);
+        if($result->fails()) return ['result' => false, 'msg' => 'Somthing went wrong.'];
+        $user = $request->user;
+        if($localUser = User::where('email',$user['email'])->first()){
+          if(!$localUser->fb_account)
+            return ['result' => false, 'msg' => 'You already have an account from league-project, use it instead!'];
+          Auth::login($localUser);
+          return ['result' => true];
+        }
+        $admin = false;
+        if(User::get()->count() < 1) $admin = true;
+        $newUser = new User;
+        $newUser->name = $user['name'];
+        $newUser->email = $user['email'];
+        $newUser->password = $user['id'];
+        $newUser->fb_account = true;
+        $newUser->active = true;
+        $newUser->type = $admin;
+        $newUser->save();
+        Auth::login($newUser);
+        return ['result' => true];
     }
 }

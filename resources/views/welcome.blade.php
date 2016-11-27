@@ -188,6 +188,7 @@ Welcome to the official site of the spain league
     }
     .black-transparent-back > .messageBox > .body{
       padding-left: 15px;
+      padding-right: 15px;
       padding-bottom: 15px;
     }
     .black-transparent-back > .messageBox > .btnBack{
@@ -218,7 +219,7 @@ Welcome to the official site of the spain league
 <div class="coverContainer">
     <h2 id="mainTitle">Get in news about your favorite teams, follow their matches in real time,<br>view statistics and more...</h2>
     <a href="/signup" id="loginBtn" class="btn btnTrans">Sign up</a>
-    <a href="/fblogin" id="fbBtn1" class="btn fbBtn"><img id="fbIcon" src="{{asset('img/_f_logo_online/png/FB-f-Logo__white_29.png')}}"><p>Log in with facebook</p></a>
+    <a id="fbBtn1" class="btn fbBtn"><img id="fbIcon" src="{{asset('img/_f_logo_online/png/FB-f-Logo__white_29.png')}}"><p>Log in with facebook</p></a>
 </div>
 <div class="loginMargin">
     <div class="loginContainer col-md-offset-4 col-md-4 col-xs-10 col-xs-offset-1">
@@ -304,8 +305,15 @@ $(function($){
     });
 });
 </script>
-@if(session('gonnaLogOut'))
+
 <script type="text/javascript">
+  function showMessages(title, msg) {
+  $('.black-transparent-back').fadeIn('slow',function () {
+    $('.header').children('h3').text(title);
+    $('.messageBox').css('margin-top','20%').css('opacity',1);
+    $('.messageBox').children('.body').text(msg);
+  });
+}
   window.fbAsyncInit = function() {
       FB.init({
         appId      : '1767846576800416',
@@ -313,8 +321,28 @@ $(function($){
         version    : 'v2.8'
       });
       FB.AppEvents.logPageView();
-      FB.logout(function (response) {
-        console.log(response);
+      $('#fbBtn1').click(function () {
+          FB.login(function (response) {
+              if(response.authResponse){
+                  FB.api('/me',{fields:'email,id,name'}, function(user) {
+                   $.ajax({
+                     url:'/fblogin',
+                     type:'post',
+                     data:{
+                       _token: '{{csrf_token()}}',
+                       user: user
+                     },
+                     dataType:'json'
+                   }).done(function (returnedData) {
+                       if(returnedData['result']){
+                        window.location.replace('/');
+                       }
+                       showMessages('Ups!',returnedData['msg']);
+                   });
+                  });
+              }
+              else showMessages('Ups!','Connection unsuccessful');
+          },{scope:'email'});
       });
   };
 
@@ -325,8 +353,9 @@ $(function($){
      js.src = "//connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
+
 </script>
-@endif
+
 @if(session('msg'))
 <script>
 $(function ($) {
