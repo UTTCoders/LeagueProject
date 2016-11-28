@@ -157,7 +157,7 @@ $(document).ready(function(){
 		}
 	});
 
-	$("tr").click(function(){
+	$(".t-row").click(function(){
 		document.location.href="/stadiums/"+$(this).attr('id');
 	});
 });
