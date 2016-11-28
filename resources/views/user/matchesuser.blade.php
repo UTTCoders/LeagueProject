@@ -55,26 +55,6 @@
 		color: #666;
 	}
 
-	/*CSS For the matches menu*/
-	#matchesMenu{
-		background-color: #111;
-		margin-bottom: 20px;
-		box-shadow: 3px 3px black;
-	}
-	.optionM:hover{
-		border-radius: 0;
-		color: #111;
-		cursor:pointer;
-	}
-	.activeOp{
-		background-color: #eee;
-	}
-
-	/*Select al classes containing ‘keyword’ whether it’s first, last or part of a name*/
-	a[class*=Selected]{
-		color:#111;
-	}
-
 	.padData{
 		padding-top: 10px;
 		padding-bottom: 10px;
@@ -96,29 +76,16 @@
 	<div class="container">
 	<div align="center">
 		<img src="/img/soccer_player.jpg" style="width: 30%;">
-		<h1 style="color:#111; margin-top: 20px; margin-bottom: 30px;">There are matches<br>taking place right now!</span></h1>
-		<hr>
 	</div>
+	@if($matches->count()>0)
+		<h1 align="center" style="color:#111; margin-top: 20px; margin-bottom: 30px;">There are matches<br>taking place right now!</h1>
+		<hr>
 		<div class="thumbnail col-lg-9 col-xs-12" id="contcards">
-			<!--<div id="matchesMenu" class="col-xs-12">
-				<ul class="nav nav-pills">
-					@if(isset($favorites))
-						<li role="presentation"><a class="optionM" id="now">Right Now!</a></li>
-					  	<li role="presentation" class="activeOp"><a class="optionM Selected" id="favorites"><span class="glyphicon glyphicon-star-empty"></span> My favorites</a></li>
-					@else
-					  	<li role="presentation" class="activeOp"><a class="optionM Selected" id="now">Right Now!</a></li>
-					  	<li role="presentation"><a class="optionM" id="favorites"><span class="glyphicon glyphicon-star-empty"></span> My favorites</a></li>
-				  	@endif
-				</ul>
-			</div>-->
-			<div id="menuResults">
-				@if(isset($favorites))
-					@include('user.favmatches')
-				@else
-					@include('user.nowmatches')
-				@endif
-			</div>
+			
 		</div>
+	@else
+		<h1 align="center" style="color:#111; margin-top: 20px; margin-bottom: 30px;">Here you can see all of the matches!</h1>
+	@endif
 	</div>
 </div>
 <div class="jumbotron" style="margin-bottom: 0; background-color: #009688; color: #eee;">
@@ -160,29 +127,6 @@
 @section('js2')
 <script>
 $(document).ready(function(){
-	$(".optionM").click(function(){
-		if (!$(this).hasClass('Selected')) {
-			$(".Selected").parent().removeClass('activeOp');
-			$(".Selected").removeClass('Selected');
-			$(this).addClass('Selected');
-			$(this).parent().addClass('activeOp');
-			var t=$("meta[name='toktok']").attr('content');
-			var op=$(this).attr('id');
-			$.ajax({
-				url:"/getmatches",
-				method:"post",
-				data:{
-					_token:t,
-					option:op
-				}
-			}).done(function(response){
-				//$("#menuResults").slideUp().html(response).slideDown();
-				$("#menuResults").html(response);
-				//.html(response).slideDown('300');
-			});
-		}
-	});
-
 	$(".t-row").click(function(){
 		document.location.href="/stadiums/"+$(this).attr('id');
 	});
