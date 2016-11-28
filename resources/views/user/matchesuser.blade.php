@@ -14,7 +14,7 @@
 		padding-bottom: 20px;
 	}
 	body{
-		background-color: #B71C1C;
+		background-color: #fff;
 	}
 	.matchcard{
 		border-radius:0; 
@@ -41,13 +41,14 @@
 		padding-bottom: 20px;
 		padding-right: 30px;
 		padding-left: 30px;
-		background-color: #eee;
+		border: solid 1px #666;
 		border-radius: 0;
-		box-shadow: 2px 2px 2px #111;
+		box-shadow: 5px 5px #666;
+		background-color: #fff;
 	}
 	#infoside{
 		border-radius: 0;
-		box-shadow: 2px 2px 2px #000;
+		box-shadow: 5px 5px #00695C;
 		padding: 10px 15px;
 		font-size: 13px;
 		text-align: justify;
@@ -93,41 +94,66 @@
 @section('body2')
 <div id="con">
 	<div class="container">
-		<h1 style="color:#eee; margin-top: 20px; margin-bottom: 30px; text-shadow: 3px 3px 3px black;" id="mainTitle">Follow your passion!<br>Here you can see, all of the matches!</h1>
+	<div align="center">
+		<img src="/img/soccer_player.jpg" style="width: 30%;">
+		<h1 style="color:#111; margin-top: 20px; margin-bottom: 30px;">There are matches<br>taking place right now!</span></h1>
 		<hr>
+	</div>
 		<div class="thumbnail col-lg-9 col-xs-12" id="contcards">
-			<div id="matchesMenu" class="col-xs-12">
+			<!--<div id="matchesMenu" class="col-xs-12">
 				<ul class="nav nav-pills">
 					@if(isset($favorites))
-						<li role="presentation"><a class="optionM" id="now">Now!</a></li>
-					  	<li role="presentation" class="activeOp"><a class="optionM Selected" id="favorites"><span class="glyphicon glyphicon-star-empty"></span><span class="hidden-xs"> My favorites</span></a></li>
+						<li role="presentation"><a class="optionM" id="now">Right Now!</a></li>
+					  	<li role="presentation" class="activeOp"><a class="optionM Selected" id="favorites"><span class="glyphicon glyphicon-star-empty"></span> My favorites</a></li>
 					@else
-					  	<li role="presentation" class="activeOp"><a class="optionM Selected" id="now">Now!</a></li>
-					  	<li role="presentation"><a class="optionM" id="favorites"><span class="glyphicon glyphicon-star-empty"></span><span class="hidden-xs"> My favorites</span></a></li>
+					  	<li role="presentation" class="activeOp"><a class="optionM Selected" id="now">Right Now!</a></li>
+					  	<li role="presentation"><a class="optionM" id="favorites"><span class="glyphicon glyphicon-star-empty"></span> My favorites</a></li>
 				  	@endif
-				  	<li role="presentation"><a class="optionM" id="history">History</a></li>
 				</ul>
-			</div>
+			</div>-->
 			<div id="menuResults">
-
 				@if(isset($favorites))
 					@include('user.favmatches')
 				@else
 					@include('user.nowmatches')
 				@endif
-
 			</div>
 		</div>
-		<div class="thumbnail col-lg-2 col-lg-offset-1 hidden-xs hidden-sm hidden-md" id="infoside">
+	</div>
+</div>
+<div class="jumbotron" style="margin-bottom: 0; background-color: #009688; color: #eee;">
+	<div class="container">
+		<div class="thumbnail col-lg-9" style="border-radius: 0; color: #111; padding-top: 20px; padding-bottom: 20px; box-shadow: 5px 5px #00695C;">
+			<h2 align="center"><span class="glyphicon glyphicon-th-list"></span> Calendar</h2>
+			@if(!App\League\Match::where('state',0)->count()>0)
+			<div class="container">
+				<div class="table-responsive">
+					<table class="table">
+						<tr align="center">
+							<td><strong>Teams</strong></td>
+							<td><strong>Stadium</strong></td>
+							<td><strong>Date</strong></td>
+							<td><strong>Start hour</strong></td>
+						</tr>
+						@foreach(App\League\Match::where('state',0)->get() as $match)
+						<tr align="center">
+							
+						</tr>
+					@endforeach
+					</table>
+				</div>
+			</div>
+			@else
+			<h3 align="center">There're no matches</h3>
+			@endif
+		</div>
+		<div class="thumbnail col-lg-2 col-lg-offset-1 hidden-xs hidden-sm hidden-md" id="infoside" style="color: #111;">
 			<img src="/img/Logo La Liga Spain.png" class="img-responsive">
-			<p><span class="glyphicon glyphicon-euro"></span> Lorem ipsum dolor sit amet.<br>Ut enim ad minim veniam,
+			<p style="font-size: 13px;"><span class="glyphicon glyphicon-euro"></span> Lorem ipsum dolor sit amet.<br>Ut enim ad minim veniam,
 			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 			consequat.</p>
 		</div>
 	</div>
-</div>
-<div class="jumbotron">
-	
 </div>
 @endsection
 
