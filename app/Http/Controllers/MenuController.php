@@ -15,7 +15,7 @@ class MenuController extends Controller
 {
     public function MenuRequest(Request $r){
     	if (Auth::user()->type)
-            return view('admin.management');
+            return view('admin.management.management');
 
         if (Auth::user()->teams->count()>0) {
         	if (self::checkTeamMatches() && !Session::has('first')) {
