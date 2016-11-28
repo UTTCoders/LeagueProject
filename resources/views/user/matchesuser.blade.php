@@ -126,6 +126,9 @@
 		</div>
 	</div>
 </div>
+<div class="jumbotron">
+	
+</div>
 @endsection
 
 @section('js2')
