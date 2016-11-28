@@ -9,6 +9,7 @@ use App\League\Stadium;
 use App\League\Coach;
 use Validator;
 use Storage;
+use App\League\Team;
 
 class League extends Controller
 {
@@ -192,6 +193,29 @@ class League extends Controller
         if($result->fails()) return ['title' => 'Ups!', 'content' => 'Something went wrong!', 'type' => 'error-card'];
         Coach::find($request->id)->delete();
         return ['title' => 'Ok!', 'content' => 'Coach deleted!', 'type' => 'success-card'];
+    }
+
+    public function addTeam(Request $request){
+        $result = Validator::make($request->all(),[
+          'name' => 'required',
+          'photo' => 'required',
+          'date' => 'required',
+          'stadiumId' => 'required',
+          'coachId' => 'required'
+        ]);
+        if($result->fails()) return ['result' => false];
+        if(!Stadium::find($request->stadiumId)) return ['result' => false];
+        if(!Coach::find($request->coachId)) return ['result' => false];
+        if(Team::where('stadium_id',$request->stadiumId)->where('coach_id',$request->coachId)->first())
+          return ['result' => false];
+        $team = new Team;
+        $team->name = $request->name;
+        $team->logo = $request->photo->store('img\teams','public');
+        $team->foundation_date = $request->date;
+        $team->stadium_id = $request->stadiumId;
+        $team->coach_id = $request->coachId;
+        if($team->save()) return ['result' => $team];
+        return ['result' => false];
     }
 
 }

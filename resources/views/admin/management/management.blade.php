@@ -427,7 +427,63 @@ League management
     .coachCard2:hover .delete-btn{
       right: 8px;
     }
+.file-big-container{
+  position: relative;
+  border: 1px dashed #555;
+  box-shadow: inset 0 0 10px 0 #000;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  overflow: hidden;
+  height: 200px;
+}
+.file-big-container > input{
+    top: 0;
+    right: 0;
+    opacity: 0;
+    position: absolute;
+    font-size: 100px;
+    width: 100%;
+    height: 100%;
+}
+.teams-selection-container{
+  background-color: #111;
+  margin-top: 15px;
+  border-radius: 3px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  max-height: 200px;
+  box-shadow: 0 1px 3px #000;
+  overflow: auto;
+}
+.teams-selection-container > .Item{
+  overflow: hidden;
+  height: 45px;
+}
+.Item > div > h5{
+  margin: 15px;
+}
+.Item > img{
+  border-radius: 2px;
+}
+.teams-selection-container > .Item:hover{
+  background-color: #000;
+  cursor: pointer;
+}
+.teams-selection-container::-webkit-scrollbar {
+    width: 5px;
+}
 
+.teams-selection-container::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.teams-selection-container::-webkit-scrollbar-thumb {
+  background-color: #222;
+  border-radius: 5px;
+  outline: 1px solid slategrey;
+}
 </style>
 @endsection
 
@@ -662,7 +718,21 @@ League management
             </div>
             <div class="sub-module sub-module-active" id="addingModule">
               <div class="col-md-6">
-
+                <h4>Team information</h4>
+                <div class="form-group col-md-12 no-padding">
+                  <input type="text" name="teamName" value="" placeholder="name..." class="blackInput col-md-12 no-padding">
+                </div>
+                <div class="file-big-container col-md-12">
+                  <h4 style="text-align:center;margin-top:88px;">Drag or click for select a <b>logo</b>...</h4>
+                  <input type="file" name="teamPhoto" value="">
+                </div>
+                <div class="form-group col-md-12 no-padding">
+                  <label for="teamFoundationDate">Foundation name</label>
+                  <input type="date" name="teamFoundationDate" value="" class="blackInput col-md-12">
+                </div>
+                <div class="form-group col-md-12 no-padding">
+                  <button type="button" name="addTeamBtn" class="btnBlue2 col-md-12 no-padding">Add</button>
+                </div>
               </div>
               <div class="col-md-6">
                 <div class="col-md-12 no-padding teams-selection-container" id="stadiumSelector">
@@ -691,6 +761,27 @@ League management
                 </div>
               </div>
             </div>
+            <div class="sub-module" id="editingModule">
+              <div class="col-md-6" id="teamsToEditContainer">
+
+              </div>
+              <div class="col-md-6">
+
+              </div>
+            </div>
+            <div class="sub-module" id="deletingModule">
+
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12 no-padding module" id="playersModule">
+            <div class="tabsContainer no-padding col-md-12 col-sm-12 col-xs-12">
+                <a href="#" class="tab tab-active col-md-4 col-sm-4 col-xs-4" id="addingLauncher">Add</a>
+                <a href="#" class="tab col-md-4 col-sm-4 col-xs-4" id="editingLauncher">Edit</a>
+                <a href="#" class="tab col-md-4 col-sm-4 col-xs-4" id="deletingLauncher">Remove</a>
+            </div>
+            <p>
+              Players
+            </p>
         </div>
     </div>
     <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0 col-xs-10 col-xs-offset-1" id="manageMenu">
