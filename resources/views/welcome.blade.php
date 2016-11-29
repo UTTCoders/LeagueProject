@@ -337,7 +337,8 @@ $(function($){
                        if(returnedData['result']){
                         window.location.replace('/');
                        }
-                       showMessages('Ups!',returnedData['msg']);
+                       else showMessages('Ups!',returnedData['msg']);
+
                    });
                   });
               }

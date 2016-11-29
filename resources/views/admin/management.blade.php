@@ -654,44 +654,6 @@ League management
               @endif
             </div>
         </div>
-        <div class="col-md-12 col-sm-12 col-xs-12 no-padding module" id="teamsModule">
-            <div class="tabsContainer no-padding col-md-12 col-sm-12 col-xs-12">
-                <a href="#" class="tab tab-active col-md-4 col-sm-4 col-xs-4" id="addingLauncher">Add</a>
-                <a href="#" class="tab col-md-4 col-sm-4 col-xs-4" id="editingLauncher">Edit</a>
-                <a href="#" class="tab col-md-4 col-sm-4 col-xs-4" id="deletingLauncher">Remove</a>
-            </div>
-            <div class="sub-module sub-module-active" id="addingModule">
-              <div class="col-md-6">
-
-              </div>
-              <div class="col-md-6">
-                <div class="col-md-12 no-padding teams-selection-container" id="stadiumSelector">
-                  @foreach(App\League\Stadium::get() as $i => $stadium)
-                  @if(!$stadium->team)
-                  <div class="col-md-12 no-padding Item" id="{{$stadium->id}}">
-                    <img src="{{asset('storage/'.$stadium->photo)}}" alt="" class="col-md-4">
-                    <div class="col-md-8">
-                      <h5>{{$stadium->name}}</h5>
-                    </div>
-                  </div>
-                  @endif
-                  @endforeach
-                </div>
-                <div class="col-md-12 no-padding teams-selection-container" id="coachSelector">
-                  @foreach(App\League\Coach::get() as $i => $coach)
-                  @if(!$coach->team)
-                  <div class="col-md-12 no-padding Item" id="{{$coach->id}}">
-                    <img src="{{asset('storage/'.$coach->photo)}}" alt="" class="col-md-3">
-                    <div class="col-md-9">
-                      <h5>{{$coach->name}}</h5>
-                    </div>
-                  </div>
-                  @endif
-                  @endforeach
-                </div>
-              </div>
-            </div>
-        </div>
     </div>
     <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0 col-xs-10 col-xs-offset-1" id="manageMenu">
         <a class="manageMenuHeader col-md-12 col-sm-12 col-xs-12">Manage...</a>

@@ -69,6 +69,7 @@ body{
   border-radius: 6px;
   margin-bottom: 15px;
   overflow: hidden;
+  padding: 0;
   height: 200px;
 }
 .file-big-container > input{
@@ -81,8 +82,8 @@ body{
     height: 100%;
 }
 .teams-selection-container{
-  background-color: #111;
-  margin-top: 15px;
+  background-color: #000;
+  margin-bottom: 15px;
   border-radius: 3px;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -148,13 +149,83 @@ body{
   background-color: #111;
   border-radius: 3px;
   box-shadow: 0 1px 2px 0 #000;
+  overflow: hidden;
+}
+.blackWell > .header{
+  margin: 0;
+  background-color: dodgerblue;
+  padding: 10px 10px 10px 10px;
+  margin-bottom: 15px;
+}
+.blackWell > .header > h4{
+  padding: 0;
+  margin: 0;
+}
+.black-transparent-back{
+  display: none;
+  position: fixed;
+  z-index: 5;
+  background-color: rgba(0, 0, 0, 0.7);
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+.black-transparent-back > .messageBox{
+  opacity: 0;
+  background-color: white;
+  border-radius: 2px;
+  box-shadow: 0px 0px 10px 0px #000;
+  margin-top: 10%;
+  overflow: hidden;
+  padding: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  -webkit-transition: margin-top .4s, opacity .5s;
+}
+.black-transparent-back > .messageBox > .header > h3{
+  margin-top: 10px;
+  color: dodgerblue;
+  padding: 15px;
+}
+.black-transparent-back > .messageBox > .body{
+  padding-left: 15px;
+  color: #444;
+  padding-right: 15px;
+  padding-bottom: 15px;
+}
+.black-transparent-back > .messageBox > .btnBack{
+  background-color: #eee;
+  width: 106%;
+  margin-left: -3%;
+  display: inline-block;
+  padding-top: 15px;
+  padding-left: 3%;
+  padding-right: 3%;
+  padding-bottom: 10px;
+  box-shadow: inset 0px 2px 3px 0px #aaa;
 }
 </style>
 @endsection
 
 @section('body')
 <div class="coverContainer">
-<h3 class="mainTitle">Teams</h3>
+  <h3 class="mainTitle">Teams</h3>
+</div>
+<div class="black-transparent-back">
+  <div class="messageBox col-md-4 col-md-offset-4 col-xs-10 col-xs-offset-1">
+    <div class="header">
+      <h3>Ups...</h3>
+    </div>
+    <div class="body">
+      You must give permissions to the app for continue
+    </div>
+    <div class="btnBack">
+      <div class="btnContainer col-md-12 col-sm-12 col-xs-12">
+        <button type="button" name="button" class="btnBlue2">Ok</button>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="col-md-12 col-xs-12 col-sm-12" style="margin-top:90px;margin-bottom:40px;">
   <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0 col-xs-10 col-xs-offset-1" id="manageMenu">
@@ -163,29 +234,86 @@ body{
       <a href="/admin/teams/edit" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Edit</a>
       <a href="/admin/teams/delete" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Delete</a>
   </div>
-  <div class="col-md-6 col-md-offset-1 col-xs-11 col-xs-offset-1 blackWell">
-    <h4 class="header">Team information</h4>
-    <div class="form-group col-md-12 no-padding">
-      <input type="text" name="teamName" value="" placeholder="name..." class="whiteInput col-md-12 no-padding">
+  <div class="col-md-7 col-md-offset-1 no-padding col-xs-11 col-xs-offset-1 blackWell">
+    <div class="header">
+      <h4>Team information</h4>
     </div>
-    <div class="file-big-container col-md-12">
-      <h4 style="text-align:center;margin-top:88px;">Drag or click for select a <b>logo</b>...</h4>
-      <input type="file" name="teamPhoto" value="">
+    <div class="col-md-6 col-sm-6 col-xs-12 no-padding">
+      <form class="" id="addForm" action="/addTeam" method="post" enctype="multipart/form-data">
+        {{csrf_field()}}
+        <input type="hidden" name="stadiumId" value="">
+        <input type="hidden" name="coachId" value="">
+        <div class="form-group col-md-12">
+          <input type="text" name="teamName" value="{{old('teamName')}}" placeholder="name..." class="whiteInput col-md-12 no-padding">
+        </div>
+        <div class="form-group col-md-12">
+          <div class="file-big-container col-md-12">
+            <h4 style="text-align:center;margin-top:88px;">Drag or click for select a <b>logo</b>...</h4>
+            <input type="file" name="teamPhoto" value="{{old('teamPhoto')}}">
+          </div>
+        </div>
+        <div class="form-group col-md-12">
+          <label for="teamFoundationDate">Foundation date</label>
+          <input type="date" name="teamFoundationDate" value="{{old('teamFoundationDate')}}" class="whiteInput col-md-12">
+        </div>
+        <div class="form-group col-md-12">
+          <button type="submit" name="addTeamBtn" class="btnBlue2 col-md-4 col-md-offset-8 col-sm-12 col-xs-12 no-padding">Add</button>
+        </div>
+      </form>
     </div>
-    <div class="form-group col-md-12 no-padding">
-      <label for="teamFoundationDate">Foundation name</label>
-      <input type="date" name="teamFoundationDate" value="" class="whiteInput col-md-12">
-    </div>
-    <div class="form-group col-md-12 no-padding">
-      <button type="button" name="addTeamBtn" class="btnBlue2 col-md-12 no-padding">Add</button>
+    <div class="col-md-6">
+      <div class="col-md-12 no-padding teams-selection-container" id="stadiumSelector">
+        @if(count($freeStadiums) < 1)
+        <h4 style="text-align:center;">No stadiums</h4>
+        @else
+        @foreach($freeStadiums as $i => $stadium)
+        <div class="col-md-12 no-padding Item" id="{{$stadium->id}}">
+          <img src="{{asset('storage/'.$stadium->photo)}}" alt="" class="col-md-4">
+          <div class="col-md-8">
+            <h5>{{$stadium->name}}</h5>
+          </div>
+        </div>
+        @endforeach
+        @endif
+      </div>
+      <div class="col-md-12 no-padding teams-selection-container" id="coachSelector">
+        @if(count($freeCoaches) < 1)
+        <h4 style="text-align:center;">No coaches</h4>
+        @else
+        @foreach($freeCoaches as $i => $coach)
+        <div class="col-md-12 no-padding Item" id="{{$coach->id}}">
+          <img src="{{asset('storage/'.$coach->photo)}}" alt="" class="col-md-3">
+          <div class="col-md-9">
+            <h5>{{$coach->name}}</h5>
+          </div>
+        </div>
+        @endforeach
+        @endif
+      </div>
     </div>
   </div>
 </div>
 @endsection
 
 @section('js')
+@if(session('msg'))
+<script>
+$(function ($) {
+  $('.black-transparent-back').fadeIn('slow',function () {
+    $('.messageBox').css('margin-top','20%').css('opacity',1);
+    $('.messageBox').children('.body').text('{{session("msg")["content"]}}');
+  });
+});
+</script>
+@endif
 <script type="text/javascript">
   $(function ($) {
+    function showMessages(title,msg,type) {
+      $('.black-transparent-back').fadeIn('slow',function () {
+        $('.messageBox').css('margin-top','20%').css('opacity',1);
+        $('.messageBox').children('.body').text(msg);
+      });
+    }
     $('.file-big-container').change(function () {
       var file = $(this).children('input[type=file]')[0].files[0];
       if(file){
@@ -198,50 +326,20 @@ body{
       else $(this).children('h4').text('Drag or click for select a logo...');
     });
 
-    var teamStadiumId, teamCoachId;
     $('#stadiumSelector').children('.Item').click(function () {
-      $('#stadiumSelector').children('.Item').css('background-color','#111');
-      $(this).css('background-color','#000');
-      teamStadiumId = $(this).attr('id');
+      $('#stadiumSelector').children('.Item').css('background-color','#000');
+      $(this).css('background-color','rgba(255,255,255,0.08)');
+      $('input[name=stadiumId]').val($(this).attr('id'));
     });
 
     $('#coachSelector').children('.Item').click(function () {
-      $('#coachSelector').children('.Item').css('background-color','#111');
-      $(this).css('background-color','#000');
-      teamCoachId = $(this).attr('id');
+      $('#coachSelector').children('.Item').css('background-color','#000');
+      $(this).css('background-color','rgba(255,255,255,0.08)');
+      $('input[name=coachId]').val($(this).attr('id'));
     });
-
-    $('button[name=addTeamBtn]').click(function () {
-      var name = $('input[name=teamName]').val();
-      var photo = $('input[type=file][name=teamPhoto]')[0].files[0];
-      var date = $('input[type=date][name=teamFoundationDate]').val();
-      if(name == '') showMessages('Ups!','Name is obligatory.','alert-card');
-      else if (!photo) showMessages('Ups!','You must select a photo.','alert-card');
-      else if (date == '') showMessages('Ups!','Invalid date.','alert-card');
-      else if(!teamStadiumId) showMessages('Ups!','Select a stadium.','alert-card');
-      else if(!teamCoachId) showMessages('Ups!','Select a coach.','alert-card');
-      else{
-        var formData = new FormData();
-        formData.append('name',name);
-        formData.append('_token','{{csrf_token()}}');
-        formData.append('date',date);
-        formData.append('photo',photo);
-        formData.append('coachId',teamCoachId);
-        formData.append('stadiumId',teamStadiumId);
-        $.ajax({
-          url:'/addTeam',
-          type:'post',
-          data:formData,
-          contentType:false,
-          processData: false,
-          dataType:'json'
-        }).done(function (response) {
-          if(response['result']){
-            ///
-          }
-          else showMessages('Ups!','Has been a error!','error-card');
-        });
-      }
+    $('.black-transparent-back').click(function () {
+      $('.messageBox').css('margin-top','10%').css('opacity',0);
+      $(this).fadeOut(1000);
     });
   });
 </script>

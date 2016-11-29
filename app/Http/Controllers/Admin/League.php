@@ -197,25 +197,60 @@ class League extends Controller
 
     public function addTeam(Request $request){
         $result = Validator::make($request->all(),[
-          'name' => 'required',
-          'photo' => 'required',
-          'date' => 'required',
+          'teamName' => 'required',
+          'teamPhoto' => 'required',
+          'teamFoundationDate' => 'required',
           'stadiumId' => 'required',
           'coachId' => 'required'
         ]);
-        if($result->fails()) return ['result' => false];
-        if(!Stadium::find($request->stadiumId)) return ['result' => false];
-        if(!Coach::find($request->coachId)) return ['result' => false];
+        if($result->fails()) return back()->with('msg',['title' => 'Ups!', 'content' => 'Complete everything!' ])->withInput();
+        if(!Stadium::find($request->stadiumId)) return back()->with('msg',['title' => 'Ups!', 'content' => "The stadium doesn't exist!" ])->withInput();
+        if(!Coach::find($request->coachId)) return back()->with('msg',['title' => 'Ups!', 'content' => "The coach doesn't exist!", ])->withInput();
         if(Team::where('stadium_id',$request->stadiumId)->where('coach_id',$request->coachId)->first())
-          return ['result' => false];
+          return back()->with('msg',['title' => 'Ups!', 'content' => 'There is already a team with the same data.' ])->withInput();
+        if(Team::where('name',$request->teamName)->first())
+          return back()->with('msg',['title' => 'Ups!', 'content' => 'There is already a team with the same name.' ])->withInput();
         $team = new Team;
-        $team->name = $request->name;
-        $team->logo = $request->photo->store('img\teams','public');
-        $team->foundation_date = $request->date;
+        $team->name = $request->teamName;
+        $team->logo = $request->teamPhoto->store('img\teams','public');
+        $team->foundation_date = $request->teamFoundationDate;
         $team->stadium_id = $request->stadiumId;
         $team->coach_id = $request->coachId;
-        if($team->save()) return ['result' => $team];
-        return ['result' => false];
+        if($team->save()) return back()->with('msg',['title' => 'OK!', 'content' => 'Team added successful!' ]);
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'Has been an error!' ])->withInput();
+    }
+    public function editTeam(Request $request){
+      if($request->teamId == '')
+        return back()->with('msg',['title' => 'What?', 'content' => 'Select a team.' ])->withInput();
+      if($request->name == '' and $request->logo == null and $request->foundationDate == ''
+        and $request->stadiumId == '' and $request->coachId == ''){
+          return back()->with('msg',['title' => 'What?', 'content' => 'Nothing changed.' ])->withInput();
+      }
+      if(!$team = Team::find($request->teamId))
+        return back()->with('msg',['title' => 'Ups!', 'content' => "Team could not be found." ])->withInput();
+      if($request->name != ''){
+        if(Team::where('id','!=',$team->id)->where('name',$request->name)->first())
+          return back()->with('msg',['title' => 'Ups!', 'content' => "There is already a team with the given name." ])->withInput();
+        $team->name = $request->name;
+      }
+      if($request->file('logo') != null){
+        $team->logo = $request->file('logo')->store('img/teams','public');
+      }
+      if($request->foundationDate != '')
+        $team->foundation_date = $request->foundationDate;
+      if($request->stadiumId != ''){
+        if(Team::where('id','!=',$team->id)->where('stadium_id',$request->stadiumId)->first())
+          return back()->with('msg',['title' => 'Ups!', 'content' => "The stadiums already belongs to another team." ])->withInput();
+        $team->stadium_id = $request->stadiumId;
+      }
+      if($request->coachId != '') {
+        if(Team::where('id','!=',$team->id)->where('coach_id',$request->coachId)->first())
+          return back()->with('msg',['title' => 'Ups!', 'content' => "The coach already belongs to another team." ])->withInput();
+        $team->coach_id = $request->coachId;
+      }
+      if($team->save())
+        return back()->with('msg',['title' => 'OK!', 'content' => "Success!" ]);
+        else return back()->with('msg',['title' => 'Ups!', 'content' => "Has been an error." ])->withInput();
     }
 
 }
