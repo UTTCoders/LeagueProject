@@ -30,13 +30,9 @@ Route::group(['middleware' => ['authen']], function(){
 				return view('admin.calendar');
 		})->middleware('admin');
 
-		Route::get('/admin/teams/add', function () {
-				return view('admin.management.teams.add');
-		})->middleware('admin');
+		Route::get('/admin/teams/add', 'Admin\DataForViewsController@getForAdd')->middleware('admin');
 
-		Route::get('/admin/teams/edit', function () {
-				return view('admin.management.teams.edit');
-		})->middleware('admin');
+		Route::get('/admin/teams/edit', 'Admin\DataForViewsController@getForEdit')->middleware('admin');
 
 		Route::get('/admin/teams/delete', function () {
 				return view('admin.management.teams.delete');
@@ -62,7 +58,9 @@ Route::group(['middleware' => ['authen']], function(){
 
 		Route::post('/deleteCoach','Admin\League@deleteCoach')->middleware('admin');
 
-		Route::post('/addTeam','Admin\League@addTeam');
+		Route::post('/addTeam','Admin\League@addTeam')->middleware('admin');
+
+		Route::post('/editTeam','Admin\League@editTeam')->middleware('admin');
 		// end of Management by admin
 
 });

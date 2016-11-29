@@ -306,7 +306,7 @@
                     <a href="/" id="1" class="panelSubItem" style="display:none">Stadiums and Coaches</a>
                     <a href="/admin/teams/add" id="1" class="panelSubItem" style="display:none">Teams</a>
                 </div>
-                <div class="bottomContainer col-md-12 no-padding" style="position:absolute;bottom:0px;background-color:red;">
+                <div class="bottomContainer col-md-12 col-xs-12 col-sm-12 no-padding" style="position:absolute;bottom:0px;background-color:red;">
                   <a href="/favorites" class="panelItem" style="">Favorites</a>
                   <a id="logOutBtn" class="panelItem">Log out</a>
                 </div>
