@@ -81,7 +81,7 @@
 		<h1 align="center" style="color:#111; margin-top: 20px; margin-bottom: 30px;">There are matches<br>taking place right now!</h1>
 		<hr>
 		<div class="thumbnail col-lg-9 col-xs-12" id="contcards">
-			
+
 		</div>
 	@else
 		<h1 align="center" style="color:#111; margin-top: 20px; margin-bottom: 30px;">Here you can see all of the matches!</h1>
@@ -106,7 +106,7 @@
 						<tr align="center">
 							
 						</tr>
-					@endforeach
+						@endforeach
 					</table>
 				</div>
 			</div>
@@ -116,9 +116,9 @@
 		</div>
 		<div class="thumbnail col-lg-2 col-lg-offset-1 hidden-xs hidden-sm hidden-md" id="infoside" style="color: #111;">
 			<img src="/img/Logo La Liga Spain.png" class="img-responsive">
-			<p style="font-size: 13px;"><span class="glyphicon glyphicon-euro"></span> Lorem ipsum dolor sit amet.<br>Ut enim ad minim veniam,
+			<span style="font-size: 13px;"><span class="glyphicon glyphicon-euro"></span> Lorem ipsum dolor sit amet.<br>Ut enim ad minim veniam,
 			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-			consequat.</p>
+			consequat.</span>
 		</div>
 	</div>
 </div>

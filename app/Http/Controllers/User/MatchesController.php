@@ -28,6 +28,7 @@ class MatchesController extends Controller
 	private function favoriteMatches(){
 		$favorites=[];
 		$count=0;
+		$theresTable=false;
 		foreach (Auth::user()->teams as $team) {
 			if ($team->matches->count()>0) {
 				foreach ($team->matches as $match) {
@@ -41,8 +42,16 @@ class MatchesController extends Controller
 				}
 			}
 		}
+		if ($count>0) {
+			foreach (Match::where('state','>',0)->where('state','<',4)->get()
+			 as $match) {
+			 	if (!in_array($match->id, array_keys($favorites))) {
+			 		$theresTable=true;
+			 	}
+			}
+		}
 		return [
-			"count"=>$count,"favorites"=>$favorites
+			"count"=>$count,"favorites"=>$favorites,"table",$theresTable
 		];
 	}
 }

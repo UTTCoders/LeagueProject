@@ -1,5 +1,4 @@
-@if($favorites["count"]>0)
-@foreach($favorites["matches"] as $match)
+@foreach($favorites as $match)
 <div class="row">
 	<a href="{{'/stadiums/'.$match->teams->where('pivot.local',true)->first()->stadium->id}}" style="background-color: #004D40;" class="thumbnail col-sm-12 matchcard hidden-xs hidden-sm">
 		<div class="col-sm-5 imgcard" style="background-image: url('{{'/storage/'.$match->teams->where('pivot.local',true)->first()->stadium->photo}}');" align="center">
@@ -34,7 +33,7 @@
 			<td><strong>Referee</strong></td>
 			<td><strong>State</strong></td>
 		</tr>
-		@foreach($favorites["matches"] as $match)
+		@foreach($favorites as $match)
 		<tr id="{{$match->teams->where('pivot.local',true)->first()->stadium->id}}" align="center" style="color:#111;" class="t-row">
 			<td><strong><span class="glyphicon glyphicon-star-empty"></span> {{$match['fav']->name}}</strong> VS {{$match['nofav']->name}}</td>
 			<td>{{$match->teams->where('pivot.local',true)->first()->stadium->name}} | {{$match->teams->where('pivot.local',true)->first()->name}}</td>
@@ -52,13 +51,4 @@
 		@endforeach
 	</table>
 </div>
-@else
-<div style="color:#111; padding-top: 60px;" align="center">
-	@if(Auth::user()->teams->count()>0)
-	<h2>There're no matches of your favorite teams right now!</h2>
-	@else
-	<h2>You have no favorites dude! :'(</h2>
-	<!--<h3>Go to the Home menu and add some teams to your favs! <span class="glyphicon glyphicon-star-empty"></span></h3>-->
-	@endif
-</div>
-@endif
+
