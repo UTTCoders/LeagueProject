@@ -212,7 +212,7 @@ class League extends Controller
           return back()->with('msg',['title' => 'Ups!', 'content' => 'There is already a team with the same name.' ])->withInput();
         $team = new Team;
         $team->name = $request->teamName;
-        $team->logo = $request->teamPhoto->store('img\teams','public');
+        $team->logo = $request->teamPhoto->store('img/teams','public');
         $team->foundation_date = $request->teamFoundationDate;
         $team->stadium_id = $request->stadiumId;
         $team->coach_id = $request->coachId;
