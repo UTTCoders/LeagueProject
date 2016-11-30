@@ -83,8 +83,7 @@
 	}
 
 	.favStarRow{
-		color:#E65100; 
-		font-weight: bold;
+		color:#E65100;
 		font-size: 18px;
 		text-align: left;
 	}

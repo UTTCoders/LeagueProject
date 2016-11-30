@@ -43,25 +43,4 @@ class MatchesController extends Controller
     		"thereAre"=>$thereAre,"matches"=>$matches
     	];
     }
-
-	private function favoriteMatches(){
-		$favorites=[];
-		$count=0;
-		foreach (Auth::user()->teams as $team) {
-			if ($team->matches->count()>0) {
-				foreach ($team->matches as $match) {
-					if ($match->state>0 && $match->state<4) {
-						$count++;
-						$match["fav"]=$team;
-						$noteam=$match->teams->where('id','!=',$team->id)->first();
-						$match["nofav"]=$noteam;
-						$favorites[$match->id]=$match;
-					}
-				}
-			}
-		}
-		return [
-			"count"=>$count,"favorites"=>$favorites
-		];
-	}
 }

@@ -80,7 +80,7 @@
 		<div class="col-md-11 col-md-offset-1">
 		<h2>See all the stadiums!</h2>
 			<p style="font-size: 20px;">Here you can see all of the stadiums.</p>
-			<div class="thumbnail" style="border-radius: 0; box-shadow: 3px 3px 3px #1B5E20;">
+			<div class="thumbnail" style="border-radius: 0; box-shadow: 5px 5px #1B5E20;">
 				<div style="font-size: 15px; color: #000; padding: 20px 10px;">
 					<p><span class="glyphicon glyphicon-asterisk"></span> Do click on a stadium to go to check its events and more information.</p>
 				</div>

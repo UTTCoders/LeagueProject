@@ -1,6 +1,6 @@
 @extends('user.userhome')
 
-@section('title',$stadium->name." | Stadium")
+@section('title',$stadium->name)
 
 @section('css2')
 <style type="text/css">
@@ -28,23 +28,31 @@
 <div id="con">
 	<div align="center">
 	@if(isset($match))
-	<h1 style="color:#eee; margin-top: 0px; margin-bottom: 0; text-shadow: 2px 2px 2px black;" id="mainTitle">{{$stadium->name}}</h1>
+	<div>
+		<img src="/img/icons/match1.png" style="width: 15%;">
+	</div>
 	<br>
-		<img src="/img/soccerball.png" style="width: 15%;">
-		<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle">
-			<strong style="text-shadow: 2px 2px 2px black;">{{$stadium->team->name}}</strong> VS <span>{{$match->teams->where('id','!=',$stadium->team->id)->first()->name}}</span>
-		</h3>
+	<h2 style="color:#eee; margin-top: 0px; margin-bottom: 0; text-shadow: 2px 2px 2px black;" id="mainTitle">{{$stadium->name}}</h2>
 	@else
 		<h1 style="color:#eee; margin-top: 0px; margin-bottom: 0; text-shadow: 2px 2px 2px black; font-size: 45px;" id="mainTitle">{{$stadium->name}}</h1>
 		<br>
+	<div>
+		<img src="/img/icons/stadiumicon.png" style="width: 15%;">
+	</div>
 		<h2 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle">{{$stadium->team->name}}</h2>
 	@endif
 	</div>
 </div>
 @if(isset($match))
-<div class="jumbotron" style="background-color: #004D40; margin-bottom: 0;">
-	<h1 align="center" style="color:#eee; font-size: 35px; text-shadow: 1px 1px 1px black;">A match is taking place right now <br>at {{$stadium->name}}!</h1>
-</div>
+	<h1 align="center" style="color:#eee; text-shadow: 1px 1px 1px black;">A match is taking place right now <br>at {{$stadium->name}}!</h1>
+	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle">
+			<strong style="text-shadow: 2px 2px 2px black;">{{$stadium->team->name}}</strong> VS <span>{{$match->teams->where('id','!=',$stadium->team->id)->first()->name}}</span>
+		</h3>
+	
+				<img src="/storage/{{$stadium->team->logo}}" style="width: 30%;">
+
+				<img src="/storage/{{$stadium->team->logo}}" style="width: 30%;">
+
 @else
 <div class="jumbotron" style="background-color: #B71C1C; margin-bottom: 0;">
 	<div class="container">
