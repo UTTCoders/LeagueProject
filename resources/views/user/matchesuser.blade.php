@@ -81,7 +81,7 @@
 		<h1 align="center" style="color:#111; margin-top: 20px; margin-bottom: 30px;">There are matches<br>taking place right now!</h1>
 		<hr>
 		<div class="thumbnail col-lg-9 col-xs-12" id="contcards">
-
+		
 		</div>
 	@else
 		<h1 align="center" style="color:#111; margin-top: 20px; margin-bottom: 30px;">Here you can see all of the matches!</h1>

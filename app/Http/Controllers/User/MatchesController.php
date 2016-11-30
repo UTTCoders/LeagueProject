@@ -42,14 +42,6 @@ class MatchesController extends Controller
 				}
 			}
 		}
-		if ($count>0) {
-			foreach (Match::where('state','>',0)->where('state','<',4)->get()
-			 as $match) {
-			 	if (!in_array($match->id, array_keys($favorites))) {
-			 		$theresTable=true;
-			 	}
-			}
-		}
 		return [
 			"count"=>$count,"favorites"=>$favorites,"table",$theresTable
 		];
