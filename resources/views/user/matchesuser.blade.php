@@ -93,7 +93,8 @@
 						<h3 align="center"><img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',true)->first()->logo}}"> {{$match->teams->where('pivot.local',true)->first()->name}} VS {{$match->teams->where('pivot.local',false)->first()->name}} <img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',false)->first()->logo}}"></h3>
 					</div>
 
-						<hr style="border-color: #666;">
+					<hr style="border-color: #666;">
+					<div>
 						<div class="col-sm-5" align="left">
 							<p><strong><span class="glyphicon glyphicon-flag"></span> Stadium: </strong>{{$match->teams->where('pivot.local',true)->first()->stadium->name}}</p>
 							<p><strong><span class="glyphicon glyphicon-bookmark"></span> Local: </strong>{{$match->teams->where('pivot.local',true)->first()->name}}</p>
@@ -109,21 +110,22 @@
 							@endif
 						</div>
 					</div>
+					</div>
 				</a>
 			</div>
 		@endforeach
 		<div class="table-responsive hidden-md hidden-lg">
 			<table class="table table-hover" style="border: solid 1px #666;">
-				<tr align="center" style="background-color: #004D40; color: #eee;">
+				<tr align="center" style="background-color: #111; color: #eee;">
 					<td><strong>Teams</strong></td>
-					<td><strong><span class="glyphicon glyphicon-flag"></span> Stadium</strong></td>
+					<td class="hidden-xs"><strong><span class="glyphicon glyphicon-flag"></span> Stadium</strong></td>
 					<td><strong>State</strong></td>
 				</tr>
 				@foreach($matches as $match)
 				<tr id="{{$match->teams->where('pivot.local',true)->first()->stadium->id}}" align="center" style="color:#111;" class="t-row">
-					<td><strong>{{$match->teams->where('pivot.local',true)->first()->name}}</strong> VS {{$match->teams->where('pivot.local',false)->first()->name}}</td>
-					<td>{{$match->teams->where('pivot.local',true)->first()->stadium->name}}</td>
-					<td>
+					<td style="vertical-align: middle;"><img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',true)->first()->logo}}"> <strong>{{$match->teams->where('pivot.local',true)->first()->name}}</strong> VS {{$match->teams->where('pivot.local',false)->first()->name}} <img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',false)->first()->logo}}"></td>
+					<td style="vertical-align: middle;" class="hidden-xs">{{$match->teams->where('pivot.local',true)->first()->stadium->name}}</td>
+					<td style="vertical-align: middle;">
 						@if($match->state==1)
 						<span><strong><span class="glyphicon glyphicon-time"></span></strong> 1st Time</span>
 						@elseif($match->state==2)
