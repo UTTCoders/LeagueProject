@@ -25,6 +25,23 @@ class MatchesController extends Controller
 		Match::where('state','>',0)->where('state','<',4)->get());
 	}
 
+	private function checkTeamMatches(){
+    	foreach (Auth::user()->teams as $team) {
+    		if ($team->matches->count()>0) {
+    			foreach ($team->matches as $match) {
+    				$matchdate=date('Y-m-d', strtotime($match->start_date));
+    				$today=Carbon::today('America/Monterrey')->toDateString();
+    				if ($today==$matchdate) {
+    					if ($match->state>0 && $match->state<4) {
+    						return true;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	return false;
+    }
+
 	private function favoriteMatches(){
 		$favorites=[];
 		$count=0;

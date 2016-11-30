@@ -17,29 +17,13 @@ class MenuController extends Controller
     	if (Auth::user()->type)
             return view('admin.management.management');
 
-        if (Auth::user()->teams->count()>0) {
-        	if (self::checkTeamMatches() && !Session::has('first')) {
+        if (Match::where('state','>',0)->where('state','<',4)->count()>0) {
+        	if (!Session::has('first')) {
         		Session::put('first',1);
         		return redirect('/matches');
         	}
         }
-        return view('user.mapview2');
-    }
 
-    private function checkTeamMatches(){
-    	foreach (Auth::user()->teams as $team) {
-    		if ($team->matches->count()>0) {
-    			foreach ($team->matches as $match) {
-    				$matchdate=date('Y-m-d', strtotime($match->start_date));
-    				$today=Carbon::today('America/Monterrey')->toDateString();
-    				if ($today==$matchdate) {
-    					if ($match->state>0 && $match->state<4) {
-    						return true;
-    					}
-    				}
-    			}
-    		}
-    	}
-    	return false;
+        return view('user.mapview2');
     }
 }
