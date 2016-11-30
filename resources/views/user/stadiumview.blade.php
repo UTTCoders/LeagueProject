@@ -34,11 +34,11 @@
 	<br>
 	<h2 style="color:#eee; margin-top: 0px; margin-bottom: 0; text-shadow: 2px 2px 2px black;" id="mainTitle">{{$stadium->name}}</h2>
 	@else
-		<h1 style="color:#eee; margin-top: 0px; margin-bottom: 0; text-shadow: 2px 2px 2px black; font-size: 45px;" id="mainTitle">{{$stadium->name}}</h1>
-		<br>
 	<div>
 		<img src="/img/icons/stadiumicon.png" style="width: 15%;">
 	</div>
+		<h1 style="color:#eee; margin-top: 0px; margin-bottom: 0; text-shadow: 2px 2px 2px black; font-size: 45px;" id="mainTitle">{{$stadium->name}}</h1>
+		<br>
 		<h2 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle">{{$stadium->team->name}}</h2>
 	@endif
 	</div>

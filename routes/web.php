@@ -70,7 +70,7 @@ Route::post('/','Authentication\LoginHomeController@FirstRequest');
 //Activation route
 Route::get('activate/{t}',
 'Authentication\ActivationController@ActivationRequest');
-Route::get('/logout','Authentication\LoginHomeController@LogoutRequest')->middleware('auth');
+Route::get('/logout','Authentication\LoginHomeController@LogoutRequest')->middleware('authen');
 
 
 //--------------------Routes for the user----------------------!
