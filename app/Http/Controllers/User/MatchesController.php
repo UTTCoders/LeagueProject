@@ -14,11 +14,10 @@ class MatchesController extends Controller
 		if (Auth::user()->teams->count()>0 && 
 		Match::where('state','>',0)->where('state','<',4)->count()>0) {
 			$res=self::checkMatches();
-			if ($res["count"]>0) {
+			if ($res["thereAre"]) {
+				//return $res["matches"];
 				return view('user.matchesuser')
-				->with('favorites',$res["favorites"])
-				->with('matches',
-				Match::where('state','>',0)->where('state','<',4)->get());
+				->with('matches',$res["matches"]);
 			}
 		}
 		return view('user.matchesuser')
@@ -27,30 +26,22 @@ class MatchesController extends Controller
 	}
 
 	private function checkMatches(){
-    	foreach (Match::where('state','>',0)
-    	->where('state','<',4)->get() as $match) {
-    		if (Auth::user()->teams->find()) {
-    			
+		$thereAre=false;
+		$matches=Match::where('state','>',0)
+    	->where('state','<',4)->get();
+    	foreach ($matches as $match) {
+    		if (Auth::user()->teams->find($match->teams[0]->id)) {
+    			$match->teams[0]["favorite"]="itIs";
+    			$thereAre=true;
+    		}
+    		if (Auth::user()->teams->find($match->teams[1]->id)) {
+    			$match->teams[1]["favorite"]="itIs";
+    			$thereAre=true;
     		}
     	}
-    	return false;
-    }
-
-    private function checkTeamMatches(){
-    	foreach (Auth::user()->teams as $team) {
-    		if ($team->matches->count()>0) {
-    			foreach ($team->matches as $match) {
-    				$matchdate=date('Y-m-d', strtotime($match->start_date));
-    				$today=Carbon::today('America/Monterrey')->toDateString();
-    				if ($today==$matchdate) {
-    					if ($match->state>0 && $match->state<4) {
-    						return true;
-    					}
-    				}
-    			}
-    		}
-    	}
-    	return false;
+    	return [
+    		"thereAre"=>$thereAre,"matches"=>$matches
+    	];
     }
 
 	private function favoriteMatches(){

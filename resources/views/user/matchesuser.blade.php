@@ -68,6 +68,19 @@
 	.t-row:hover{
 		cursor: pointer;
 	}
+
+	.favText{
+		color: #E65100;
+		font-weight: bold;
+	}
+
+	.favStarCard{
+		color:#E65100; 
+		position: absolute;
+		margin-top: 15px;
+		font-weight: bold;
+		font-size: 18px;
+	}
 </style>
 @endsection
 
@@ -89,8 +102,11 @@
 						<img src="/img/icons/match1.png" style="width: 60%">
 					</div>
 					<div class="col-sm-7 padData" style="color:#111;">
-					<div style="vertical-align: middle;">
-						<h3 align="center"><img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',true)->first()->logo}}"> {{$match->teams->where('pivot.local',true)->first()->name}} VS {{$match->teams->where('pivot.local',false)->first()->name}} <img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',false)->first()->logo}}"></h3>
+					@if(isset($match->teams[0]['favorite']) || isset($match->teams[1]['favorite']))
+					<span style="" class="glyphicon glyphicon-star-empty favStarCard"></span>
+					@endif
+					<div>
+						<h3 align="center"><img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',true)->first()->logo}}"> @if(isset($match->teams->where('pivot.local',true)->first()['favorite']))<span class="favText">@endif{{$match->teams->where('pivot.local',true)->first()->name}}@if(isset($match->teams->where('pivot.local',true)->first()['favorite']))</span>@endif VS @if(isset($match->teams->where('pivot.local',false)->first()['favorite']))<span class="favText">@endif{{$match->teams->where('pivot.local',false)->first()->name}}@if(isset($match->teams->where('pivot.local',false)->first()['favorite']))</span>@endif <img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',false)->first()->logo}}"></h3>
 					</div>
 
 					<hr style="border-color: #666;">
@@ -123,7 +139,7 @@
 				</tr>
 				@foreach($matches as $match)
 				<tr id="{{$match->teams->where('pivot.local',true)->first()->stadium->id}}" align="center" style="color:#111;" class="t-row">
-					<td style="vertical-align: middle;"><img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',true)->first()->logo}}"> {{$match->teams->where('pivot.local',true)->first()->name}} VS {{$match->teams->where('pivot.local',false)->first()->name}} <img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',false)->first()->logo}}"></td>
+					<td style="vertical-align: middle;"><img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',true)->first()->logo}}"> @if(isset($match->teams->where('pivot.local',true)->first()['favorite']))<span class="favText">@endif{{$match->teams->where('pivot.local',true)->first()->name}}@if(isset($match->teams->where('pivot.local',true)->first()['favorite']))</span>@endif VS @if(isset($match->teams->where('pivot.local',false)->first()['favorite']))<span class="favText">@endif{{$match->teams->where('pivot.local',false)->first()->name}}@if(isset($match->teams->where('pivot.local',false)->first()['favorite']))</span>@endif <img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',false)->first()->logo}}"></td>
 					<td style="vertical-align: middle;" class="hidden-xs">{{$match->teams->where('pivot.local',true)->first()->stadium->name}}</td>
 					<td style="vertical-align: middle;">
 						@if($match->state==1)
