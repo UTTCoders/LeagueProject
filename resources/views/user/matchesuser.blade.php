@@ -123,7 +123,7 @@
 				</tr>
 				@foreach($matches as $match)
 				<tr id="{{$match->teams->where('pivot.local',true)->first()->stadium->id}}" align="center" style="color:#111;" class="t-row">
-					<td style="vertical-align: middle;"><img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',true)->first()->logo}}"> <strong>{{$match->teams->where('pivot.local',true)->first()->name}}</strong> VS {{$match->teams->where('pivot.local',false)->first()->name}} <img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',false)->first()->logo}}"></td>
+					<td style="vertical-align: middle;"><img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',true)->first()->logo}}"> {{$match->teams->where('pivot.local',true)->first()->name}} VS {{$match->teams->where('pivot.local',false)->first()->name}} <img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',false)->first()->logo}}"></td>
 					<td style="vertical-align: middle;" class="hidden-xs">{{$match->teams->where('pivot.local',true)->first()->stadium->name}}</td>
 					<td style="vertical-align: middle;">
 						@if($match->state==1)

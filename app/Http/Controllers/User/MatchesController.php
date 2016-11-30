@@ -11,8 +11,9 @@ use Carbon\Carbon;
 class MatchesController extends Controller
 {
 	public function MatchesRequest(Request $r){
-		if (Auth::user()->teams->count()>0) {
-			$res=self::favoriteMatches();
+		if (Auth::user()->teams->count()>0 && 
+		Match::where('state','>',0)->where('state','<',4)->count()>0) {
+			$res=self::checkMatches();
 			if ($res["count"]>0) {
 				return view('user.matchesuser')
 				->with('favorites',$res["favorites"])
@@ -25,7 +26,17 @@ class MatchesController extends Controller
 		Match::where('state','>',0)->where('state','<',4)->get());
 	}
 
-	private function checkTeamMatches(){
+	private function checkMatches(){
+    	foreach (Match::where('state','>',0)
+    	->where('state','<',4)->get() as $match) {
+    		if (Auth::user()->teams->find()) {
+    			
+    		}
+    	}
+    	return false;
+    }
+
+    private function checkTeamMatches(){
     	foreach (Auth::user()->teams as $team) {
     		if ($team->matches->count()>0) {
     			foreach ($team->matches as $match) {
