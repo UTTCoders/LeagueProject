@@ -18,10 +18,10 @@
 	}
 	.matchcard{
 		border-radius:0; 
-		border: 0px; 
+		border: solid 1px #666;
 		padding:0px;
-		background-color: #111;
-		color: #eee;
+		background-color: #fff;
+		color: #111;
   		transition: box-shadow 0.2s ease-in-out;
 	}
 	.imgcard{
@@ -37,7 +37,7 @@
 		padding-left: 30px;
 	}
 	#contcards{
-		padding-top: 20px;
+		padding-top: 30px;
 		padding-bottom: 20px;
 		padding-right: 30px;
 		padding-left: 30px;
@@ -61,7 +61,7 @@
 	}
 
 	.matchcard:hover{
-		box-shadow: 3px 3px 3px black;
+		box-shadow: 3px 3px #666;
 		cursor: pointer;
 	}
 
@@ -81,7 +81,34 @@
 		<h1 align="center" style="color:#111; margin-top: 20px; margin-bottom: 30px;">There are matches<br>taking place right now!</h1>
 		<hr>
 		<div class="thumbnail col-lg-9 col-xs-12" id="contcards">
-		
+		@foreach($matches as $match)
+			<div class="row">
+				<a href="{{'/stadiums/'.$match->teams->where('pivot.local',true)->first()->stadium->id}}" class="thumbnail col-sm-12 matchcard hidden-xs hidden-sm">
+					<div class="col-sm-5 imgcard" style="background-image: url('{{'/storage/'.$match->teams->where('pivot.local',true)->first()->stadium->photo}}');" align="center">
+					<img src="/img/soccerball.png" style="width: 60%">
+					</div>
+					<div class="col-sm-7 padData">
+						<h3 align="center"><strong>{{$match->teams->where('pivot.local',true)->first()->name}}</strong> VS {{$match->teams->where('pivot.local',false)->first()->name}}</h3>
+						<hr>
+						<div class=" col-sm-5" align="left">
+							<p><strong><span class="glyphicon glyphicon-flag"></span> Stadium: </strong>{{$match->teams->where('pivot.local',true)->first()->stadium->name}}</p>
+							<p><strong><span class="glyphicon glyphicon-bookmark"></span> Local: </strong>{{$match->teams->where('pivot.local',true)->first()->name}}</p>
+						</div>
+						<div class="col-sm-7" align="left">	
+							<p><strong><span class="glyphicon glyphicon-user"></span> Referee: </strong>{{$match->referee->name." ".$match->referee->last_name}}</p>
+							@if($match->state==1)
+							<p><strong><span class="glyphicon glyphicon-time"></span> State: </strong>1st Time</p>
+							@elseif($match->state==2)
+							<p><strong><span class="glyphicon glyphicon-time"></span> State: </strong>Breaktime</p>
+							@else
+							<p><strong><span class="glyphicon glyphicon-time"></span> State: </strong>2nd Time</p>
+							@endif
+						</div>
+					</div>
+				</a>
+			</div>
+		@endforeach
+
 		</div>
 	@else
 		<h1 align="center" style="color:#111; margin-top: 20px; margin-bottom: 30px;">Here you can see all of the matches!</h1>

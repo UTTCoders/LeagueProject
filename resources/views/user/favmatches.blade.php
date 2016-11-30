@@ -5,7 +5,7 @@
 		<img src="/img/soccerball.png" style="width: 60%">
 		</div>
 		<div class="col-sm-7 padData">
-			<h3 align="center" style="text-shadow: 1px 1px 1px black;"><strong><span class="glyphicon glyphicon-star-empty"></span> {{$match['fav']->name}}</strong> VS {{$match['nofav']->name}}</h3>
+			<h3 align="center" style="text-shadow: 1px 1px 1px black;"><strong>{{$match->teams->where('pivot.local',true)->first()->name}}</strong> VS {{$match->teams->where('pivot.local',false)->first()->name}}</h3>
 			<hr>
 			<div class=" col-sm-5" align="left">
 				<p><strong><span class="glyphicon glyphicon-flag"></span> Stadium: </strong>{{$match->teams->where('pivot.local',true)->first()->stadium->name}}</p>
