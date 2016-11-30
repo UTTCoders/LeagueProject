@@ -38,9 +38,9 @@
 	}
 	#contcards{
 		padding-top: 10px;
-		padding-bottom: 20px;
-		padding-right: 40px;
-		padding-left: 40px;
+		padding-bottom: 30px;
+		padding-right: 43px;
+		padding-left: 43px;
 		border: solid 1px #666;
 		border-radius: 0;
 		box-shadow: 5px 5px #666;
@@ -56,7 +56,7 @@
 	}
 
 	.padData{
-		padding-top: 10px;
+		padding-top: 13px;
 		padding-bottom: 10px;
 	}
 
@@ -80,7 +80,7 @@
 	@if($matches->count()>0)
 		<h1 align="center" style="color:#111; margin-top: 20px; margin-bottom: 30px;">There are matches<br>taking place right now!</h1>
 		<br>
-		<div class="thumbnail col-lg-9 col-xs-12" id="contcards">
+		<div class="thumbnail col-lg-10 col-xs-12" id="contcards">
 		<h3 style="color:#111; margin-bottom: 15px;">Check them out!</h3>
 		@foreach($matches as $match)
 			<div class="row">
@@ -89,7 +89,10 @@
 						<img src="/img/icons/match1.png" style="width: 60%">
 					</div>
 					<div class="col-sm-7 padData" style="color:#111;">
-						<h3 align="center"><strong>{{$match->teams->where('pivot.local',true)->first()->name}}</strong> VS {{$match->teams->where('pivot.local',false)->first()->name}}</h3>
+					<div style="vertical-align: middle;">
+						<h3 align="center"><img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',true)->first()->logo}}"> {{$match->teams->where('pivot.local',true)->first()->name}} VS {{$match->teams->where('pivot.local',false)->first()->name}} <img style="width: 30px; border-radius: 100%;" src="/storage/{{$match->teams->where('pivot.local',false)->first()->logo}}"></h3>
+					</div>
+
 						<hr style="border-color: #666;">
 						<div class="col-sm-5" align="left">
 							<p><strong><span class="glyphicon glyphicon-flag"></span> Stadium: </strong>{{$match->teams->where('pivot.local',true)->first()->stadium->name}}</p>
