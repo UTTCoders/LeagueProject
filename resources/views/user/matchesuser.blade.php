@@ -112,7 +112,30 @@
 				</a>
 			</div>
 		@endforeach
-
+		<div class="table-responsive hidden-md hidden-lg">
+			<table class="table table-hover" style="border: solid 1px #666;">
+				<tr align="center" style="background-color: #004D40; color: #eee;">
+					<td><strong>Teams</strong></td>
+					<td><strong><span class="glyphicon glyphicon-flag"></span> Stadium</strong></td>
+					<td><strong>State</strong></td>
+				</tr>
+				@foreach($matches as $match)
+				<tr id="{{$match->teams->where('pivot.local',true)->first()->stadium->id}}" align="center" style="color:#111;" class="t-row">
+					<td><strong>{{$match->teams->where('pivot.local',true)->first()->name}}</strong> VS {{$match->teams->where('pivot.local',false)->first()->name}}</td>
+					<td>{{$match->teams->where('pivot.local',true)->first()->stadium->name}}</td>
+					<td>
+						@if($match->state==1)
+						<span><strong><span class="glyphicon glyphicon-time"></span></strong> 1st Time</span>
+						@elseif($match->state==2)
+						<span><strong><span class="glyphicon glyphicon-time"></span></strong> Breaktime</span>
+						@else
+						<span><strong><span class="glyphicon glyphicon-time"></span></strong> 2nd Time</span>
+						@endif
+					</td>
+				</tr>
+				@endforeach
+			</table>
+		</div>
 		</div>
 	@else
 		<h1 align="center" style="color:#111; margin-top: 20px; margin-bottom: 30px;">Here you can see all of the matches!</h1>
