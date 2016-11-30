@@ -26,18 +26,23 @@ Route::group(['middleware' => ['authen']], function(){
     	Route::get('/','MenuController@MenuRequest');
 
 		// Management by admin
+		//get
 		Route::get('/admin/calendar', function () {
 				return view('admin.calendar');
 		})->middleware('admin');
 
-		Route::get('/admin/teams/add', 'Admin\DataForViewsController@getForAdd')->middleware('admin');
+		Route::get('/admin/teams/add', 'Admin\DataForViewsController@getForAddTeams')->middleware('admin');
 
-		Route::get('/admin/teams/edit', 'Admin\DataForViewsController@getForEdit')->middleware('admin');
+		Route::get('/admin/teams/edit', 'Admin\DataForViewsController@getForEditTeams')->middleware('admin');
 
 		Route::get('/admin/teams/delete', function () {
 				return view('admin.management.teams.delete');
 		})->middleware('admin');
 
+		Route::get('/admin/players/add',function (){
+			return view('admin.management.players.add');
+		})->middleware('admin');
+		//post
 		Route::post('/getStadiums','Admin\League@getStadiums')->middleware('admin');
 
 		Route::post('/addStadium','Admin\League@addStadium')->middleware('admin');
@@ -61,6 +66,8 @@ Route::group(['middleware' => ['authen']], function(){
 		Route::post('/addTeam','Admin\League@addTeam')->middleware('admin');
 
 		Route::post('/editTeam','Admin\League@editTeam')->middleware('admin');
+
+		Route::post('/deleteTeam','Admin\League@deleteTeam')->middleware('admin');
 		// end of Management by admin
 
 });

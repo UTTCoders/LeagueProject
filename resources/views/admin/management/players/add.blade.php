@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-Delete teams
+Add players
 @endsection
 
 @section('css')
@@ -205,56 +205,12 @@ body{
   padding-bottom: 10px;
   box-shadow: inset 0px 2px 3px 0px #aaa;
 }
-.delete-btn{
-  top: 8px;
-  right: -50px;
-  -webkit-transition: right .4s;
-}
-.coachCard{
-  background-color: #111;
-  border-radius: 2px;
-  width: 100%;
-  height: 100%;
-  box-shadow: 0px 0px 3px 0px #000;
-}
-.coachCard > img{
-  margin: auto;
-  display: block;
-  height: 100%;
-  padding: 20px;
-}
-.coachCard > div{
-  position: absolute;
-  font-size: 12px;
-  background: rgba(0,0,0,.2);
-  display: inline;
-  bottom: -1px;
-  overflow: hidden;
-  left: 0;
-  box-shadow: 0px 0px 2px 0px #000;
-  text-shadow: 0px 0px 1px #000;
-}
-.coachCard > .material-icons{
-  position: absolute;
-  cursor: pointer;
-  text-shadow: 0px 0px 2px #000;
-}
-.coachCard > .material-icons:hover{
-  color:white;
-}
-.cardParent{
-  opacity: 0;
-  -webkit-transition: opacity 1s,height .5s;
-}
-.cardParent:hover div div .delete-btn{
-  right: 8px;
-}
 </style>
 @endsection
 
 @section('body')
 <div class="coverContainer">
-  <h3 class="mainTitle">Teams</h3>
+  <h3 class="mainTitle">Players</h3>
 </div>
 <div class="black-transparent-back">
   <div class="messageBox col-md-4 col-md-offset-4 col-xs-10 col-xs-offset-1">
@@ -274,37 +230,52 @@ body{
 <div class="col-md-12 col-xs-12 col-sm-12" style="margin-top:90px;margin-bottom:40px;">
   <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0 col-xs-10 col-xs-offset-1" id="manageMenu">
       <a class="manageMenuHeader col-md-12 col-sm-12 col-xs-12">Teams...</a>
-      <a href="/admin/teams/add" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Add</a>
-      <a href="/admin/teams/edit" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Edit</a>
-      <a href="/admin/teams/delete" class="manageMenuItem item-active col-md-12 col-sm-12 col-xs-12">Delete</a>
+      <a href="/admin/players/add" class="manageMenuItem item-active col-md-12 col-sm-12 col-xs-12">Add</a>
+      <a href="/admin/players/edit" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Edit</a>
+      <a href="/admin/players/delete" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Delete</a>
   </div>
   <div class="col-md-7 col-md-offset-1 no-padding col-xs-11 col-xs-offset-1 blackWell">
     <div class="header">
-      <h4>Deleting teams</h4>
+      <h4>Player information</h4>
     </div>
-    <div class="col-md-12 col-sm-12 col-xs-12 no-padding">
-      @foreach(App\League\Team::get() as $team)
-        <form class="" id="{{$team->id}}" action="/deleteTeam" method="post" enctype="multipart/form-data">
-          {{csrf_field()}}
-          <input type="hidden" name="id" value="{{$team->id}}">
-          <div class="col-md-3 col-xs-12 col-sm-4 cardParent" style="padding:15px; ;overflow: hidden;">
-            <div class="col-md-12 col-sm-12 col-xs-12 no-padding" style="height:100%;overflow: hidden;box-shadow: 0px 0px 3px 0px #000;">
-              <div class="coachCard col-md-12 col-sm-12 col-xs-12 no-padding">
-                  <img src="{{asset('storage/'.$team->logo)}}" alt="" class=""/>
-                  <i class="material-icons delete-btn" id="{{$team->id}}">delete</i>
-                  <div class="col-md-12 col-xs-12 col-sm-12">
-                    <h5>{{$team->name}}</h5>
-                    @if($team->stadium)
-                    <p id="team">{{$team->stadium->name}}</p>
-                    @else
-                    <p id="team">No stadium</p>
-                    @endif
-                  </div>
-              </div>
-            </div>
+    <div class="col-md-6 col-sm-6 col-xs-12 no-padding">
+      <form class="" id="addForm" action="/addTeam" method="post" enctype="multipart/form-data">
+        {{csrf_field()}}
+        <input type="hidden" name="stadiumId" value="">
+        <input type="hidden" name="coachId" value="">
+        <div class="form-group col-md-12">
+          <input type="text" name="teamName" value="{{old('teamName')}}" placeholder="name..." class="whiteInput col-md-12 no-padding">
+        </div>
+        <div class="form-group col-md-12">
+          <div class="file-big-container col-md-12">
+            <h4 style="text-align:center;margin-top:88px;">Drag or click for select a <b>logo</b>...</h4>
+            <input type="file" name="teamPhoto" value="{{old('teamPhoto')}}">
           </div>
-        </form>
-      @endforeach
+        </div>
+        <div class="form-group col-md-12">
+          <label for="teamFoundationDate">Foundation date</label>
+          <input type="date" name="teamFoundationDate" value="{{old('teamFoundationDate')}}" class="whiteInput col-md-12">
+        </div>
+        <div class="form-group col-md-12">
+          <button type="submit" name="addTeamBtn" class="btnBlue2 col-md-4 col-md-offset-8 col-sm-12 col-xs-12 no-padding">Add</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <div class="col-md-12 no-padding teams-selection-container" id="coachSelector">
+        @if(App\League\Team::count() < 1)
+        <h4 style="text-align:center;">No coaches</h4>
+        @else
+        @foreach(App\League\Team::get() as $i => $team)
+        <div class="col-md-12 no-padding Item" id="{{$team->id}}">
+          <img src="{{asset('storage/'.$team->logo)}}" alt="" class="col-md-3">
+          <div class="col-md-9">
+            <h5>{{$team->name}}</h5>
+          </div>
+        </div>
+        @endforeach
+        @endif
+      </div>
     </div>
   </div>
 </div>
@@ -323,15 +294,9 @@ $(function ($) {
 @endif
 <script type="text/javascript">
   $(function ($) {
-    $('.cardParent').height($('.cardParent').width());
-    $('.cardParent').css('opacity',1);
-    $(window).resize(function () {
-        $('.cardParent').height($('.cardParent').width());
-    });
     function showMessages(title,msg,type) {
       $('.black-transparent-back').fadeIn('slow',function () {
         $('.messageBox').css('margin-top','20%').css('opacity',1);
-        $('.messageBox > .header > h3').text(title);
         $('.messageBox').children('.body').text(msg);
       });
     }
@@ -348,22 +313,19 @@ $(function ($) {
     });
 
     $('#stadiumSelector').children('.Item').click(function () {
-      $('#stadiumSelector').children('.Item').css('background-color','#000');
-      $(this).css('background-color','rgba(255,255,255,0.08)');
+      $('#stadiumSelector').children('.Item').css('background','#000');
+      $(this).css('background-color','linear-gradient(to bottom,#222,#111)');
       $('input[name=stadiumId]').val($(this).attr('id'));
     });
 
     $('#coachSelector').children('.Item').click(function () {
-      $('#coachSelector').children('.Item').css('background-color','#000');
-      $(this).css('background-color','rgba(255,255,255,0.08)');
+      $('#coachSelector').children('.Item').css('background','#000');
+      $(this).css('background','linear-gradient(to bottom,#222,#111)');
       $('input[name=coachId]').val($(this).attr('id'));
     });
     $('.black-transparent-back').click(function () {
       $('.messageBox').css('margin-top','10%').css('opacity',0);
       $(this).fadeOut(1000);
-    });
-    $('.delete-btn').click(function () {
-      $('form#'+$(this).attr('id')).submit();
     });
   });
 </script>

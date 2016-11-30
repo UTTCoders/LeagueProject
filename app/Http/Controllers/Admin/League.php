@@ -78,16 +78,32 @@ class League extends Controller
             'changeLocation' => 'required',
             'id' => 'required'
         ]);
+        $stadium = Stadium::find($request->id);
         if($result->fails()){
             return [
                 'msgs' => ['title' => 'Error' ,'type' => 'error-card' ,'content' => $result->messages()->all()],
-                'stadium' => null
+                'stadium' => null,
+                'lastStadiumName' => $stadium->name
             ];
         }
-        $stadium = Stadium::find($request->id);
+        $changes = false;
+
+        if($request->photo != 'undefined'){
+          $stadium->photo = $request->file('photo')->store('img/stadiums','public');
+          $changes = true;
+        }
+        if($request->changeLocation === 'true'){
+          $stadium->location = $request->location;
+          $changes = true;
+        }
+        if((strtolower($stadium->name) == strtolower($request->name) or $request->name == '') and !$changes){
+          return [
+              'msgs' => ['title' => 'Error' ,'type' => 'alert-card' ,'content' => ['Nothing changed.'] ],
+              'stadium' => null,
+              'lastStadiumName' => $stadium->name
+          ];
+        }
         $stadium->name = $request->name;
-        if($request->photo != 'undefined') $stadium->photo = $request->file('photo')->store('img/stadiums','public');
-        if($request->changeLocation === 'true') $stadium->location = $request->location;
         if($stadium->save()){
             return [
                 'msgs' => ['title' => 'OK!' ,'type' => 'success-card' ,'content' => ['Stadium updated successfully!']],
@@ -251,6 +267,17 @@ class League extends Controller
       if($team->save())
         return back()->with('msg',['title' => 'OK!', 'content' => "Success!" ]);
         else return back()->with('msg',['title' => 'Ups!', 'content' => "Has been an error." ])->withInput();
+    }
+    public function deleteTeam(Request $request){
+      $result = Validator::make($request->all(),[
+        'id' => 'required',
+      ]);
+      if($result->fails())
+        return back()->with('msg',['title' => 'Ups!', 'content' => "Something went wrong!" ]);
+      if(!$team = Team::find($request->id))
+        return back()->with('msg',['title' => 'Ups!', 'content' => "Team could not be found." ]);
+      $team->delete();
+        return back()->with('msg',['title' => 'Ok!', 'content' => "Success!" ]);
     }
 
 }

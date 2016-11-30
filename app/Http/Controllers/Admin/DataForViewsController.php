@@ -10,7 +10,7 @@ use App\League\Coach;
 
 class DataForViewsController extends Controller
 {
-    public function getForAdd(Request $request){
+    public function getForAddTeams(Request $request){
       $freeCoaches = [];
       $freeStadiums = [];
       foreach (Stadium::get() as $stadium) {
@@ -29,7 +29,7 @@ class DataForViewsController extends Controller
       ]);
     }
 
-    public function getForEdit(Request $request){
+    public function getForEditTeams(Request $request){
       $freeCoaches = [];
       $freeStadiums = [];
       foreach (Stadium::get() as $stadium) {
