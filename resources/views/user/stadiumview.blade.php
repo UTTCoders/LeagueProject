@@ -58,38 +58,36 @@
 <div class="container">
 	<h2 style="color:#111;">A match is taking place right now!</h2>
 	<hr style="border-color: #111;">
-	<div class="row">
-		<!--<table class="table" style="border-color: #111;">
-			<tr>
-				<td style="vertical-align: middle;" align="right"><img src="/storage/{{$stadium->team->logo}}" style="max-height: 200px;" class="img-responsive"></td>
-				<td style="vertical-align: middle;"><h1 style="color:#111;" align="center">VS</h1></td>
-				<td style="vertical-align: middle;" align="left"><img src="/storage/{{$match->teams->where('id','!=',$stadium->team->id)->first()->logo}}" style="max-height: 200px;" class="img-responsive"></td>
-			</tr>
-		</table>-->
-		<div class="col-xs-5">
-			<h1 align="right">{{$stadium->team->name}}</h1>
-		</div>
-		<div class="col-xs-1">
+	<div class="row" style="color:#444;">
+		<div class="col-md-6 col-xs-12">
+			<h1 align="center"><strong>{{$stadium->team->name}} - 3</strong></h1>
 			<h1 align="center">vs</h1>
+			<h1 align="center"><strong>{{$match->teams->where('id','!=',$stadium->team->id)->first()->name}}</strong> - 2</h1>
 		</div>
-		<div class="col-xs-6">
-			<h1 align="left">{{$match->teams->where('id','!=',$stadium->team->id)->first()->name}}</h1>
+		<div class="col-md-5 col-xs-12 thumbnail">
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 		</div>
 	</div>
 	<div class="row">
-	<div class="col-sm-7 col-xs-12">	
-		<h4>Comments section</h4>
-		<div id="commentSecion">
-		@foreach($match->comments as $comment)
-			<div class="thumbnail col-xs-12">
-				<div class="col-xs-12">
-					<h4>{{$comment->name}} <small>{{date_format(date_create($comment->pivot->date),"Y/m/d g:i a") }}</small></h4>
-					<p class="comment">{{$comment->pivot->content}}</p>
+		<div class="col-sm-9 col-xs-12">	
+			<h4 style="color:#444;">Comments section</h4>
+			<div id="commentSecion">
+			@foreach($match->comments as $comment)
+				<div class="thumbnail col-xs-12">
+					<div class="col-xs-12">
+						<h4>{{$comment->name}} <small style="text-align: right;" class="pull-right">{{date_format(date_create($comment->pivot->date),"Y/F/d")}} <br>{{date_format(date_create($comment->pivot->date),"g:i a")}}</small></h4>
+						<br>
+						<p class="comment">{{$comment->pivot->content}}</p>
+					</div>
 				</div>
+			@endforeach
 			</div>
-		@endforeach
 		</div>
-	</div>
 	</div>
 </div>
 
