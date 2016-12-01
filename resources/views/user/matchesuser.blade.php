@@ -105,7 +105,7 @@
 			<div class="row">
 				<a href="{{'/stadiums/'.$match->teams->where('pivot.local',true)->first()->stadium->id}}" class="thumbnail col-sm-12 matchcard hidden-xs hidden-sm">
 					<div class="col-sm-5 imgcard" style="background-image: url('{{'/storage/'.$match->teams->where('pivot.local',true)->first()->stadium->photo}}');" align="center">
-						<img src="/img/icons/match1.png" style="width: 60%">
+						<img src="/img/icons/match1.png" style="width: 60%;">
 					</div>
 					<div class="col-sm-7 padData" style="color:#111;">
 					@if(isset($match->teams[0]['favorite']) || isset($match->teams[1]['favorite']))
