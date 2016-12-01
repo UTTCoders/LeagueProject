@@ -15,7 +15,7 @@ class Match extends Model
     }
 
     public function comments(){
-        return $this->belongsToMany('App\League\User')->withPivot('content','date');
+        return $this->belongsToMany('App\User','match_user','matche_id')->withPivot('content','date');
     }
 
     public function season(){
