@@ -305,9 +305,10 @@
             <div class="menuPanel">
                 <i class="material-icons pull-right" id="hideBtn" style="margin-right:15px;font-size:28px;cursor:pointer;">arrow_forward</i>
                 <div class="itemsContainer">
-                    <a href="#" id="1"  class="panelItem event">Management</a>
+                    <a id="1"  class="panelItem event">Management</a>
                     <a href="/" id="1" class="panelSubItem" style="display:none">Stadiums and Coaches</a>
                     <a href="/admin/teams/add" id="1" class="panelSubItem" style="display:none">Teams</a>
+                    <a href="/admin/players/add" id="1" class="panelSubItem" style="display:none">Players</a>
                 </div>
                 <div class="bottomContainer col-md-12 col-xs-12 col-sm-12 no-padding" style="position:absolute;bottom:0px;background-color:red;">
                   <a href="/favorites" class="panelItem" style="">Favorites</a>

@@ -327,14 +327,14 @@ $(function ($) {
     });
 
     $('#stadiumSelector').children('.Item').click(function () {
-      $('#stadiumSelector').children('.Item').css('background-color','#000');
-      $(this).css('background-color','rgba(255,255,255,0.08)');
+      $('#stadiumSelector').children('.Item').css('background','#000');
+      $(this).css('background-color','linear-gradient(to bottom,#222,#111)');
       $('input[name=stadiumId]').val($(this).attr('id'));
     });
 
     $('#coachSelector').children('.Item').click(function () {
-      $('#coachSelector').children('.Item').css('background-color','#000');
-      $(this).css('background-color','rgba(255,255,255,0.08)');
+      $('#coachSelector').children('.Item').css('background','#000');
+      $(this).css('background','linear-gradient(to bottom,#222,#111)');
       $('input[name=coachId]').val($(this).attr('id'));
     });
     $('.black-transparent-back').click(function () {

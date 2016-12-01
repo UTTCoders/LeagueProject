@@ -1099,7 +1099,6 @@ League management
                       if($('#changeStadiumLocation').prop('checked') && map.zoom < 15){
                           showMessages('Stop just there!','You need to aument the zoom for select accurately!','alert-card');
                       }
-                      else if($('input[name=newStadiumName]').val() == "") showMessages('Stop just there!','The stadium must have a name!','alert-card');
                       else {
                           var id = $('#editingStadiumDiv').attr('name');
                           var stadiumPos = marker.getPosition().toJSON();
@@ -1123,6 +1122,7 @@ League management
 
                           }).done(function (response) {
                               //fix. add stadium to map and show messages
+                              console.log(response['lastStadiumName']);
                               if(response['stadium']){
                                   if($('#changeStadiumLocation').prop('checked') && stadiumToEdit){
                                       var newStadiumLocation = JSON.parse(response['stadium'].location);
@@ -1139,6 +1139,12 @@ League management
                                   map.setZoom(6);
                                   $('#editingStadiumDiv').children('div').children('img').attr('src','storage/'+response['stadium'].photo);
                                   $('#editingStadiumDiv').children('div').children('input[type=text][id=name]').first().val(response['stadium'].name);
+                                  $('#changeStadiumLocation').prop('checked',false);
+                              }
+                              else{
+                                if(response['lastStadiumName']){
+                                  $('input[name=newStadiumName]').val(response['lastStadiumName']);
+                                }
                               }
                               showMessages(response['msgs']['title'], response['msgs']['content'][0], response['msgs']['type']);
                           });
