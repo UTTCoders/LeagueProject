@@ -10,6 +10,7 @@ use App\League\Coach;
 use Validator;
 use Storage;
 use App\League\Team;
+use App\League\Player;
 
 class League extends Controller
 {
@@ -178,6 +179,7 @@ class League extends Controller
           'coachTeam' => $coach->team
         ];
     }
+
     public function updateCoachPhoto(Request $request){
         $result = Validator::make($request->all(), [
           'id' => 'required',
@@ -226,6 +228,8 @@ class League extends Controller
           return back()->with('msg',['title' => 'Ups!', 'content' => 'There is already a team with the same data.' ])->withInput();
         if(Team::where('name',$request->teamName)->first())
           return back()->with('msg',['title' => 'Ups!', 'content' => 'There is already a team with the same name.' ])->withInput();
+        if(Team::count() >= 20)
+          return back()->with('msg',['title' => 'Ups!', 'content' => 'The necessary number of teams has been reached' ])->withInput();
         $team = new Team;
         $team->name = $request->teamName;
         $team->logo = $request->teamPhoto->store('img/teams','public');
@@ -235,6 +239,7 @@ class League extends Controller
         if($team->save()) return back()->with('msg',['title' => 'OK!', 'content' => 'Team added successful!' ]);
         return back()->with('msg',['title' => 'Ups!', 'content' => 'Has been an error!' ])->withInput();
     }
+
     public function editTeam(Request $request){
       if($request->teamId == '')
         return back()->with('msg',['title' => 'What?', 'content' => 'Select a team.' ])->withInput();
@@ -268,6 +273,7 @@ class League extends Controller
         return back()->with('msg',['title' => 'OK!', 'content' => "Success!" ]);
         else return back()->with('msg',['title' => 'Ups!', 'content' => "Has been an error." ])->withInput();
     }
+
     public function deleteTeam(Request $request){
       $result = Validator::make($request->all(),[
         'id' => 'required',
@@ -278,6 +284,37 @@ class League extends Controller
         return back()->with('msg',['title' => 'Ups!', 'content' => "Team could not be found." ]);
       $team->delete();
         return back()->with('msg',['title' => 'Ok!', 'content' => "Success!" ]);
+    }
+
+    public function addPlayer(Request $request){
+      $result = Validator::make($request->all(),[
+        'teamId' => 'required|numeric',
+        'name' => 'required',
+        'photo' => 'required',
+        'last_name' => 'required',
+        'shirt_number' => 'required|numeric',
+        'nationality' => 'required'
+      ]);
+      if($result->fails())
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'Please, complete everything.'])->withInput();
+      if(Player::where('name',$request->name)->where('last_name',$request->last_name)->where('nationality',$request->nationality)->first())
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'There is already a player with those names.'])->withInput();
+      if(!$team = Team::find($request->teamId))
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'Team not found.'])->withInput();
+      if($team->players()->count() >= 25)
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'The team has enough players. Max 25 players.'])->withInput();
+      if($team->players()->where('shirt_number',$request->shirt_number)->first())
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'There is already a player with that number in the team.'])->withInput();
+      $player = new Player;
+      $player->name = $request->name;
+      $player->photo = $request->photo->store('img/players','public');
+      $player->last_name = $request->last_name;
+      $player->nationality = $request->nationality;
+      $player->shirt_number = $request->shirt_number;
+      $player->team_id = $team->id;
+      if($player->save())
+        return back()->with('msg',['title' => 'Ok!', 'content' => 'Success!'])->withInput();
+      return back()->with('msg',['title' => 'Ups!', 'content' => 'Has been an error.'])->withInput();
     }
 
 }

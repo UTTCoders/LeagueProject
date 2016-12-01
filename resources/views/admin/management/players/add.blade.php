@@ -18,10 +18,11 @@ body{
 }
 .mainTitle{
     text-align: center;
+    font-size: 30px;
     margin: 0;
     top: 180px;
-    color: white;
-    text-shadow: 0px 0px 2px #000;
+    color: #fff;
+    text-shadow: 0px 0px 2px #000,0px 0px 10px #000;
     position: relative;
 }
 #manageMenu{
@@ -98,8 +99,17 @@ body{
 .Item > div > h5{
   margin: 15px;
 }
-.Item > img{
+.Item > .img-container{
+  width: 60px;
+  height: 100%;
+  float: left;
+  padding: 3px;
+}
+.Item > .img-container > img{
   border-radius: 2px;
+  height: 100%;
+  margin: auto;
+  display: block;
 }
 .teams-selection-container > .Item:hover{
   background-color: #000;
@@ -205,6 +215,32 @@ body{
   padding-bottom: 10px;
   box-shadow: inset 0px 2px 3px 0px #aaa;
 }
+.autocomplete-container{
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin-top: 1px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  z-index: 0;
+  overflow: hidden;
+  box-shadow: 0 0 3px 0 #000;
+  margin: 0;
+  display: none;
+}
+.autocomplete-item{
+  background: rgba(255,255,255,.1);
+  position: relative;
+  z-index: 10;
+  color:#ddd;
+  cursor: pointer;
+  text-align: center;
+  padding-top: 5px;
+}
+.autocomplete-item:hover{
+  background: rgba(255,255,255,.15);
+  color: #fff;
+}
 </style>
 @endsection
 
@@ -228,47 +264,56 @@ body{
   </div>
 </div>
 <div class="col-md-12 col-xs-12 col-sm-12" style="margin-top:90px;margin-bottom:40px;">
-  <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0 col-xs-10 col-xs-offset-1" id="manageMenu">
+  <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0 col-xs-12" id="manageMenu">
       <a class="manageMenuHeader col-md-12 col-sm-12 col-xs-12">Teams...</a>
       <a href="/admin/players/add" class="manageMenuItem item-active col-md-12 col-sm-12 col-xs-12">Add</a>
       <a href="/admin/players/edit" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Edit</a>
       <a href="/admin/players/delete" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Delete</a>
   </div>
-  <div class="col-md-7 col-md-offset-1 no-padding col-xs-11 col-xs-offset-1 blackWell">
+  <div class="col-md-7 col-md-offset-1 no-padding col-xs-12 blackWell">
     <div class="header">
       <h4>Player information</h4>
     </div>
     <div class="col-md-6 col-sm-6 col-xs-12 no-padding">
-      <form class="" id="addForm" action="/addTeam" method="post" enctype="multipart/form-data">
+      <form class="" id="" action="/addPlayer" method="post" enctype="multipart/form-data">
         {{csrf_field()}}
-        <input type="hidden" name="stadiumId" value="">
-        <input type="hidden" name="coachId" value="">
-        <div class="form-group col-md-12">
-          <input type="text" name="teamName" value="{{old('teamName')}}" placeholder="name..." class="whiteInput col-md-12 no-padding">
+        <input type="hidden" name="teamId" value="">
+        <div class="form-group col-md-12 col-xs-12">
+          <input type="text" name="name" value="{{old('name')}}" placeholder="name..." class="whiteInput col-md-12 col-xs-12 no-padding">
         </div>
-        <div class="form-group col-md-12">
-          <div class="file-big-container col-md-12">
-            <h4 style="text-align:center;margin-top:88px;">Drag or click for select a <b>logo</b>...</h4>
-            <input type="file" name="teamPhoto" value="{{old('teamPhoto')}}">
+        <div class="form-group col-md-12 col-xs-12">
+          <input type="text" name="last_name" value="{{old('last_name')}}" placeholder="last name..." class="whiteInput col-md-12 col-xs-12 no-padding">
+        </div>
+        <div class="form-group col-md-12 col-xs-12">
+          <input type="text" name="nationality" autocomplete="off" value="{{old('nationality')}}" placeholder="nationality..." class="whiteInput col-md-12 col-xs-12 no-padding">
+          <div class="autocomplete-container">
+
           </div>
         </div>
-        <div class="form-group col-md-12">
-          <label for="teamFoundationDate">Foundation date</label>
-          <input type="date" name="teamFoundationDate" value="{{old('teamFoundationDate')}}" class="whiteInput col-md-12">
+        <div class="form-group col-md-12 col-xs-12">
+          <input type="number" name="shirt_number" min="0" max="200" value="{{old('shirt_number')}}" placeholder="shirt number..." class="whiteInput col-md-6 col-xs-12 no-padding">
         </div>
-        <div class="form-group col-md-12">
+        <div class="form-group col-md-12 col-xs-12">
+          <div class="file-big-container col-md-12">
+            <h4 style="text-align:center;margin-top:88px;">Drag or click for select a <b>photo</b>...</h4>
+            <input type="file" name="photo" value="{{old('photo')}}">
+          </div>
+        </div>
+        <div class="form-group col-md-12 col-xs-12">
           <button type="submit" name="addTeamBtn" class="btnBlue2 col-md-4 col-md-offset-8 col-sm-12 col-xs-12 no-padding">Add</button>
         </div>
       </form>
     </div>
     <div class="col-md-6">
-      <div class="col-md-12 no-padding teams-selection-container" id="coachSelector">
+      <div class="col-md-12 no-padding teams-selection-container" id="teamSelector">
         @if(App\League\Team::count() < 1)
         <h4 style="text-align:center;">No coaches</h4>
         @else
         @foreach(App\League\Team::get() as $i => $team)
         <div class="col-md-12 no-padding Item" id="{{$team->id}}">
-          <img src="{{asset('storage/'.$team->logo)}}" alt="" class="col-md-3">
+          <div class="img-container">
+            <img src="{{asset('storage/'.$team->logo)}}" alt="">
+          </div>
           <div class="col-md-9">
             <h5>{{$team->name}}</h5>
           </div>
@@ -292,7 +337,61 @@ $(function ($) {
 });
 </script>
 @endif
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9fuikPcHicK9HnQSzmHM-iZikumk6710&libraries=places&language=en"></script>
 <script type="text/javascript">
+  var service = new google.maps.places.AutocompleteService();
+  var topPos=0;
+
+  $('input[name=nationality]').keyup(function () {
+    if(this.value != ''){
+      if($('.autocomplete-container').children().css('display') != 'block')
+      $('.autocomplete-container').fadeIn(10,function () {
+        $('.autocomplete-container').children().toggle(400);
+      });
+      var input = this;
+      service.getQueryPredictions({ input: this.value }, function(predictions, status) {
+          if (status == google.maps.places.PlacesServiceStatus.OK) {
+            predictions.forEach(function(prediction) {
+              $.each(prediction.types,function (i,e) {
+                if(e == 'country'){
+                  if(!$('div.'+prediction.id)[0]){
+                    topPos+=31;
+                    var $item = $('<div>');
+                    $item.addClass(prediction.id);
+                    $item.click(function () {
+                      $('input[name=nationality]').val($(this).text());
+                      $('.autocomplete-item').toggle(400,function () {
+                        $('.autocomplete-container').fadeOut(10);
+                        $('.autocomplete-item').remove();
+                      });
+                    });
+                    $item.addClass('autocomplete-item').text(prediction.description).css({
+                      height:'31px',
+                      width:'100%',
+                      top:0,
+                      left: 0
+                    });
+                    $('.autocomplete-container').append($item);
+                  }
+                }
+              });
+            });
+          }
+          else $('.autocomplete-container').children().toggle(400,function () {
+            $(this).remove();
+            $('.autocomplete-container').fadeOut();
+          });
+      });
+    }
+    else {
+      $('.autocomplete-container').children().toggle(400,function () {
+        $(this).remove();
+        $('.autocomplete-container').fadeOut();
+      });
+
+    }
+  });
+
   $(function ($) {
     function showMessages(title,msg,type) {
       $('.black-transparent-back').fadeIn('slow',function () {
@@ -300,6 +399,7 @@ $(function ($) {
         $('.messageBox').children('.body').text(msg);
       });
     }
+
     $('.file-big-container').change(function () {
       var file = $(this).children('input[type=file]')[0].files[0];
       if(file){
@@ -312,17 +412,12 @@ $(function ($) {
       else $(this).children('h4').text('Drag or click for select a logo...');
     });
 
-    $('#stadiumSelector').children('.Item').click(function () {
-      $('#stadiumSelector').children('.Item').css('background','#000');
-      $(this).css('background-color','linear-gradient(to bottom,#222,#111)');
-      $('input[name=stadiumId]').val($(this).attr('id'));
+    $('#teamSelector').children('.Item').click(function () {
+      $('#teamSelector').children('.Item').css('background','#000');
+      $(this).css('background','linear-gradient(to bottom,#222,#111)');
+      $('input[name=teamId]').val($(this).attr('id'));
     });
 
-    $('#coachSelector').children('.Item').click(function () {
-      $('#coachSelector').children('.Item').css('background','#000');
-      $(this).css('background','linear-gradient(to bottom,#222,#111)');
-      $('input[name=coachId]').val($(this).attr('id'));
-    });
     $('.black-transparent-back').click(function () {
       $('.messageBox').css('margin-top','10%').css('opacity',0);
       $(this).fadeOut(1000);

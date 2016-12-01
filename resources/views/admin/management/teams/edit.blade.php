@@ -17,12 +17,13 @@ body{
     box-shadow: inset 0px -2px 8px 0px #222;
 }
 .mainTitle{
-    text-align: center;
-    margin: 0;
-    top: 180px;
-    color: white;
-    text-shadow: 0px 0px 2px #000;
-    position: relative;
+  text-align: center;
+  font-size: 30px;
+  margin: 0;
+  top: 180px;
+  color: #fff;
+  text-shadow: 0px 0px 2px #000,0px 0px 10px #000;
+  position: relative;
 }
 #manageMenu{
     position: relative;
