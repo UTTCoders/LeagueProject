@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-Add players
+Edit players
 @endsection
 
 @section('css')
@@ -263,6 +263,22 @@ body{
   margin-top: 9px;
   cursor: pointer;
 }
+.players-container{
+  background-color: #444;
+  border-radius: 2px;
+  overflow: auto;
+  max-height: 600px;
+}
+input[name=playerSearchBox]{
+  border-radius: 3px;
+  background: linear-gradient(to bottom,#222,#000);
+  box-shadow: 0 0 10px 0 #000;
+  border: 1px solid #999;
+  color: #ddd;
+}
+input[name=playerSearchBox]:hover{
+  color: #fff;
+}
 </style>
 @endsection
 
@@ -288,78 +304,86 @@ body{
 <div class="col-md-12 col-xs-12 col-sm-12" style="margin-top:90px;margin-bottom:40px;">
   <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0 col-xs-12" id="manageMenu">
       <a class="manageMenuHeader col-md-12 col-sm-12 col-xs-12">Teams...</a>
-      <a href="/admin/players/add" class="manageMenuItem item-active col-md-12 col-sm-12 col-xs-12">Add</a>
-      <a href="/admin/players/edit" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Edit</a>
+      <a href="/admin/players/add" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Add</a>
+      <a href="/admin/players/edit" class="manageMenuItem item-active col-md-12 col-sm-12 col-xs-12">Edit</a>
       <a href="/admin/players/delete" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Delete</a>
   </div>
   <div class="col-md-7 col-md-offset-1 no-padding col-xs-12 blackWell">
     <div class="header">
-      <h4>Player information</h4>
+      <h4>Select one for edit</h4>
     </div>
     <div class="col-md-6 col-sm-6 col-xs-12 no-padding">
+      <div class="form-group col-xs-12">
+        <input type="text" name="playerSearchBox" autocomplete="off" value="" class="col-xs-12 whiteInput" placeholder="Search by team or player name...">
+      </div>
+      <div class="col-xs-12">
+        <div class="players-container col-xs-12 no-padding">
+
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
       <form class="" id="" action="/addPlayer" method="post" enctype="multipart/form-data">
         {{csrf_field()}}
         <input type="hidden" name="teamId" value="">
         <input type="hidden" name="mainPosition" value="">
-        <div class="form-group col-md-12 col-xs-12">
+        <div class="form-group col-md-12 col-xs-12 no-padding">
           <input type="text" name="name" value="{{old('name')}}" placeholder="name..." class="whiteInput col-md-12 col-xs-12 no-padding">
         </div>
-        <div class="form-group col-md-12 col-xs-12">
+        <div class="form-group col-md-12 col-xs-12 no-padding">
           <input type="text" name="last_name" value="{{old('last_name')}}" placeholder="last name..." class="whiteInput col-md-12 col-xs-12 no-padding">
         </div>
-        <div class="form-group col-md-12 col-xs-12">
+        <div class="form-group col-md-12 col-xs-12 no-padding">
           <input type="text" name="nationality" autocomplete="off" value="{{old('nationality')}}" placeholder="nationality..." class="whiteInput col-md-12 col-xs-12 no-padding">
           <div class="autocomplete-container">
 
           </div>
         </div>
-        <div class="form-group col-md-12 col-xs-12">
+        <div class="form-group col-md-12 col-xs-12 no-padding">
           <input type="number" name="shirt_number" min="0" max="200" value="{{old('shirt_number')}}" placeholder="shirt number..." class="whiteInput col-md-6 col-xs-12 no-padding">
         </div>
-        <div class="form-group col-md-12 col-xs-12">
+        <div class="form-group col-md-12 col-xs-12 no-padding">
           <div class="file-big-container col-md-12">
             <h4 style="text-align:center;margin-top:88px;">Drag or click for select a <b>photo</b>...</h4>
             <input type="file" name="photo" value="{{old('photo')}}">
           </div>
         </div>
-        <div class="form-group col-md-12 col-xs-12">
+        <div class="col-md-12 no-padding teams-selection-container" id="teamSelector">
+          @if(App\League\Team::count() < 1)
+          <h4 style="text-align:center;">No coaches</h4>
+          @else
+          @foreach(App\League\Team::get() as $i => $team)
+          <div class="col-md-12 no-padding Item" id="{{$team->id}}">
+            <div class="img-container">
+              <img src="{{asset('storage/'.$team->logo)}}" alt="">
+            </div>
+            <div class="col-md-9">
+              <h5>{{$team->name}}</h5>
+            </div>
+          </div>
+          @endforeach
+          @endif
+        </div>
+        <div class="col-md-12 col-xs-12 teams-selection-container no-padding" id="positionSelector">
+          @foreach(App\League\Position::get() as $position)
+          <div class="col-md-12 col-xs-12 Item no-padding" style="cursor:inherit;">
+            <div class="col-xs-2">
+              <div class="pos-container">
+                {{$position->abbreviation}}
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <h5>{{$position->name}}</h5>
+            </div>
+            <i class="col-xs-2 material-icons addPositionBtn" style="color:#888;" id="{{$position->id}}">check</i>
+            <i class="col-xs-2 material-icons mainPosition" style="color:#888;" id="{{$position->id}}">star_rate</i>
+          </div>
+          @endforeach
+        </div>
+        <div class="form-group col-md-12 col-xs-12 no-padding">
           <button type="submit" name="addTeamBtn" class="btnBlue2 col-md-4 col-md-offset-8 col-sm-12 col-xs-12 no-padding">Add</button>
         </div>
       </form>
-    </div>
-    <div class="col-md-6">
-      <div class="col-md-12 no-padding teams-selection-container" id="teamSelector">
-        @if(App\League\Team::count() < 1)
-        <h4 style="text-align:center;">No coaches</h4>
-        @else
-        @foreach(App\League\Team::get() as $i => $team)
-        <div class="col-md-12 no-padding Item" id="{{$team->id}}">
-          <div class="img-container">
-            <img src="{{asset('storage/'.$team->logo)}}" alt="">
-          </div>
-          <div class="col-md-9">
-            <h5>{{$team->name}}</h5>
-          </div>
-        </div>
-        @endforeach
-        @endif
-      </div>
-      <div class="col-md-12 col-xs-12 teams-selection-container no-padding" id="positionSelector">
-        @foreach(App\League\Position::get() as $position)
-        <div class="col-md-12 col-xs-12 Item no-padding" style="cursor:inherit;">
-          <div class="col-xs-2">
-            <div class="pos-container">
-              {{$position->abbreviation}}
-            </div>
-          </div>
-          <div class="col-xs-6">
-            <h5>{{$position->name}}</h5>
-          </div>
-          <i class="col-xs-2 material-icons addPositionBtn" style="color:#888;" id="{{$position->id}}">check</i>
-          <i class="col-xs-2 material-icons mainPosition" style="color:#888;" id="{{$position->id}}">star_rate</i>
-        </div>
-        @endforeach
-      </div>
     </div>
   </div>
 </div>
@@ -433,9 +457,49 @@ $(function ($) {
 
   $(function ($) {
 
+    $('input[name=playerSearchBox]').keyup(function () {
+      $.ajax({
+        url:'/searchPlayersByNameOrTeam',
+        type:'post',
+        dataType:'json',
+        data:{
+          _token:'{{csrf_token()}}',
+          toSearch: $(this).val()
+        }
+      }).done(function (response) {
+        $('div.players-container').children().remove();
+        if(response['players']){
+          $.each(response['players'], function (i,player) {
+            var $item = $('<div id="'+player.id+'">');
+            $item.css({
+              padding: '5px 6px 5px 6px',
+              'font-size':'12px',
+              width: '100%',
+              cursor:'pointer'
+            });
+            var $imgContainer = $('<div class="col-xs-3 no-padding">');
+            $imgContainer.css({
+            });
+            $item.append($imgContainer);
+            $infoContainer=$('<p class="col-xs-9">');
+            $infoContainer.text(player.name+'\n'+player.last_name);
+            $item.append($infoContainer);
+            var $img = $('<img>');
+            $img.css({
+              width:'100%',
+              'margin-bottom':'6px'
+            });
+            $img.attr('src','/storage/'+player.photo);
+            $imgContainer.append($img);
+            /////////////////////////////////
+            $('div.players-container').append($item);
+          });
+        }
+      });
+    });
+
     $('.addPositionBtn').click(function () {
       if($(this).css('color') == 'white' || $(this).css('color') == "#fff" || $(this).css('color') == "rgb(255, 255, 255)"){
-          console.log($('i.mainPosition[id='+$(this).attr('id')+']').css('color'));
           if($('i.mainPosition[id='+$(this).attr('id')+']').css('color') != 'rgb(255, 255, 255)'){
             $(this).css('color','#888');
             $('input[id=positionsInput][value='+$(this).attr('id')+']').remove();

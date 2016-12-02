@@ -11,6 +11,7 @@ use Validator;
 use Storage;
 use App\League\Team;
 use App\League\Player;
+use App\League\Position;
 
 class League extends Controller
 {
@@ -293,10 +294,16 @@ class League extends Controller
         'photo' => 'required',
         'last_name' => 'required',
         'shirt_number' => 'required|numeric',
-        'nationality' => 'required'
+        'nationality' => 'required',
+        'positions' => 'required',
+        'mainPosition' => 'required'
       ]);
       if($result->fails())
         return back()->with('msg',['title' => 'Ups!', 'content' => 'Please, complete everything.'])->withInput();
+      foreach ($request->positions as $position) {
+        if(!Position::find($position))
+          return back()->with('msg',['title' => 'Ups!', 'content' => 'Enter a valid position.'])->withInput();
+      }
       if(Player::where('name',$request->name)->where('last_name',$request->last_name)->where('nationality',$request->nationality)->first())
         return back()->with('msg',['title' => 'Ups!', 'content' => 'There is already a player with those names.'])->withInput();
       if(!$team = Team::find($request->teamId))
@@ -312,9 +319,30 @@ class League extends Controller
       $player->nationality = $request->nationality;
       $player->shirt_number = $request->shirt_number;
       $player->team_id = $team->id;
-      if($player->save())
-        return back()->with('msg',['title' => 'Ok!', 'content' => 'Success!'])->withInput();
+      if($player->save()){
+        foreach ($request->positions as $position) {
+          if ($position == $request->mainPosition)
+            $player->positions()->attach($position,['main' => true]);
+          else $player->positions()->attach($position,['main' => false]);
+        }
+        return back()->with('msg',['title' => 'Ok!', 'content' => 'Success!']);
+      }
       return back()->with('msg',['title' => 'Ups!', 'content' => 'Has been an error.'])->withInput();
+    }
+
+    public function searchPlayersByNameOrTeam(Request $request){
+      $result = Validator::make($request->all(), [
+        'toSearch' => 'required'
+      ]);
+      if($result->fails())
+        return ['players' => null];
+      $players = Player::havingRaw("concat(name,' ',last_name) like '%".$request->toSearch."%'")->get();
+      if($players->count() > 0)
+        return ['players' => $players];
+      if($team = Team::where('name','like','%'.$request->toSearch.'%')->first())
+        return ['players' => $team->players];
+      return ['players' => null];
+
     }
 
 }
