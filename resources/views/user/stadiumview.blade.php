@@ -91,33 +91,34 @@
 	</div>
 </div>
 
-
-
 @else
-<div id="con2">
-	<div class="row">
-		<div class="row">
-			<div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-4 col-md-4 col-md-offest-4">
-				<img src="/storage/{{$stadium->photo}}" style="border-radius: 100%;" class="img-responsive">
-			</div>
+<div id="con">
+	<div align="center">
+		<div>
+			<img src="/img/icons/stadium3flat.png" style="width: 18%; border-radius: 100%;">
 		</div>
 		<br>
-		<h1 style="color:#111; margin-top: 0px; margin-bottom: 0;">{{$stadium->name}}</h1>
-		<br>
-		<h2 style="color:#111; margin-top: 0; margin-bottom: 0;"><img src="/storage/{{$stadium->team->logo}}" style="width: 70px; border-radius: 100%;"> {{$stadium->team->name}}</h2>
+		<h2 style="color:#eee; margin-top: 0px; margin-bottom: 0;" id="mainTitle">{{$stadium->name}}</h2>
 	</div>
+	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle"><img src="/storage/{{$stadium->team->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"> <strong>{{$stadium->team->name}}</strong></h3>
 </div>
-<div class="jumbotron" style="background-color: #B71C1C; margin-bottom: 0;">
+@endif
+<div class="jumbotron" style="background-color: #43A047; margin-bottom: 0; color: #eee;">
 	<div class="container">
 	<div class="row">
-		<div class="col-sm-5" align="right">
+		<div class="col-sm-5 hidden-xs" align="right">
 			<img src="/img/icons/field.png" class="img-responsive">
 		</div>
-		<div class="col-sm-6 col-sm-offset-1">
-			<h1 style="color:#eee; font-size: 30px; text-shadow: 1px 1px 1px black;">Check the team information!</h1>
+		<div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-1">
+			<h1 style="color:#eee; font-size: 30px;">Check the team info!</h1>
+				<p style="font-size: 15px; font-weight: bold;">
+				<span>Name: {{$stadium->team->name}} ®</span><br>
+				<span>Coach: {{$stadium->team->coach->name.' '.$stadium->team->coach->last_name}}</span><br>
+				<span>Foundation date: {{date_format(date_create($stadium->team->foundation_date),"Y - F - d")}}</span><br>
+				<span>Logo: <img style="width: 45px; max-height: 55px; border-radius: 100%;" src="/storage/{{$stadium->team->logo}}"></span></p>
+			
 		</div>
 	</div>
 	</div>	
 </div>
-@endif
 @endsection
