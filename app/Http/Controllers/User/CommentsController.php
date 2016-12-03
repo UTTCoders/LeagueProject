@@ -27,7 +27,6 @@ class CommentsController extends Controller
 	    	->attach($r->matchid,[
 	    	"content"=>$r->content,
 	    	"date"=>Carbon::now('America/Monterrey')]);
-	    	return Auth::user()->comments()->last;
 	    	return ["result"=>true];
     	}
     	return ["result"=>false];
