@@ -94,6 +94,7 @@ Route::group(['middleware' => ['authen']], function(){
 	Route::get('/stadiums/{id}','User\MapController@requestStadium');
 	Route::get('/matches','User\MatchesController@MatchesRequest');
 	Route::post('/getmatches','User\MatchesController@getMatchesForMenu');
+	Route::post('/addremovefav','User\FavoritesController@AddRemove');
 });
 
 // fb

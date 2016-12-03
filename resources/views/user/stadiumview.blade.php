@@ -101,12 +101,14 @@
 			@endforeach
 			</div>
 			@if(($match->state==1 || $match->state==3) && $allowComment)
-			<div class="col-xs-12">
-				<div class="form-group">
-					<label>Leave a comment:</label><span class="pull-right" id="charIN">(140 left)</span>
-					<textarea id="textareaC" style="border-radius: 0;" rows="3" maxlength="140" class="form-control"></textarea>
+			<div id="commentForm">
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label>Leave a comment:</label><span class="pull-right" id="charIN">(140 left)</span>
+						<textarea id="textareaC" style="border-radius: 0;" rows="3" maxlength="140" class="form-control"></textarea>
+					</div>
+					<button style="border-radius: 0; border:1px solid #ccc;" id="btnComment" class="btn btn-default pull-right">Send</button>
 				</div>
-				<button style="border-radius: 0;" id="btnComment" class="btn btn-default pull-right">Send</button>
 			</div>
 			@endif
 		</div>
@@ -138,7 +140,13 @@
 				<span>Coach: {{$stadium->team->coach->name.' '.$stadium->team->coach->last_name}}</span><br>
 				<span>Foundation date: {{date_format(date_create($stadium->team->foundation_date),"Y - F - d")}}</span><br>
 				<span>Logo: <img style="width: 45px; max-height: 55px; border-radius: 100%;" src="/storage/{{$stadium->team->logo}}"></span></p>
-			
+
+				<input type="hidden" name="teamid" value="{{$stadium->team->id}}">
+				@if($isFav)
+				<button style="border-radius: 0; border:1px solid #ccc;" id="btnAddRemove" class="btn btn-default" name="0"><span class="glyphicon glyphicon-remove"></span> Remove from favorites</button>
+				@else
+				<button style="border-radius: 0; border:1px solid #ccc;" id="btnAddRemove" class="btn btn-default" name="1"><span class="glyphicon glyphicon-star-empty"></span> Add to favorites</button>
+				@endif
 		</div>
 	</div>
 	</div>	
@@ -155,4 +163,22 @@ $(function(){
 });
 </script>
 @endif
+<script>
+$(function(){
+	$("#btnAddRemove").click(function(){
+		var t=$("meta[name='toktok']").attr('content');
+		var a=$(this).attr('name');
+		var tid=$("input[name='teamid']").val();
+		$.ajax({
+			url:"/addremovefav",method:"post",
+			data:{
+				_token:t,action:a,teamid:tid
+			}
+		}).done(function(response){
+
+		});
+		$(this).hide(100).delay(100).slideDown();
+	});
+});
+</script>
 @endsection

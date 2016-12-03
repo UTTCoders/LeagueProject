@@ -40,12 +40,14 @@ class MapController extends Controller
     				return view('user.stadiumview')
 	    			->with("stadium",$thestadium)
 	    			->with("match",$res["match"])
-                    ->with("allowComment",self::checkTeamsUser($res["match"]));
+                    ->with("allowComment",self::checkTeamsUser($res["match"]))
+                    ->with("isFav",self::checkStadiumTeam($thestadium->team));
     			}
     		}
     	}
     	return view('user.stadiumview')
-    	->with("stadium",$thestadium);
+    	->with("stadium",$thestadium)
+        ->with("isFav",self::checkStadiumTeam($thestadium->team));
     }
 
     private function checkLocalTeam($match,$theStadiumsTeam){
@@ -73,6 +75,15 @@ class MapController extends Controller
     			"there_is"=>$there_is,"match"=>$thematch
     		];
     	return ["there_is"=>$there_is];
+    }
+
+    private function checkStadiumTeam($team){
+        foreach (Auth::user()->teams as $t) {
+            if ($t->id==$team->id) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private function checkTeamsUser($match){
