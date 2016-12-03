@@ -36,7 +36,6 @@ class MapController extends Controller
     		$res=self::checkStadiumMatches($thestadium);
     		if ($res["there_is"]) {
     			if (self::checkLocalTeam($res["match"],$thestadium->team)) {
-                    //return $res["match"]->comments[0]->name;
     				return view('user.stadiumview')
 	    			->with("stadium",$thestadium)
 	    			->with("match",$res["match"])

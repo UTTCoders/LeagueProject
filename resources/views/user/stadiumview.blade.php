@@ -88,9 +88,9 @@
 	</div>
 	<div class="row">
 		<div class="col-sm-9 col-xs-11">	
-			<h4 style="color:#444;">Comments section</h4>
+			<h4 style="color:#444;">Comments - {{$match->comments()->count()}}</h4>
 			<div id="commentSection">
-			@foreach($match->comments as $comment)
+			@foreach($match->comments()->orderBy('date','desc')->get() as $comment)
 				<div class="thumbnail col-xs-12 commentCard">
 					<div class="col-xs-12">
 						<h4>{{$comment->name}} <small style="text-align: right;" class="pull-right"><span class="hidden-xs">{{date_format(date_create($comment->pivot->date),"Y/F/d")}}</span><span class="hidden-sm hidden-md hidden-lg">{{date_format(date_create($comment->pivot->date),"Y/m/d")}}</span> <br>{{date_format(date_create($comment->pivot->date),"g:i a")}}</small></h4>
@@ -101,15 +101,15 @@
 			@endforeach
 			</div>
 			@if(($match->state==1 || $match->state==3) && $allowComment)
-			<div id="commentForm">
+			<br>
 				<div class="col-xs-12">
 					<div class="form-group">
 						<label>Leave a comment:</label><span class="pull-right" id="charIN">(140 left)</span>
 						<textarea id="textareaC" style="border-radius: 0;" rows="3" maxlength="140" class="form-control"></textarea>
 					</div>
-					<button style="border-radius: 0; border:1px solid #ccc;" id="btnComment" class="btn btn-default pull-right">Send</button>
+					<input type="hidden" name="commentMatch" value="{{$match->id}}">
+					<button style="border-radius: 0; border:1px solid #ccc;" id="btnSendComment" class="btn btn-default pull-right">Send</button>
 				</div>
-			</div>
 			@endif
 		</div>
 	</div>
@@ -154,14 +154,37 @@
 @endsection
 
 @section('js2')
-@if(isset($match) && ($match->state==1 || $match->state==3) && $allowComment)
-<script>
-$(function(){
-	$("textarea").on('input', function() {
-		$("#charIN").text("("+(140-$(this).val().length)+" left)");
-	});
-});
-</script>
+@if(isset($match))
+	@if(($match->state==1 || $match->state==3))
+		@if($allowComment)
+		<script>
+		$(function(){
+			$("textarea").on('input', function() {
+				$("#charIN").text("("+(140-$(this).val().length)+" left)");
+			});
+
+			$("#btnSendComment").click(function(){
+				if (!$.trim($("textarea").val()).length == 0 
+				&& $("textarea").val().length<=140){
+					var t=$("meta[name='toktok']").attr('content');
+					var comment=$("textarea").val();
+					var match=$("input[name='commentMatch']").val();
+					$.ajax({
+						url:"/sendcomment",method:"post",
+						data:{_token:t,content:comment,matchid:match}
+					}).done(function(response){
+						if (response.result) {
+							$("textarea").val('');
+						}
+					});
+				}
+			});;
+		});
+		</script>
+		@endif
+		<!--here ask for the comments events and goals-->
+	@endif
+	<!--Here ask for the state-->
 @endif
 <script>
 $(function(){

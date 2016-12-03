@@ -95,6 +95,7 @@ Route::group(['middleware' => ['authen']], function(){
 	Route::get('/matches','User\MatchesController@MatchesRequest');
 	Route::post('/getmatches','User\MatchesController@getMatchesForMenu');
 	Route::post('/addremovefav','User\FavoritesController@AddRemove');
+	Route::post('/sendcomment','User\CommentsController@SendComment');
 });
 
 // fb
