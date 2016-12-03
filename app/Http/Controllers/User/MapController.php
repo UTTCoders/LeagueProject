@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\League\Stadium;
 use App\League\Team;
 use App\League\Match;
-use Carbon\Carbon;
+use Auth;
 
 class MapController extends Controller
 {
@@ -39,7 +39,8 @@ class MapController extends Controller
                     //return $res["match"]->comments[0]->name;
     				return view('user.stadiumview')
 	    			->with("stadium",$thestadium)
-	    			->with("match",$res["match"]);
+	    			->with("match",$res["match"])
+                    ->with("allowComment",self::checkTeamsUser($res["match"]));
     			}
     		}
     	}
@@ -72,5 +73,14 @@ class MapController extends Controller
     			"there_is"=>$there_is,"match"=>$thematch
     		];
     	return ["there_is"=>$there_is];
+    }
+
+    private function checkTeamsUser($match){
+        foreach ($match->teams as $team) {
+            if (Auth::user()->teams->find($team->id)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -38,11 +38,24 @@
 		font-size: 13px;
 		color: #666;
 	}
+	#commentSection{
+		max-height: 500px;
+		width: 100%;
+		overflow-y: auto;
+		padding: 10px;
+		border-top: 1px solid #D9EDF7;
+	}
+	.commentCard{
+		border-radius: 0;
+		box-shadow: 1px 1px #eee;
+	}
+	textarea{
+		resize: none;
+	}
 </style>
 @endsection
 
 @section('body2')
-
 @if(isset($match))
 <div id="con">
 	<div align="center">
@@ -74,23 +87,32 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-9 col-xs-12">	
+		<div class="col-sm-9 col-xs-11">	
 			<h4 style="color:#444;">Comments section</h4>
-			<div id="commentSecion">
+			<div id="commentSection">
 			@foreach($match->comments as $comment)
-				<div class="thumbnail col-xs-12">
+				<div class="thumbnail col-xs-12 commentCard">
 					<div class="col-xs-12">
-						<h4>{{$comment->name}} <small style="text-align: right;" class="pull-right">{{date_format(date_create($comment->pivot->date),"Y/F/d")}} <br>{{date_format(date_create($comment->pivot->date),"g:i a")}}</small></h4>
+						<h4>{{$comment->name}} <small style="text-align: right;" class="pull-right"><span class="hidden-xs">{{date_format(date_create($comment->pivot->date),"Y/F/d")}}</span><span class="hidden-sm hidden-md hidden-lg">{{date_format(date_create($comment->pivot->date),"Y/m/d")}}</span> <br>{{date_format(date_create($comment->pivot->date),"g:i a")}}</small></h4>
 						<br>
 						<p class="comment">{{$comment->pivot->content}}</p>
 					</div>
 				</div>
 			@endforeach
 			</div>
+			@if(($match->state==1 || $match->state==3) && $allowComment)
+			<div class="col-xs-12">
+				<div class="form-group">
+					<label>Leave a comment:</label><span class="pull-right" id="charIN">(140 left)</span>
+					<textarea id="textareaC" style="border-radius: 0;" rows="3" maxlength="140" class="form-control"></textarea>
+				</div>
+				<button style="border-radius: 0;" id="btnComment" class="btn btn-default pull-right">Send</button>
+			</div>
+			@endif
 		</div>
 	</div>
 </div>
-
+<br><br>
 @else
 <div id="con">
 	<div align="center">
@@ -121,4 +143,16 @@
 	</div>
 	</div>	
 </div>
+@endsection
+
+@section('js2')
+@if(($match->state==1 || $match->state==3) && $allowComment)
+<script>
+$(function(){
+	$("textarea").on('input', function() {
+		$("#charIN").text("("+(140-$(this).val().length)+" left)");
+	});
+});
+</script>
+@endif
 @endsection
