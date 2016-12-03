@@ -154,7 +154,7 @@
 @endsection
 
 @section('js2')
-@if(($match->state==1 || $match->state==3) && $allowComment)
+@if(isset($match) && ($match->state==1 || $match->state==3) && $allowComment)
 <script>
 $(function(){
 	$("textarea").on('input', function() {
@@ -175,9 +175,12 @@ $(function(){
 				_token:t,action:a,teamid:tid
 			}
 		}).done(function(response){
-
+			if (response.action) {
+				$("#btnAddRemove").hide().html('<span class="glyphicon glyphicon-remove"></span> Remove from favorites').attr('name','0').delay(100).slideDown();
+			}else{
+				$("#btnAddRemove").hide().html('<span class="glyphicon glyphicon-star-empty"></span> Add to favorites').attr('name','1').delay(100).slideDown();
+			}
 		});
-		$(this).hide(100).delay(100).slideDown();
 	});
 });
 </script>

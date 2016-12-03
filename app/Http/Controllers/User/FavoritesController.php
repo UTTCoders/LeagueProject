@@ -4,13 +4,16 @@ namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Auth;
 
 class FavoritesController extends Controller
 {
     public function AddRemove(Request $r){
     	if ($r->action) {
-    		return "positive";
+    		Auth::user()->teams()->attach($r->teamid);
+    		return ["action"=>true];
     	}
-    	return $r->all();
+    	Auth::user()->teams()->detach($r->teamid);
+    	return ["action"=>false];
     }
 }
