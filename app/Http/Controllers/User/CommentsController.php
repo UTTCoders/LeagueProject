@@ -42,6 +42,27 @@ class CommentsController extends Controller
     }
 
     public function AskForComments(Request $r){
-    	return "hi!";
+    	$thematch=Match::find($r->matchid);
+    	$count=$thematch->comments()->count();
+    	if ($count != $r->cc) {
+    		return ["new"=>true,
+    		"comments"=>view('user.comments')
+    		->with("match",$thematch)->render()];
+    	}
+    	/*$newcomments=Match::find($r->matchid)->comments()
+    	->where('date','>',$r->date)->get();
+    	if ($newcomments->count()>0) {
+    		$views=[];
+    		$lastDate=Match::find($r->matchid)->comments()
+    		->where('date','>',$r->date)->orderBy('date','desc')
+    		->first()->pivot->date;
+    		foreach ($newcomments as $comment) {
+    			$views[]=view('user.comment')->with("comment",$comment)->render();
+    		}
+    		return ["new"=>true,
+    		"cards"=>$views,
+    		"date"=>$lastDate];
+    	}*/
+    	return ["new"=>false];
     }
 }

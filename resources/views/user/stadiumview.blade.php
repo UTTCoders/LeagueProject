@@ -88,26 +88,11 @@
 	</div>
 	<div class="row">
 		<div class="col-sm-9 col-xs-11">	
-			<h4 style="color:#444;">Comments - {{$match->comments()->count()}}</h4>
+			<h4 id="commentsIndicator" style="color:#444;">Comments - {{$match->comments()->count()}}</h4>
 			<div id="commentSection">
-			@if($match->comments()->count()>0)
-				@foreach($match->comments()->orderBy('date','desc')->get() as $comment)
-				<div class="thumbnail col-xs-12 commentCard">
-					<div class="col-xs-12">
-						<h4>{{$comment->name}} <small style="text-align: right;" class="pull-right"><span class="hidden-xs">{{date_format(date_create($comment->pivot->date),"Y/F/d")}}</span><span class="hidden-sm hidden-md hidden-lg">{{date_format(date_create($comment->pivot->date),"Y/m/d")}}</span> <br>{{date_format(date_create($comment->pivot->date),"g:i a")}}</small></h4>
-						<br>
-						<p class="comment">{{$comment->pivot->content}}</p>
-					</div>
-				</div>
-				@endforeach
-			@else
-				<div id="noComments">
-					<h5 style="color:#444;">There are no comments to show...</h5>
-				</div>
-			@endif
-			<input type="hidden" name="commentsCount" value="{{$match->comments()->count()}}">
-			<input type="hidden" name="thematchid" value="{{$match->id}}">
+				@include('user.comments')
 			</div>
+			<input type="hidden" name="thematchid" value="{{$match->id}}">
 			@if(($match->state==1 || $match->state==3) && $allowComment)
 			<br>
 				<div class="col-xs-12">
@@ -192,7 +177,7 @@
 		<!--here ask for the comments events and goals-->
 		<script>
 		$(function(){
-			var ask=function(){
+			var askComments=function(){
 				var t=$("meta[name='toktok']").attr('content')
 				var count=$("input[name='commentsCount']").val()
 				var match=$("input[name='thematchid']").val()
@@ -200,10 +185,12 @@
 					url:'/askcomments',method:'post',
 					data:{_token:t,matchid:match,cc:count}
 				}).done(function(response){
-					console.log(response)
+					if (response.new) {
+						$("#commentSection").html(response.comments)
+					}
 				});
 			}
-			setInterval(,1000)
+			setInterval(askComments,1000)
 		});
 		</script>
 	@endif
