@@ -22,7 +22,8 @@ class CommentsController extends Controller
     	if ($thematch==null) {
     		return ["result"=>false];
     	}
-    	if (self::checkTeamsUser($thematch)) {
+    	if (self::checkTeamsUser($thematch) && 
+    	($thematch->state==1 || $thematch->state==3)) {
 	    	Auth::user()->comments()
 	    	->attach($r->matchid,[
 	    	"content"=>$r->content,
@@ -49,20 +50,6 @@ class CommentsController extends Controller
     		"comments"=>view('user.comments')
     		->with("match",$thematch)->render()];
     	}
-    	/*$newcomments=Match::find($r->matchid)->comments()
-    	->where('date','>',$r->date)->get();
-    	if ($newcomments->count()>0) {
-    		$views=[];
-    		$lastDate=Match::find($r->matchid)->comments()
-    		->where('date','>',$r->date)->orderBy('date','desc')
-    		->first()->pivot->date;
-    		foreach ($newcomments as $comment) {
-    			$views[]=view('user.comment')->with("comment",$comment)->render();
-    		}
-    		return ["new"=>true,
-    		"cards"=>$views,
-    		"date"=>$lastDate];
-    	}*/
     	return ["new"=>false];
     }
 }

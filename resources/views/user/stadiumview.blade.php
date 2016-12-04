@@ -188,7 +188,7 @@
 					if (response.new) {
 						$("#commentSection").html(response.comments)
 					}
-				});
+				})
 			}
 			setInterval(askComments,1000)
 		});
