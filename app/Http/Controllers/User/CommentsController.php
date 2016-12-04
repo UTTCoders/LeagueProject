@@ -48,7 +48,8 @@ class CommentsController extends Controller
     	if ($count != $r->cc) {
     		return ["new"=>true,
     		"comments"=>view('user.comments')
-    		->with("match",$thematch)->render()];
+    		->with("match",$thematch)->render(),
+    		"newcount"=>$count];
     	}
     	return ["new"=>false];
     }

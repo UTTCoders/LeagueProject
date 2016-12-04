@@ -167,6 +167,7 @@
 					}).done(function(response){
 						if (response.result) {
 							$("textarea").val('');
+							$("#charIN").text("(140 left)");
 						}
 					});
 				}
@@ -187,6 +188,7 @@
 				}).done(function(response){
 					if (response.new) {
 						$("#commentSection").html(response.comments)
+						$("#commentsIndicator").text("Comments - "+response.newcount)
 					}
 				})
 			}
