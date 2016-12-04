@@ -30,4 +30,8 @@ class Player extends Model
         //            ->select('matches.id','players.*','assists.*','gt.description')->get();
         return $this->hasMany('App\League\Assist');
     }
+
+    public function team(){
+      return $this->belongsTo('App\League\Team');
+    }
 }

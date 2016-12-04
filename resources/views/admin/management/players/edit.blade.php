@@ -264,8 +264,10 @@ body{
   cursor: pointer;
 }
 .players-container{
-  background-color: #444;
+  background-color: #222;
   border-radius: 2px;
+  box-shadow: inset 0 0 8px 0 #000;
+  border: 1px solid rgba(0,0,0,.1);
   overflow: auto;
   max-height: 600px;
 }
@@ -303,7 +305,7 @@ input[name=playerSearchBox]:hover{
 </div>
 <div class="col-md-12 col-xs-12 col-sm-12" style="margin-top:90px;margin-bottom:40px;">
   <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0 col-xs-12" id="manageMenu">
-      <a class="manageMenuHeader col-md-12 col-sm-12 col-xs-12">Teams...</a>
+      <a class="manageMenuHeader col-md-12 col-sm-12 col-xs-12">Players...</a>
       <a href="/admin/players/add" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Add</a>
       <a href="/admin/players/edit" class="manageMenuItem item-active col-md-12 col-sm-12 col-xs-12">Edit</a>
       <a href="/admin/players/delete" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Delete</a>
@@ -323,8 +325,9 @@ input[name=playerSearchBox]:hover{
       </div>
     </div>
     <div class="col-md-6">
-      <form class="" id="" action="/addPlayer" method="post" enctype="multipart/form-data">
+      <form class="" id="" action="/editPlayer" method="post" enctype="multipart/form-data">
         {{csrf_field()}}
+        <input type="hidden" name="playerId" value="">
         <input type="hidden" name="teamId" value="">
         <input type="hidden" name="mainPosition" value="">
         <div class="form-group col-md-12 col-xs-12 no-padding">
@@ -381,7 +384,7 @@ input[name=playerSearchBox]:hover{
           @endforeach
         </div>
         <div class="form-group col-md-12 col-xs-12 no-padding">
-          <button type="submit" name="addTeamBtn" class="btnBlue2 col-md-4 col-md-offset-8 col-sm-12 col-xs-12 no-padding">Add</button>
+          <button type="submit" name="addTeamBtn" class="btnBlue2 col-md-4 col-md-offset-8 col-sm-12 col-xs-12 no-padding">Edit</button>
         </div>
       </form>
     </div>
@@ -458,44 +461,65 @@ $(function ($) {
   $(function ($) {
 
     $('input[name=playerSearchBox]').keyup(function () {
-      $.ajax({
-        url:'/searchPlayersByNameOrTeam',
-        type:'post',
-        dataType:'json',
-        data:{
-          _token:'{{csrf_token()}}',
-          toSearch: $(this).val()
-        }
-      }).done(function (response) {
-        $('div.players-container').children().remove();
-        if(response['players']){
-          $.each(response['players'], function (i,player) {
-            var $item = $('<div id="'+player.id+'">');
-            $item.css({
-              padding: '5px 6px 5px 6px',
-              'font-size':'12px',
-              width: '100%',
-              cursor:'pointer'
+      if($(this).val() != '' && $(this).val().length > 2){
+        $.ajax({
+          url:'/searchPlayersByNameOrTeam',
+          type:'post',
+          dataType:'json',
+          data:{
+            _token:'{{csrf_token()}}',
+            toSearch: $(this).val()
+          }
+        }).done(function (response) {
+          $('div.players-container').children().remove();
+          $('input[type=hidden][name=playerId]').val('');
+          if(response['players']){
+            $.each(response['players'], function (i,player) {
+              var $item = $('<div class="item">');
+              $item.css({
+                padding: '5px 6px 5px 6px',
+                'font-size':'12px',
+                width: '100%',
+                position:'relative',
+                float:'left'
+              });
+              var $imgContainer = $('<div class="col-xs-3 no-padding">');
+              $imgContainer.css({
+              });
+              $item.append($imgContainer);
+              $selectBtn=$('<i class="material-icons selectBtn" id="'+player.id+'">');
+              $selectBtn.text('check');
+              $selectBtn.css({
+                position:'absolute',
+                bottom:'10px',
+                right:'10px',
+                cursor:'pointer',
+                'z-index':'3'
+              });
+              $selectBtn.click(function () {
+                $('div.item').children('.selectBtn').css('color','white');
+                $(this).css('color','dodgerblue');
+                $('input[type=hidden][name=playerId]').val($(this).attr('id'));
+              });
+              $item.append($selectBtn);
+              $infoContainer=$('<p class="col-xs-9">');
+              $infoContainer.html(player.name+" "+player.last_name+decodeURI('<br>')+player.team.name+decodeURI('<br>#')+player.shirt_number);
+              $item.append($infoContainer);
+              var $img = $('<img>');
+              $img.css({
+                width:'100%',
+                'margin-bottom':'6px',
+                'border-radius':'3px'
+              });
+              $img.attr('src','/storage/'+player.photo);
+              $imgContainer.append($img);
+              /////////////////////////////////
+              $('div.players-container').append($item);
             });
-            var $imgContainer = $('<div class="col-xs-3 no-padding">');
-            $imgContainer.css({
-            });
-            $item.append($imgContainer);
-            $infoContainer=$('<p class="col-xs-9">');
-            $infoContainer.text(player.name+'\n'+player.last_name);
-            $item.append($infoContainer);
-            var $img = $('<img>');
-            $img.css({
-              width:'100%',
-              'margin-bottom':'6px'
-            });
-            $img.attr('src','/storage/'+player.photo);
-            $imgContainer.append($img);
-            /////////////////////////////////
-            $('div.players-container').append($item);
-          });
-        }
-      });
+          }
+        });
+      }
+      else $('div.players-container').children().remove();
     });
 
     $('.addPositionBtn').click(function () {
