@@ -40,4 +40,8 @@ class CommentsController extends Controller
         }
         return false;
     }
+
+    public function AskForComments(Request $r){
+    	return "hi!";
+    }
 }

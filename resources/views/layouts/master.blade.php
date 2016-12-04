@@ -323,8 +323,6 @@
                     <div class="itemsContainer">
                         <a href="/favorites" class="panelItem"><span class="glyphicon glyphicon-star-empty"></span> My favorite teams</a>
                         <a href="/matches" class="panelItem"><span class="glyphicon glyphicon-th"></span> See all matches</a>
-                        <a href="#" id="1"  class="panelItem event">Prueba</a>
-                        <a href="#" id="1" class="panelSubItem" style="display:none">Hijo</a>
                     </div>
                     <div class="bottomContainer col-xs-12 no-padding" style="position:absolute;bottom:0px;">
                       <a id="logOutBtn" href="/logout" class="panelItem">Log out</a>

@@ -90,7 +90,8 @@
 		<div class="col-sm-9 col-xs-11">	
 			<h4 style="color:#444;">Comments - {{$match->comments()->count()}}</h4>
 			<div id="commentSection">
-			@foreach($match->comments()->orderBy('date','desc')->get() as $comment)
+			@if($match->comments()->count()>0)
+				@foreach($match->comments()->orderBy('date','desc')->get() as $comment)
 				<div class="thumbnail col-xs-12 commentCard">
 					<div class="col-xs-12">
 						<h4>{{$comment->name}} <small style="text-align: right;" class="pull-right"><span class="hidden-xs">{{date_format(date_create($comment->pivot->date),"Y/F/d")}}</span><span class="hidden-sm hidden-md hidden-lg">{{date_format(date_create($comment->pivot->date),"Y/m/d")}}</span> <br>{{date_format(date_create($comment->pivot->date),"g:i a")}}</small></h4>
@@ -98,7 +99,14 @@
 						<p class="comment">{{$comment->pivot->content}}</p>
 					</div>
 				</div>
-			@endforeach
+				@endforeach
+			@else
+				<div id="noComments">
+					<h5 style="color:#444;">There are no comments to show...</h5>
+				</div>
+			@endif
+			<input type="hidden" name="commentsCount" value="{{$match->comments()->count()}}">
+			<input type="hidden" name="thematchid" value="{{$match->id}}">
 			</div>
 			@if(($match->state==1 || $match->state==3) && $allowComment)
 			<br>
@@ -107,7 +115,6 @@
 						<label>Leave a comment:</label><span class="pull-right" id="charIN">(140 left)</span>
 						<textarea id="textareaC" style="border-radius: 0;" rows="3" maxlength="140" class="form-control"></textarea>
 					</div>
-					<input type="hidden" name="commentMatch" value="{{$match->id}}">
 					<button style="border-radius: 0; border:1px solid #ccc;" id="btnSendComment" class="btn btn-default pull-right">Send</button>
 				</div>
 			@endif
@@ -168,7 +175,7 @@
 				&& $("textarea").val().length<=140){
 					var t=$("meta[name='toktok']").attr('content');
 					var comment=$("textarea").val();
-					var match=$("input[name='commentMatch']").val();
+					var match=$("input[name='thematchid']").val();
 					$.ajax({
 						url:"/sendcomment",method:"post",
 						data:{_token:t,content:comment,matchid:match}
@@ -183,6 +190,22 @@
 		</script>
 		@endif
 		<!--here ask for the comments events and goals-->
+		<script>
+		$(function(){
+			var ask=function(){
+				var t=$("meta[name='toktok']").attr('content')
+				var count=$("input[name='commentsCount']").val()
+				var match=$("input[name='thematchid']").val()
+				$.ajax({
+					url:'/askcomments',method:'post',
+					data:{_token:t,matchid:match,cc:count}
+				}).done(function(response){
+					console.log(response)
+				});
+			}
+			setInterval(,1000)
+		});
+		</script>
 	@endif
 	<!--Here ask for the state-->
 @endif
