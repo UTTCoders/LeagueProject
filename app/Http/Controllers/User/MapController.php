@@ -49,8 +49,14 @@ class MapController extends Controller
         ->with("isFav",self::checkStadiumTeam($thestadium->team));
     }
 
+    private function checkGoals($match){
+        foreach ($match->goals as $goal) {
+            
+        }
+    }
+
     private function checkLocalTeam($match,$theStadiumsTeam){
-    	foreach ($match->teams as $key => $team) {
+    	foreach ($match->teams as $team) {
     		if ($team->pivot->local) {
     			if ($team->id==$theStadiumsTeam->id) {
     				return true;

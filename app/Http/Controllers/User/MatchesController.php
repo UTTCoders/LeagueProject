@@ -15,7 +15,6 @@ class MatchesController extends Controller
 		Match::where('state','>',0)->where('state','<',4)->count()>0) {
 			$res=self::checkMatches();
 			if ($res["thereAre"]) {
-				//return $res["matches"];
 				return view('user.matchesuser')
 				->with('matches',$res["matches"]);
 			}
