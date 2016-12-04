@@ -76,6 +76,8 @@ Route::group(['middleware' => ['authen']], function(){
 		Route::post('/addPlayer','Admin\League@addPlayer');
 
 		Route::post('/searchPlayersByNameOrTeam','Admin\League@searchPlayersByNameOrTeam');
+
+		Route::post('/editPlayer','Admin\League@editPlayer');
 		// end of Management by admin
 
 });
@@ -106,7 +108,9 @@ Route::post('/fblogin','Auth\LoginFBController@loginAsync')->middleware('guest')
 //pruebas
 
 Route::get('/prueba2', function(){
-    return view('admin.calendar');
+    $player= App\League\Player::first();
+		$player->edad = 18;
+		return $player->team;
 });
 
 Route::get('/prueba3',function(){

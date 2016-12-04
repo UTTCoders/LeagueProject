@@ -337,12 +337,85 @@ class League extends Controller
       if($result->fails())
         return ['players' => null];
       $players = Player::havingRaw("concat(name,' ',last_name) like '%".$request->toSearch."%'")->get();
-      if($players->count() > 0)
+      if($players->count() > 0){
+        foreach ($players as $player) {
+          $player->team = $player->team;
+        }
         return ['players' => $players];
-      if($team = Team::where('name','like','%'.$request->toSearch.'%')->first())
+      }
+      if($team = Team::where('name','like','%'.$request->toSearch.'%')->first()){
+        foreach ($team->players as $player) {
+          $player->team = $player->team;
+        }
         return ['players' => $team->players];
+      }
       return ['players' => null];
+    }
 
+    public function editPlayer(Request $request){
+      if(Validator::make($request->all(),[
+          'playerId' => 'required'
+        ])->fails()) return back()->with('msg',['title' => 'Stop just there!', 'content' => 'Select a player first.'])->withInput();
+      if(!$player = Player::find($request->playerId))
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'Player not found.'])->withInput();
+      $changed = false;
+      if($request->name and strtolower($request->name) != strtolower($player->name)){
+        if(Player::where('name',$request->name)->where('last_name',$player->last_name)->first())
+          return back()->with('msg',['title' => 'Ups!', 'content' => 'You cannot change the name because there is a player with the same name and last name.'])->withInput();
+        $player->name = $request->name;
+        $changed = true;
+      }
+      if($request->last_name and strtolower($request->last_name) != strtolower($player->last_name)){
+        if(Player::where('name',$player->name)->where('last_name',$request->last_name)->first())
+          return back()->with('msg',['title' => 'Ups!', 'content' => 'You cannot change the last name because there is a player with the same name and last name.'])->withInput();
+        $player->last_name = $request->last_name;
+        $changed = true;
+      }
+      if($request->nationality){
+        $player->nationality = $request->nationality;
+        $changed = true;
+      }
+      if($request->changePositions and (!$request->positions or !$request->mainPosition)){
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'You must select at least one position.'])->withInput();
+      }
+      else if($request->changePositions){
+        $changed=true;
+        $player->positions()->detach();
+        foreach ($request->positions as $position) {
+          if ($position == $request->mainPosition)
+            $player->positions()->attach($position,['main' => true]);
+          else $player->positions()->attach($position,['main' => false]);
+        }
+      }
+      if($request->shirt_number){
+        if($request->shirt_number != $player->shirt_number){
+          if($request->changeTeam and $request->teamId and $player->team_id != $request->teamId
+            and Team::find($request->teamId)->players()->where('shirt_number',$request->shirt_number)->first()){
+              return back()->with('msg',['title' => 'Ups!', 'content' => 'The shirt number has been taken.'])->withInput();
+          }
+          else if(!$request->changeTeam and $player->team){
+            if($player->team()->players()->where('shirt_number',$request->shirt_number)->first())
+              return back()->with('msg',['title' => 'Ups!', 'content' => 'The shirt number has been taken.'])->withInput();
+          }
+          $player->shirt_number = $request->shirt_number;
+          $changed = true;
+        }
+      }
+      if($request->changeTeam){
+        if($player->team_id != $request->teamId){
+          $player->team_id = $request->teamId;
+          $changed = true;
+        }
+      }
+      if($request->photo != null){
+        $player->photo = $request->photo->store('img/players','public');
+      }
+      if($changed){
+        if($player->save())
+          return back()->with('msg',['title' => 'Ok!', 'content' => 'Success!'])->withInput();
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'Has been an error.'])->withInput();
+      }
+      return back()->with('msg',['title' => 'Alert!', 'content' => 'Nothing has changed!'])->withInput();
     }
 
 }
