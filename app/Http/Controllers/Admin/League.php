@@ -375,10 +375,13 @@ class League extends Controller
         $player->nationality = $request->nationality;
         $changed = true;
       }
-      if($request->changePositions and (!$request->positions or !$request->mainPosition)){
-        return back()->with('msg',['title' => 'Ups!', 'content' => 'You must select at least one position.'])->withInput();
+      if($request->changePositions !== null and (!$request->positions or !$request->mainPosition)){
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'You must select a main position and at least one position.'])->withInput();
       }
-      else if($request->changePositions){
+      else if($request->changePositions !== null){
+        //checar si cambiaron las posiciones
+
+        //si cambiaron agregar y quitar los cambios (quiza lo de abajo se modificara por completo)
         $changed=true;
         $player->positions()->detach();
         foreach ($request->positions as $position) {
@@ -389,11 +392,11 @@ class League extends Controller
       }
       if($request->shirt_number){
         if($request->shirt_number != $player->shirt_number){
-          if($request->changeTeam and $request->teamId and $player->team_id != $request->teamId
+          if($request->teamId and $player->team_id != $request->teamId
             and Team::find($request->teamId)->players()->where('shirt_number',$request->shirt_number)->first()){
               return back()->with('msg',['title' => 'Ups!', 'content' => 'The shirt number has been taken.'])->withInput();
           }
-          else if(!$request->changeTeam and $player->team){
+          else if(!$request->teamId and $player->team){
             if($player->team()->players()->where('shirt_number',$request->shirt_number)->first())
               return back()->with('msg',['title' => 'Ups!', 'content' => 'The shirt number has been taken.'])->withInput();
           }
@@ -401,7 +404,7 @@ class League extends Controller
           $changed = true;
         }
       }
-      if($request->changeTeam){
+      if($request->teamId){
         if($player->team_id != $request->teamId){
           $player->team_id = $request->teamId;
           $changed = true;
@@ -416,6 +419,9 @@ class League extends Controller
         return back()->with('msg',['title' => 'Ups!', 'content' => 'Has been an error.'])->withInput();
       }
       return back()->with('msg',['title' => 'Alert!', 'content' => 'Nothing has changed!'])->withInput();
+    }
+    public function getPlayerPositions(Request $request){
+      return Player::find($request->id)->positions;
     }
 
 }

@@ -73,11 +73,13 @@ Route::group(['middleware' => ['authen']], function(){
 
 		Route::post('/deleteTeam','Admin\League@deleteTeam')->middleware('admin');
 
-		Route::post('/addPlayer','Admin\League@addPlayer');
+		Route::post('/addPlayer','Admin\League@addPlayer')->middleware('admin');
 
-		Route::post('/searchPlayersByNameOrTeam','Admin\League@searchPlayersByNameOrTeam');
+		Route::post('/searchPlayersByNameOrTeam','Admin\League@searchPlayersByNameOrTeam')->middleware('admin');
 
-		Route::post('/editPlayer','Admin\League@editPlayer');
+		Route::post('/editPlayer','Admin\League@editPlayer')->middleware('admin');
+
+		Route::post('/getPlayerPositions','Admin\League@getPlayerPositions');
 		// end of Management by admin
 
 });
