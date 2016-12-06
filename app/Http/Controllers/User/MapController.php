@@ -39,6 +39,7 @@ class MapController extends Controller
     				return view('user.stadiumview')
 	    			->with("stadium",$thestadium)
 	    			->with("match",$res["match"])
+                    ->with("teams",self::checkGoals($res["match"]))
                     ->with("allowComment",self::checkTeamsUser($res["match"]))
                     ->with("isFav",self::checkStadiumTeam($thestadium->team));
     			}
@@ -49,10 +50,31 @@ class MapController extends Controller
         ->with("isFav",self::checkStadiumTeam($thestadium->team));
     }
 
-    private function checkGoals($match){
-        foreach ($match->goals as $goal) {
-            
+    public function AskForGoals(Request $r){
+        $thematch=Match::find($r->matchid);
+        if ($thematch->goals()->count() > $r->gc) {
+            return ["newgoals"=>true,
+                "marker"=>view('user.goals')
+                ->with("teams",self::checkGoals($thematch))
+                ->with("match",$thematch)->render()
+            ];
         }
+        return ["newgoals"=>false];
+    }
+
+    public function checkGoals($match){
+        $teams["local"]=$match->teams->where('pivot.local',true)->first();
+        $teams["local"]["goals"]=0;
+        $teams["visitor"]=$match->teams->where('pivot.local',false)->first();
+        $teams["visitor"]["goals"]=0;
+        foreach ($match->goals as $goal) {
+            if ($goal->player->team->id == $teams["local"]->id) {
+                $teams["local"]["goals"]+=1;
+            }else{
+                $teams["visitor"]["goals"]++;
+            }
+        }
+        return $teams;
     }
 
     private function checkLocalTeam($match,$theStadiumsTeam){

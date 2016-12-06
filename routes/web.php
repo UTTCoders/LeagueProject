@@ -99,6 +99,7 @@ Route::group(['middleware' => ['authen']], function(){
 	Route::post('/addremovefav','User\FavoritesController@AddRemove');
 	Route::post('/sendcomment','User\CommentsController@SendComment');
 	Route::post('/askcomments','User\CommentsController@AskForComments');
+	Route::post('/askgoals','User\MapController@AskForGoals');
 });
 
 // fb

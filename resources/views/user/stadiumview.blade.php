@@ -65,7 +65,7 @@
 		<br>
 		<h2 style="color:#eee; margin-top: 0px; margin-bottom: 0;" id="mainTitle">{{$stadium->name}}</h2>
 	</div>
-	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle"><img src="/storage/{{$stadium->team->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"> <strong>{{$stadium->team->name}}</strong> VS <strong>{{$match->teams->where('id','!=',$stadium->team->id)->first()->name}}</strong> <img src="/storage/{{$match->teams->where('id','!=',$stadium->team->id)->first()->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"></h3>
+	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle"><img src="/storage/{{$stadium->team->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"> <strong>{{$stadium->team->name}}</strong> VS <strong>{{$teams["visitor"]->name}}</strong> <img src="/storage/{{$teams['visitor']->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"></h3>
 </div>
 <br><br>
 <div class="container">
@@ -73,9 +73,9 @@
 	<hr style="border-color: #111;">
 	<div class="row" style="color:#444;">
 		<div class="col-md-6 col-xs-12">
-			<h1 align="center"><strong>{{$stadium->team->name}} - 3</strong></h1>
-			<h1 align="center">vs</h1>
-			<h1 align="center"><strong>{{$match->teams->where('id','!=',$stadium->team->id)->first()->name}}</strong> - 2</h1>
+			<div id="goalSection">
+				@include('user.goals')
+			</div>
 		</div>
 		<div class="col-md-5 col-xs-12 thumbnail">
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -87,14 +87,15 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-9 col-xs-11">	
+	<br>
+		<div class="col-sm-9 col-xs-11">
 			<h4 id="commentsIndicator" style="color:#444;">Comments - {{$match->comments()->count()}}</h4>
 			<div id="commentSection">
 				@include('user.comments')
 			</div>
 			<input type="hidden" name="thematchid" value="{{$match->id}}">
-			@if(($match->state==1 || $match->state==3) && $allowComment)
 			<br>
+			@if(($match->state==1 || $match->state==3) && $allowComment)
 				<div class="col-xs-12">
 					<div class="form-group">
 						<label>Leave a comment:</label><span class="pull-right" id="charIN">(140 left)</span>
@@ -178,7 +179,7 @@
 		<!--here ask for the comments events and goals-->
 		<script>
 		$(function(){
-			var askComments=function(){
+			var askData=function(){
 				var t=$("meta[name='toktok']").attr('content')
 				var count=$("input[name='commentsCount']").val()
 				var match=$("input[name='thematchid']").val()
@@ -191,8 +192,18 @@
 						$("#commentsIndicator").text("Comments - "+response.newcount)
 					}
 				})
+
+				var goalsCount=$("input[name='goalsCount']").val()
+				$.ajax({
+					url:'/askgoals',method:'post',
+					data:{_token:t,matchid:match,gc:goalsCount}
+				}).done(function(response){
+					if (response.newgoals) {
+						$("#goalSection").html(response.marker)
+					}
+				})
 			}
-			setInterval(askComments,1000)
+			setInterval(askData,1000)
 		});
 		</script>
 	@endif
