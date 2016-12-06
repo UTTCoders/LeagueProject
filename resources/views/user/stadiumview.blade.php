@@ -18,19 +18,6 @@
 		padding-top:90px;
 		padding-bottom: 20px;
 	}
-	#con2{
-		width: 100%;
-		margin-top: 62px;/*size of the navbar*/
-		background-repeat: no-repeat;
-		background-size: 150%;
-		background-position: center;
-		margin-bottom: 0;
-		margin-top: 0;
-		border-bottom: 0;
-		padding-top:90px;
-		padding-bottom: 20px;
-		text-align: center;
-	}
 	body{
 		background-color: white;
 	}

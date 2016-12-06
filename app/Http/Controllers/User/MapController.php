@@ -62,7 +62,7 @@ class MapController extends Controller
         return ["newgoals"=>false];
     }
 
-    public function checkGoals($match){
+    private function checkGoals($match){
         $teams["local"]=$match->teams->where('pivot.local',true)->first();
         $teams["local"]["goals"]=0;
         $teams["visitor"]=$match->teams->where('pivot.local',false)->first();

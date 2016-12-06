@@ -42,4 +42,32 @@ class MatchesController extends Controller
     		"thereAre"=>$thereAre,"matches"=>$matches
     	];
     }
+
+    public function resultsRequest(Request $r,$id){
+    	$thematch=Match::find($id);
+    	if ($thematch==null) {
+    		return view('errors.404error');
+    	}
+    	if ($thematch->state != 4) {
+    		return view('errors.404error');	
+    	}
+    	return view('user.results')
+    	->with("match",$thematch)
+    	->with("teams",self::checkGoals($thematch));
+    }
+
+    private function checkGoals($match){
+        $teams["local"]=$match->teams->where('pivot.local',true)->first();
+        $teams["local"]["goals"]=0;
+        $teams["visitor"]=$match->teams->where('pivot.local',false)->first();
+        $teams["visitor"]["goals"]=0;
+        foreach ($match->goals as $goal) {
+            if ($goal->player->team->id == $teams["local"]->id) {
+                $teams["local"]["goals"]+=1;
+            }else{
+                $teams["visitor"]["goals"]++;
+            }
+        }
+        return $teams;
+    }
 }
