@@ -433,6 +433,17 @@ $(function ($) {
 
   $(function ($) {
 
+    var file = $('.file-big-container').children('input[type=file]')[0].files[0];
+    if(file){
+      if(file.type.indexOf('image') < 0 || (file.type.indexOf('png') < 0 && file.type.indexOf('jpg') < 0 && file.type.indexOf('jpeg') < 0)){
+        showMessages('Ups!','Only png images.','alert-card');
+        $('.file-big-container').children('input[type=file]').val('');
+        $('.file-big-container').children('h4').text('Drag or click for select a logo...');
+      }
+      else $('.file-big-container').children('h4').text(file.name);
+    }
+    else $('.file-big-container').children('h4').text('Drag or click for select a logo...');
+
     $('.addPositionBtn').click(function () {
       if($(this).css('color') == 'white' || $(this).css('color') == "#fff" || $(this).css('color') == "rgb(255, 255, 255)"){
           console.log($('i.mainPosition[id='+$(this).attr('id')+']').css('color'));

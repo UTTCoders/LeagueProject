@@ -281,6 +281,9 @@ input[name=playerSearchBox]{
 input[name=playerSearchBox]:hover{
   color: #fff;
 }
+#positionSelector,#teamSelector{
+  display: none;
+}
 </style>
 @endsection
 
@@ -351,6 +354,9 @@ input[name=playerSearchBox]:hover{
             <input type="file" name="photo" value="{{old('photo')}}">
           </div>
         </div>
+        <div class="form-group col-md-12 col-xs-12 no-padding">
+          <input type="checkbox" name="" id="changeTeam" value=""><span style="margin-left: 5px; ;position:absolute; top:2px; font-size:12px; padding-top:0px;"> Change team</span>
+        </div>
         <div class="col-md-12 no-padding teams-selection-container" id="teamSelector">
           @if(App\League\Team::count() < 1)
           <h4 style="text-align:center;">No coaches</h4>
@@ -366,6 +372,9 @@ input[name=playerSearchBox]:hover{
           </div>
           @endforeach
           @endif
+        </div>
+        <div class="form-group col-md-12 col-xs-12 no-padding">
+          <input type="checkbox" name="changePositions" id="changePositions" value=""><span style="margin-left: 5px; ;position:absolute; top:2px; font-size:12px; padding-top:0px;"> Change positions</span>
         </div>
         <div class="col-md-12 col-xs-12 teams-selection-container no-padding" id="positionSelector">
           @foreach(App\League\Position::get() as $position)
@@ -460,6 +469,38 @@ $(function ($) {
 
   $(function ($) {
 
+      var file = $('.file-big-container').children('input[type=file]')[0].files[0];
+      if(file){
+        if(file.type.indexOf('image') < 0 || (file.type.indexOf('png') < 0 && file.type.indexOf('jpg') < 0 && file.type.indexOf('jpeg') < 0)){
+          showMessages('Ups!','Only png images.','alert-card');
+          $('.file-big-container').children('input[type=file]').val('');
+          $('.file-big-container').children('h4').text('Drag or click for select a logo...');
+        }
+        else $('.file-big-container').children('h4').text(file.name);
+      }
+      else $('.file-big-container').children('h4').text('Drag or click for select a logo...');
+
+    $('#changeTeam').change(function () {
+      if($(this).prop('checked')){
+        $('#teamSelector').fadeIn('fast');
+      }
+      else{
+        $('#teamSelector').fadeOut('fast');
+        $('#teamSelector').children('.Item').css('background-color','#000');
+        $('input[id=teamId][type=hidden]').val('');
+      }
+    });
+
+    $('#changePositions').change(function () {
+      if($(this).prop('checked')){
+        $('#positionSelector').fadeIn('fast');
+      }
+      else{
+        $('#positionSelector').fadeOut('fast');
+        $('#positionSelector').children('.Item').css('background-color','#000');
+      }
+    });
+
     $('input[name=playerSearchBox]').keyup(function () {
       if($(this).val() != '' && $(this).val().length > 2){
         $.ajax({
@@ -500,10 +541,32 @@ $(function ($) {
                 $('div.item').children('.selectBtn').css('color','white');
                 $(this).css('color','dodgerblue');
                 $('input[type=hidden][name=playerId]').val($(this).attr('id'));
+                $.ajax({
+                  url:'/getPlayerPositions',
+                  type:'post',
+                  dataType:'json',
+                  data:{
+                    _token:'{{csrf_token()}}',
+                    id:$(this).attr('id')
+                  }
+                }).done(function (response) {
+                  $('#positionSelector').children('.Item').children('.addPositionBtn').css('color','#888');
+                  $('#positionSelector').children('.Item').children('.mainPosition').css('color','#888');
+                  $('input[type=hidden][id=positionsInput]').val('');
+                  $('input[type=hidden][name=mainPosition]').val('');
+                  $.each(response,function (i,pos) {
+                    $('#positionSelector').children('.Item').children('.addPositionBtn#'+pos.id).css('color','#fff');
+                    $('form').append($('<input type="hidden" name="positions[]" value='+$(this).attr('id')+' id="positionsInput">'));
+                    if(pos.pivot.main){
+                      $('#positionSelector').children('.Item').children('.mainPosition#'+pos.id).css('color','#fff');
+                      $('input[type=hidden][name=mainPosition]').val($(this).attr('id'));
+                    }
+                  });
+                });
               });
               $item.append($selectBtn);
               $infoContainer=$('<p class="col-xs-9">');
-              $infoContainer.html(player.name+" "+player.last_name+decodeURI('<br>')+player.team.name+decodeURI('<br>#')+player.shirt_number);
+              $infoContainer.html(player.name+" "+player.last_name+decodeURI('<br>')+player.team.name+decodeURI('<br>')+player.nationality+decodeURI('<br>#')+player.shirt_number);
               $item.append($infoContainer);
               var $img = $('<img>');
               $img.css({

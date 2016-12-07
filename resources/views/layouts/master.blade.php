@@ -348,11 +348,35 @@
               });
               FB.AppEvents.logPageView();
 
+              $('#fbBtn1').click(function () {
+                  FB.login(function (response) {
+                      if(response.authResponse){
+                          FB.api('/me',{fields:'email,id,name'}, function(user) {
+                           $.ajax({
+                             url:'/fblogin',
+                             type:'post',
+                             data:{
+                               _token: '{{csrf_token()}}',
+                               user: user
+                             },
+                             dataType:'json'
+                           }).done(function (returnedData) {
+                               if(returnedData['result']){
+                                window.location.replace('/');
+                               }
+                               else showMessages('Ups!',returnedData['msg']);
+
+                           });
+                          });
+                      }
+                      else showMessages('Ups!','Connection unsuccessful');
+                  },{scope:'email'});
+              });
+
               $('#logOutBtn').click(function () {
                   FB.getLoginStatus(function (response) {
                     if(response.status === 'connected'){
                       FB.logout();
-                      console.log(response);
                     }
                     window.location.replace('/logout');
                   },true);

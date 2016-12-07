@@ -375,47 +375,73 @@ class League extends Controller
         $player->nationality = $request->nationality;
         $changed = true;
       }
-      if($request->changePositions and (!$request->positions or !$request->mainPosition)){
-        return back()->with('msg',['title' => 'Ups!', 'content' => 'You must select at least one position.'])->withInput();
+      if($request->changePositions !== null and (!$request->positions or !$request->mainPosition)){
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'You must select a main position and at least one position.'])->withInput();
       }
-      else if($request->changePositions){
-        $changed=true;
-        $player->positions()->detach();
-        foreach ($request->positions as $position) {
-          if ($position == $request->mainPosition)
-            $player->positions()->attach($position,['main' => true]);
-          else $player->positions()->attach($position,['main' => false]);
+      else if($request->changePositions !== null){
+        //checar si cambiaron las posiciones
+        foreach ($request->positions as $pos) {
+          if(!is_numeric($pos))
+            return back()->with('msg',['title' => 'Ups!', 'content' => 'Has been an error with the given positions. Try again.'])->withInput();
+        }
+        $playerPositions=[];
+        foreach ($player->positions as $position) {
+          $playerPositions[]=$position->id;
+        }
+        $posChanged=false;
+        foreach ($player->positions as $position) {
+          if(!in_array($position->id,$request->positions) || ($position->pivot->main and $position->id != $request->mainPosition)){
+            $changed=true;
+            $posChanged=true;
+          }
+        }
+        foreach ($request->positions as $pos) {
+          if(!in_array($pos,$playerPositions))
+            $changed=true;
+            $posChanged=true;
+        }
+        if($posChanged){
+          $player->positions()->detach();
+          foreach ($request->positions as $position) {
+            if ($position == $request->mainPosition)
+              $player->positions()->attach($position,['main' => true]);
+            else $player->positions()->attach($position,['main' => false]);
+          }
         }
       }
       if($request->shirt_number){
         if($request->shirt_number != $player->shirt_number){
-          if($request->changeTeam and $request->teamId and $player->team_id != $request->teamId
+          if($request->teamId and $player->team_id != $request->teamId
             and Team::find($request->teamId)->players()->where('shirt_number',$request->shirt_number)->first()){
               return back()->with('msg',['title' => 'Ups!', 'content' => 'The shirt number has been taken.'])->withInput();
           }
-          else if(!$request->changeTeam and $player->team){
-            if($player->team()->players()->where('shirt_number',$request->shirt_number)->first())
+          else if(!$request->teamId and $player->team){
+            if($player->team->players->where('shirt_number',$request->shirt_number)->first())
               return back()->with('msg',['title' => 'Ups!', 'content' => 'The shirt number has been taken.'])->withInput();
           }
           $player->shirt_number = $request->shirt_number;
           $changed = true;
         }
       }
-      if($request->changeTeam){
+      if($request->teamId){
         if($player->team_id != $request->teamId){
           $player->team_id = $request->teamId;
           $changed = true;
         }
       }
-      if($request->photo != null){
+      if($request->photo and $request->photo != null){
         $player->photo = $request->photo->store('img/players','public');
+        $changed=true;
       }
       if($changed){
         if($player->save())
-          return back()->with('msg',['title' => 'Ok!', 'content' => 'Success!'])->withInput();
+          return back()->with('msg',['title' => 'Ok!', 'content' => 'Success!']);
         return back()->with('msg',['title' => 'Ups!', 'content' => 'Has been an error.'])->withInput();
       }
       return back()->with('msg',['title' => 'Alert!', 'content' => 'Nothing has changed!'])->withInput();
+    }
+    public function getPlayerPositions(Request $request){
+      return Player::find($request->id)->positions;
     }
 
 }
