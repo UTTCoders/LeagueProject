@@ -98,8 +98,8 @@
 @else
 <div id="con">
 	<div align="center">
-		<div>
-			<img src="/img/icons/stadium3flat.png" style="width: 18%; border-radius: 100%;">
+		<div class="hidden-xs">
+			<img src="/img/icons/stadium3flat.png" style="width: 15%; border-radius: 100%;">
 		</div>
 		<br>
 		<h2 style="color:#eee; margin-top: 0px; margin-bottom: 0;" id="mainTitle">{{$stadium->name}}</h2>
@@ -119,7 +119,7 @@
 				<span>Name: {{$stadium->team->name}} ®</span><br>
 				<span>Coach: {{$stadium->team->coach->name.' '.$stadium->team->coach->last_name}}</span><br>
 				<span>Foundation date: {{date_format(date_create($stadium->team->foundation_date),"Y - F - d")}}</span><br>
-				<span>Logo: <img style="width: 45px; max-height: 55px; border-radius: 100%;" src="/storage/{{$stadium->team->logo}}"></span></p>
+				<span>Logo: <img style="width: 45px; max-height: 55px;" src="/storage/{{$stadium->team->logo}}"></span></p>
 
 				<input type="hidden" name="teamid" value="{{$stadium->team->id}}">
 				@if($isFav)
