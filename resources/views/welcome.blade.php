@@ -314,46 +314,6 @@ $(function($){
     $('.messageBox').children('.body').text(msg);
   });
 }
-  window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '1767846576800416',
-        xfbml      : true,
-        version    : 'v2.8'
-      });
-      FB.AppEvents.logPageView();
-      $('#fbBtn1').click(function () {
-          FB.login(function (response) {
-              if(response.authResponse){
-                  FB.api('/me',{fields:'email,id,name'}, function(user) {
-                   $.ajax({
-                     url:'/fblogin',
-                     type:'post',
-                     data:{
-                       _token: '{{csrf_token()}}',
-                       user: user
-                     },
-                     dataType:'json'
-                   }).done(function (returnedData) {
-                       if(returnedData['result']){
-                        window.location.replace('/');
-                       }
-                       else showMessages('Ups!',returnedData['msg']);
-
-                   });
-                  });
-              }
-              else showMessages('Ups!','Connection unsuccessful');
-          },{scope:'email'});
-      });
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
 
 </script>
 

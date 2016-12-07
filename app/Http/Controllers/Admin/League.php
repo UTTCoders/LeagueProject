@@ -380,14 +380,33 @@ class League extends Controller
       }
       else if($request->changePositions !== null){
         //checar si cambiaron las posiciones
-
-        //si cambiaron agregar y quitar los cambios (quiza lo de abajo se modificara por completo)
-        $changed=true;
-        $player->positions()->detach();
-        foreach ($request->positions as $position) {
-          if ($position == $request->mainPosition)
-            $player->positions()->attach($position,['main' => true]);
-          else $player->positions()->attach($position,['main' => false]);
+        foreach ($request->positions as $pos) {
+          if(!is_numeric($pos))
+            return back()->with('msg',['title' => 'Ups!', 'content' => 'Has been an error with the given positions. Try again.'])->withInput();
+        }
+        $playerPositions=[];
+        foreach ($player->positions as $position) {
+          $playerPositions[]=$position->id;
+        }
+        $posChanged=false;
+        foreach ($player->positions as $position) {
+          if(!in_array($position->id,$request->positions) || ($position->pivot->main and $position->id != $request->mainPosition)){
+            $changed=true;
+            $posChanged=true;
+          }
+        }
+        foreach ($request->positions as $pos) {
+          if(!in_array($pos,$playerPositions))
+            $changed=true;
+            $posChanged=true;
+        }
+        if($posChanged){
+          $player->positions()->detach();
+          foreach ($request->positions as $position) {
+            if ($position == $request->mainPosition)
+              $player->positions()->attach($position,['main' => true]);
+            else $player->positions()->attach($position,['main' => false]);
+          }
         }
       }
       if($request->shirt_number){
@@ -397,7 +416,7 @@ class League extends Controller
               return back()->with('msg',['title' => 'Ups!', 'content' => 'The shirt number has been taken.'])->withInput();
           }
           else if(!$request->teamId and $player->team){
-            if($player->team()->players()->where('shirt_number',$request->shirt_number)->first())
+            if($player->team->players->where('shirt_number',$request->shirt_number)->first())
               return back()->with('msg',['title' => 'Ups!', 'content' => 'The shirt number has been taken.'])->withInput();
           }
           $player->shirt_number = $request->shirt_number;
@@ -410,12 +429,13 @@ class League extends Controller
           $changed = true;
         }
       }
-      if($request->photo != null){
+      if($request->photo and $request->photo != null){
         $player->photo = $request->photo->store('img/players','public');
+        $changed=true;
       }
       if($changed){
         if($player->save())
-          return back()->with('msg',['title' => 'Ok!', 'content' => 'Success!'])->withInput();
+          return back()->with('msg',['title' => 'Ok!', 'content' => 'Success!']);
         return back()->with('msg',['title' => 'Ups!', 'content' => 'Has been an error.'])->withInput();
       }
       return back()->with('msg',['title' => 'Alert!', 'content' => 'Nothing has changed!'])->withInput();

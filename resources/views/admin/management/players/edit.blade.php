@@ -468,7 +468,18 @@ $(function ($) {
   });
 
   $(function ($) {
-    
+
+      var file = $('.file-big-container').children('input[type=file]')[0].files[0];
+      if(file){
+        if(file.type.indexOf('image') < 0 || (file.type.indexOf('png') < 0 && file.type.indexOf('jpg') < 0 && file.type.indexOf('jpeg') < 0)){
+          showMessages('Ups!','Only png images.','alert-card');
+          $('.file-big-container').children('input[type=file]').val('');
+          $('.file-big-container').children('h4').text('Drag or click for select a logo...');
+        }
+        else $('.file-big-container').children('h4').text(file.name);
+      }
+      else $('.file-big-container').children('h4').text('Drag or click for select a logo...');
+
     $('#changeTeam').change(function () {
       if($(this).prop('checked')){
         $('#teamSelector').fadeIn('fast');
@@ -555,7 +566,7 @@ $(function ($) {
               });
               $item.append($selectBtn);
               $infoContainer=$('<p class="col-xs-9">');
-              $infoContainer.html(player.name+" "+player.last_name+decodeURI('<br>')+player.team.name+decodeURI('<br>#')+player.shirt_number);
+              $infoContainer.html(player.name+" "+player.last_name+decodeURI('<br>')+player.team.name+decodeURI('<br>')+player.nationality+decodeURI('<br>#')+player.shirt_number);
               $item.append($infoContainer);
               var $img = $('<img>');
               $img.css({
