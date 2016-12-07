@@ -31,6 +31,9 @@
 	#goalSection{
 		color:#111;
 	}
+	#events{
+		border-radius: 0;
+	}
 </style>
 @endsection
 

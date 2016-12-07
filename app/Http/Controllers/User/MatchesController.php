@@ -70,4 +70,25 @@ class MatchesController extends Controller
         }
         return $teams;
     }
+
+    public function AskForState(Request $r){
+    	$thematch=Match::find($r->matchid);
+    	if ($thematch->state != $r->actualState) {
+    		return [
+    			"change"=>true,
+    			"state"=>$thematch->state
+    		];
+    	}
+    	return["change"=>false];
+    }
+
+    public function AskPossession(Request $r){
+    	$thematch=Match::find($r->matchid);
+    	if ($thematch->teams[0]->pivot->ball_possesion != $r->pos1) {
+    		return [
+    		"change"=>true,
+    		"teams"=>$thematch->teams];
+    	}
+    	return ["change"=>false];
+    }
 }

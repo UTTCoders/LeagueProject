@@ -39,6 +39,12 @@
 	textarea{
 		resize: none;
 	}
+	#events{
+		border-radius: 0;
+		overflow-y: auto;
+		max-height: 50px;
+		padding-left: 20px;
+	}
 </style>
 @endsection
 
@@ -56,7 +62,8 @@
 </div>
 <br><br>
 <div class="container">
-	<h2 style="color:#111;">A match is taking place right now!</h2>
+	<h2 style="color:#111;">A match is taking place right now!<br><small id="stateIndicator"><span class="glyphicon glyphicon-time"></span> @if($match->state==1)1st time @elseif($match->state==2)Break time @elseif($match->state==3)2nd time @endif</small></h2>
+	<input type="hidden" name="actualState" value="{{$match->state}}">
 	<hr style="border-color: #111;">
 	<div class="row" style="color:#444;">
 		<div class="col-md-6 col-xs-12">
@@ -64,13 +71,17 @@
 				@include('user.goals')
 			</div>
 		</div>
-		<div class="col-md-5 col-xs-12 thumbnail">
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		<div class="col-md-5 col-xs-12">
+			<div id="pieChart" style="width:100%; height:200px; margin: 0 auto"></div>
+			<input type="hidden" name="possession1" value="{{$match->teams[0]->pivot->ball_possesion}}">
+		</div>
+	</div>
+	<div class="row">
+	<br><br>
+	<h4 style="color:#444;">Events</h4>
+		<div class="col-xs-11 thumbnail" id="events">
+			<h5><span class="glyphicon glyphicon-ok"></span> Something happened!</h5>
+			<h5><span class="glyphicon glyphicon-ok"></span> Something happened!</h5>
 		</div>
 	</div>
 	<div class="row">
@@ -83,7 +94,7 @@
 			<input type="hidden" name="thematchid" value="{{$match->id}}">
 			<br>
 			@if(($match->state==1 || $match->state==3) && $allowComment)
-				<div class="col-xs-12">
+				<div class="col-xs-12" id="commentForm">
 					<div class="form-group">
 						<label>Leave a comment:</label><span class="pull-right" id="charIN">(140 left)</span>
 						<textarea id="textareaC" style="border-radius: 0;" rows="3" maxlength="140" class="form-control"></textarea>
@@ -195,6 +206,125 @@
 		</script>
 	@endif
 	<!--Here ask for the state-->
+	<script>
+	$(function(){
+		var askState=function(){
+			var t=$("meta[name='toktok']").attr('content')
+			var match=$("input[name='thematchid']").val()
+			var actual=$("input[name='actualState']").val()
+			$.ajax({
+				url:'/askstate',method:'post',
+				data:{_token:t,matchid:match,actualState:actual}
+			}).done(function(response){
+				if (response.change) {
+					if (response.state==2) {
+						$("#commentForm").hide()
+						$("#stateIndicator").html("<span class='glyphicon glyphicon-time'></span> Break time")
+					}else if(response.state==3){
+						location.reload();
+					}else if(response.state==4){
+						document.location.href="/results/"+match
+					}
+				}
+			})
+		}
+		setInterval(askState,1000)
+	});
+	</script>
+<script src="/Highcharts/js/highcharts.js"></script>
+<script>
+$(document).ready(function(){
+	var brands=[];
+			brands[0]={name:"{{$match->teams[0]->name}}",y:Number("{{$match->teams[0]->pivot->ball_possesion}}") };
+			brands[1]={name:"{{$match->teams[1]->name}}",y:Number("{{$match->teams[1]->pivot->ball_possesion}}") };
+			var chart = new Highcharts.Chart({
+	    	chart: {
+	            plotBackgroundColor: null,
+	            plotBorderWidth: null,
+	            plotShadow: false,
+	            type: 'pie',
+	            renderTo: 'pieChart'
+	        },
+	        title: {
+	            text: 'Ball possession'
+	        },
+	        tooltip: {
+	            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	        },
+	        plotOptions: {
+	            pie: {
+	                allowPointSelect: true,
+	                cursor: 'pointer',
+	                dataLabels: {
+	                    enabled: true,
+	                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+	                    style: {
+	                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+	                    }
+	                }
+	            }
+	        },
+	        series: [{
+	            name: 'Brands',
+	            colorByPoint: true,
+	            data: brands
+	        	}]
+	    	});
+
+	var askChart=function(){
+		var t=$("meta[name='toktok']").attr('content')
+		var match=$("input[name='thematchid']").val()
+		var pos=$("input[name='possession1']").val();
+	    $.ajax({                       
+		    url:"/askchart", type:"post", 
+		    data:{ _token:t,matchid:match,pos1:pos}
+	    }).done(function(response){ 
+	    	if (response.change) {
+	    		$("input[name='possession1']").val(response.teams[0].pivot.ball_possesion);
+			    var brands=[];
+				brands[0]={name:response.teams[0].name,
+					y:Number(response.teams[0].pivot.ball_possesion)};
+				brands[1]={name:response.teams[1].name,
+					y:Number(response.teams[1].pivot.ball_possesion)};
+				var chart = new Highcharts.Chart({
+		    	chart: {
+		            plotBackgroundColor: null,
+		            plotBorderWidth: null,
+		            plotShadow: false,
+		            type: 'pie',
+		            renderTo: 'pieChart'
+		        },
+		        title: {
+		            text: 'Ball possession'
+		        },
+		        tooltip: {
+		            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+		        },
+		        plotOptions: {
+		            pie: {
+		                allowPointSelect: true,
+		                cursor: 'pointer',
+		                dataLabels: {
+		                    enabled: true,
+		                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+		                    style: {
+		                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+		                    }
+		                }
+		            }
+		        },
+		        series: [{
+		            name: 'Brands',
+		            colorByPoint: true,
+		            data: brands
+		        	}]
+		    	});
+	    	}
+		});
+	}
+	setInterval(askChart,60000);
+});
+</script>
 @endif
 <script>
 $(function(){

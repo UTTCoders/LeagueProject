@@ -103,6 +103,8 @@ Route::group(['middleware' => ['authen']], function(){
 	Route::post('/sendcomment','User\CommentsController@SendComment');
 	Route::post('/askcomments','User\CommentsController@AskForComments');
 	Route::post('/askgoals','User\MapController@AskForGoals');
+	Route::post('/askstate','User\MatchesController@AskForState');
+	Route::post("/askchart",'User\MatchesController@AskPossession');
 });
 
 // fb
