@@ -72,7 +72,8 @@
 			</div>
 		</div>
 		<div class="col-md-5 col-xs-12">
-			<div id="pieChart" style="width:100%; height:200px; margin: 0 auto"></div>
+		<br>
+			<div id="pieChart" style="width:100%; height:210px; margin: 0 auto"></div>
 			<input type="hidden" name="possession1" value="{{$match->teams[0]->pivot->ball_possesion}}">
 		</div>
 	</div>
@@ -245,6 +246,9 @@ $(document).ready(function(){
 	            type: 'pie',
 	            renderTo: 'pieChart'
 	        },
+	        credits: {
+	        	enabled: false
+	        },
 	        title: {
 	            text: 'Ball possession'
 	        },
@@ -265,7 +269,7 @@ $(document).ready(function(){
 	            }
 	        },
 	        series: [{
-	            name: 'Brands',
+	            name: 'Ball',
 	            colorByPoint: true,
 	            data: brands
 	        	}]
@@ -294,6 +298,9 @@ $(document).ready(function(){
 		            type: 'pie',
 		            renderTo: 'pieChart'
 		        },
+		        credits: {
+		        	enabled: false
+		        },
 		        title: {
 		            text: 'Ball possession'
 		        },
@@ -314,7 +321,7 @@ $(document).ready(function(){
 		            }
 		        },
 		        series: [{
-		            name: 'Brands',
+		            name: 'Ball',
 		            colorByPoint: true,
 		            data: brands
 		        	}]
