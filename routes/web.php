@@ -46,6 +46,14 @@ Route::group(['middleware' => ['authen']], function(){
 		Route::get('/admin/players/edit',function (){
 			return view('admin.management.players.edit');
 		})->middleware('admin');
+
+		Route::get('/admin/players/delete',function (){
+			return view('admin.management.players.delete');
+		})->middleware('admin');
+
+		Route::get('/admin/seasons/add',function (){
+			return view('admin.calendar.seasons.add');
+		});
 		//post
 		Route::post('/getStadiums','Admin\League@getStadiums')->middleware('admin');
 
@@ -80,6 +88,10 @@ Route::group(['middleware' => ['authen']], function(){
 		Route::post('/editPlayer','Admin\League@editPlayer')->middleware('admin');
 
 		Route::post('/getPlayerPositions','Admin\League@getPlayerPositions');
+
+		Route::post('/getPlayersPerTeam','Admin\League@getPlayersPerTeam')->middleware('admin');
+
+		Route::post('/deletePlayer','Admin\League@deletePlayer');
 		// end of Management by admin
 
 });

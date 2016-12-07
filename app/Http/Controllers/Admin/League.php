@@ -440,8 +440,16 @@ class League extends Controller
       }
       return back()->with('msg',['title' => 'Alert!', 'content' => 'Nothing has changed!'])->withInput();
     }
+
     public function getPlayerPositions(Request $request){
       return Player::find($request->id)->positions;
+    }
+
+    public function getPlayersPerTeam(Request $request){
+      return Team::find($request->id)->players;
+    }
+    public function deletePlayer(Request $request){
+      Player::find($request->id)->delete();
     }
 
 }
