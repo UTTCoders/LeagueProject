@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\League\Stadium;
 use App\League\Team;
 use App\League\Match;
-use Carbon\Carbon;
+use Auth;
 
 class MapController extends Controller
 {
@@ -38,16 +38,47 @@ class MapController extends Controller
     			if (self::checkLocalTeam($res["match"],$thestadium->team)) {
     				return view('user.stadiumview')
 	    			->with("stadium",$thestadium)
-	    			->with("match",$res["match"]);
+	    			->with("match",$res["match"])
+                    ->with("teams",self::checkGoals($res["match"]))
+                    ->with("allowComment",self::checkTeamsUser($res["match"]))
+                    ->with("isFav",self::checkStadiumTeam($thestadium->team));
     			}
     		}
     	}
     	return view('user.stadiumview')
-    	->with("stadium",$thestadium);
+    	->with("stadium",$thestadium)
+        ->with("isFav",self::checkStadiumTeam($thestadium->team));
+    }
+
+    public function AskForGoals(Request $r){
+        $thematch=Match::find($r->matchid);
+        if ($thematch->goals()->count() > $r->gc) {
+            return ["newgoals"=>true,
+                "marker"=>view('user.goals')
+                ->with("teams",self::checkGoals($thematch))
+                ->with("match",$thematch)->render()
+            ];
+        }
+        return ["newgoals"=>false];
+    }
+
+    private function checkGoals($match){
+        $teams["local"]=$match->teams->where('pivot.local',true)->first();
+        $teams["local"]["goals"]=0;
+        $teams["visitor"]=$match->teams->where('pivot.local',false)->first();
+        $teams["visitor"]["goals"]=0;
+        foreach ($match->goals as $goal) {
+            if ($goal->player->team->id == $teams["local"]->id) {
+                $teams["local"]["goals"]+=1;
+            }else{
+                $teams["visitor"]["goals"]++;
+            }
+        }
+        return $teams;
     }
 
     private function checkLocalTeam($match,$theStadiumsTeam){
-    	foreach ($match->teams as $key => $team) {
+    	foreach ($match->teams as $team) {
     		if ($team->pivot->local) {
     			if ($team->id==$theStadiumsTeam->id) {
     				return true;
@@ -71,5 +102,23 @@ class MapController extends Controller
     			"there_is"=>$there_is,"match"=>$thematch
     		];
     	return ["there_is"=>$there_is];
+    }
+
+    private function checkStadiumTeam($team){
+        foreach (Auth::user()->teams as $t) {
+            if ($t->id==$team->id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function checkTeamsUser($match){
+        foreach ($match->teams as $team) {
+            if (Auth::user()->teams->find($team->id)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

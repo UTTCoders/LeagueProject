@@ -10,7 +10,7 @@ class Team extends Model
     use SoftDeletes;
 
     public $timestamps = false;
-    protected $fillable = ['name','logo','fundation_date','coach_id','stadium_id'];
+    protected $fillable = ['name','logo','foundation_date','coach_id','stadium_id'];
     protected $dates = ['deleted_at'];
 
     public function stadium(){

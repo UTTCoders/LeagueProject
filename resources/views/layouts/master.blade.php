@@ -323,8 +323,6 @@
                     <div class="itemsContainer">
                         <a href="/favorites" class="panelItem"><span class="glyphicon glyphicon-star-empty"></span> My favorite teams</a>
                         <a href="/matches" class="panelItem"><span class="glyphicon glyphicon-th"></span> See all matches</a>
-                        <a href="#" id="1"  class="panelItem event">Prueba</a>
-                        <a href="#" id="1" class="panelSubItem" style="display:none">Hijo</a>
                     </div>
                     <div class="bottomContainer col-xs-12 no-padding" style="position:absolute;bottom:0px;">
                       <a id="logOutBtn" href="/logout" class="panelItem">Log out</a>
@@ -335,9 +333,9 @@
         @yield('body')
         <div class="footer col-md-12 col-xs-12 col-sm-12 col-lg-12">
             <div style="padding-left: 40px; padding-top: 30px; padding-right: 40px; padding-bottom: 30px;">
-                <p class="toLeft" style="position: absolute; left: 25%; top: 40px;">league-project.com</p>
+                <p class="toLeft hidden-xs" style="position: absolute; left: 25%; top: 40px;">league-project.com</p>
                 <img src="{{elixir('img/icons/la-liga.png')}}" alt="" id="footerBrand" >
-                <a class="footerLink" style="position: absolute; right: 25%; top: 40px;" href="">privacity</a>
+                <a class="footerLink hidden-xs" style="position: absolute; right: 25%; top: 40px;" href="">privacity</a>
             </div>
         </div>
         <script type="text/javascript">

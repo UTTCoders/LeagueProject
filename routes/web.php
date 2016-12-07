@@ -98,6 +98,11 @@ Route::group(['middleware' => ['authen']], function(){
 	Route::get('/stadiums/{id}','User\MapController@requestStadium');
 	Route::get('/matches','User\MatchesController@MatchesRequest');
 	Route::post('/getmatches','User\MatchesController@getMatchesForMenu');
+	Route::get('/results/{id}','User\MatchesController@resultsRequest');
+	Route::post('/addremovefav','User\FavoritesController@AddRemove');
+	Route::post('/sendcomment','User\CommentsController@SendComment');
+	Route::post('/askcomments','User\CommentsController@AskForComments');
+	Route::post('/askgoals','User\MapController@AskForGoals');
 });
 
 // fb

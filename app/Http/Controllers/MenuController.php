@@ -23,7 +23,7 @@ class MenuController extends Controller
         		return redirect('/matches');
         	}
         }
-
+        
         return view('user.mapview2');
     }
 }
