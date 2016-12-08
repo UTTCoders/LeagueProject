@@ -381,7 +381,7 @@ input[name=playerSearchBox]:hover{
     </div>
     <div class="col-xs-12 col-md-4" style="margin-bottom:15px;">
       @for($i = 1; $i <= 38; $i++)
-      <div class="matchday-item">
+      <div class="matchday-item" id="{{$i}}">
         Matchday {{$i}}
       </div>
       @endfor
@@ -399,6 +399,7 @@ input[name=playerSearchBox]:hover{
           <input type="hidden" name="refereeId" value="">
           <input type="hidden" name="localId" value="">
           <input type="hidden" name="visitorId" value="">
+          <input type="hidden" name="matchday" value="">
           @endif
           <div class="form-group no-padding col-xs-12">
             <label for="">Date</label>
@@ -499,6 +500,7 @@ $(function ($) {
       $('#match-data').fadeIn(200);
       $('#instruction').fadeOut(300);
       $('.teams-selection-container').fadeIn(200);
+      $('input[type=hidden][name=matchday]').val($(this).attr('id'));
       // mostrar partidos por jornada
     });
 

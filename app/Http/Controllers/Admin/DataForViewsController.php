@@ -55,17 +55,14 @@ class DataForViewsController extends Controller
         $month=date('m');
         $year = date('Y');
         for($month;;$month++){
-          if($month == 8 || $month == 5) break;
+          if($month == 8) break;
           if($month == 12){
             $month = 0;
             $year++;
           }
         }
-        $endMonth;
-        if($month == 5) $endMonth = 8;
-        else $endMonth = 5;
         $month = date('F', mktime(0,0,0,$month,1,$year));
-        $endMonth = date('F', mktime(0,0,0,$endMonth,1,$year+1));
+        $endMonth = date('F', mktime(0,0,0,5,1,$year+1));
         $season = ['start_date' => ['month' => $month, 'year' => $year], 'end_date' => ['month' => $endMonth, 'year' => $year+1]];
         return view('admin.calendar.seasons.add-matches',['firstSeason' => $season]);
       }

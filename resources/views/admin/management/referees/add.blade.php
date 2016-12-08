@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-Add players
+Add referees
 @endsection
 
 @section('css')
