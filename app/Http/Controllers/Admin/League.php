@@ -12,6 +12,7 @@ use Storage;
 use App\League\Team;
 use App\League\Player;
 use App\League\Position;
+use App\League\Referee;
 
 class League extends Controller
 {
@@ -448,8 +449,31 @@ class League extends Controller
     public function getPlayersPerTeam(Request $request){
       return Team::find($request->id)->players;
     }
+
     public function deletePlayer(Request $request){
       Player::find($request->id)->delete();
     }
 
+    public function addReferee(Request $request){
+      if(Validator::make($request->all(),[
+        'name' => 'required',
+        'last_name' => 'required',
+        'photo' => 'required'
+      ])->fails()){
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'Complete everything!'])->withInput();
+      }
+      if(Referee::where('name',$request->name)->where('last_name',$request->last_name)->first())
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'There is already a coach with the given names!'])->withInput();
+      $referee=new Referee;
+      $referee->name = $request->name;
+      $referee->last_name = $request->last_name;
+      $referee->photo = $request->photo->store('img/referees','public');
+      if($referee->save())
+        return back()->with('msg',['title' => 'OK!', 'content' => 'Coach successfully added!']);
+      else return back()->with('msg',['title' => 'Ups!', 'content' => 'Has been an error.'])->withInput();
+    }
+
+    public function addMatch(Request $request){
+      return $request->all();
+    }
 }

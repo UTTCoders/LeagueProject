@@ -309,8 +309,10 @@
                     <a href="/" id="1" class="panelSubItem" style="display:none">Stadiums and Coaches</a>
                     <a href="/admin/teams/add" id="1" class="panelSubItem" style="display:none">Teams</a>
                     <a href="/admin/players/add" id="1" class="panelSubItem" style="display:none">Players</a>
+                    <a href="/admin/referees/add" id="1" class="panelSubItem" style="display:none">Referees</a>
                     <a id="2"  class="panelItem event">Calendar</a>
-                    <a href="/admin/seasons/add" id="2" class="panelSubItem" style="display:none">Seasons</a>
+                    <a href="/admin/seasons/add-matches" id="2" class="panelSubItem" style="display:none">Programme matches</a>
+                    <a href="/admin/seasons/control-matches" id="2" class="panelSubItem" style="display:none">Control matches</a>
                 </div>
                 <div class="bottomContainer col-md-12 col-xs-12 col-sm-12 no-padding" style="position:absolute;bottom:0px;background-color:red;">
                   <a href="/favorites" class="panelItem" style="">Favorites</a>
