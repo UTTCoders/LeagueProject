@@ -58,7 +58,7 @@
 		<br>
 		<h2 style="color:#eee; margin-top: 0px; margin-bottom: 0;" id="mainTitle">{{$stadium->name}}</h2>
 	</div>
-	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle"><img src="/storage/{{$stadium->team->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"> <strong>{{$stadium->team->name}}</strong> VS <strong>{{$teams["visitor"]->name}}</strong> <img src="/storage/{{$teams['visitor']->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"></h3>
+	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle"><img src="/storage/{{$stadium->team->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"> <strong>{{$stadium->team->name}}</strong> <br class="hidden-md hidden-sm hidden-lg">VS <strong>{{$teams["visitor"]->name}}</strong> <img src="/storage/{{$teams['visitor']->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"></h3>
 </div>
 <br><br>
 <div class="container">
@@ -77,8 +77,9 @@
 			<input type="hidden" name="possession1" value="{{$match->teams[0]->pivot->ball_possesion}}">
 		</div>
 	</div>
+	<hr>
 	<div class="row">
-	<br><br>
+	<br>
 	<h4 style="color:#444;">Events</h4>
 		<div class="col-xs-11 thumbnail" id="events">
 			<h5><span class="glyphicon glyphicon-ok"></span> Something happened!</h5>
