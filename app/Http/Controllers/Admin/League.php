@@ -542,7 +542,7 @@ class League extends Controller
                 and $match->teams()->wherePivot('local',false)->first()->id == $request->visitorId)
                 || ($match->teams()->wherePivot('local',true)->first()->id == $request->visitorId
                   and $match->teams()->wherePivot('local',false)->first()->id == $request->localId))
-                return back()->with('msg',['title' => 'Ups!', 'content' => "The teams have already faced between them in the first part of the season."])->withInput();
+                return back()->with('msg',['title' => 'Ups!', 'content' => "The match is already programmed."])->withInput();
             }
             $isSecondPart=true;
           }
@@ -559,6 +559,7 @@ class League extends Controller
           $match->save();
           $match->teams()->attach($request->localId,['local' => true]);
           $match->teams()->attach($request->visitorId,['local' => false]);
+          return back()->with('msg',['title' => 'OK!', 'content' => "Success!"]);
         }
         else if(date('Y-m-d') > $season->end_date){
           //probar este caso, cuando sigue una nueva temporada
@@ -579,11 +580,16 @@ class League extends Controller
           $match->save();
           $match->teams()->attach($request->localId,['local' => true]);
           $match->teams()->attach($request->visitorId,['local' => false]);
+          return back()->with('msg',['title' => 'OK!', 'content' => "Success!"]);
         }
         else{
           return back()->with('msg',['title' => 'Alert!', 'content' => "The season is defined and its going on. You wont be able of programme another season until the current one finish."])->withInput();
         }
       }
 
+    }
+
+    public function getMatchesPerMatchDay(Request $request){
+      return Match::offset($request->matchday-1)->limit(10)->get();
     }
 }

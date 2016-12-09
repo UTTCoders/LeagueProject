@@ -98,6 +98,8 @@ Route::group(['middleware' => ['authen']], function(){
 		Route::post('/addReferee','Admin\League@addReferee');
 
 		Route::post('/addMatch','Admin\League@addMatch');
+
+		Route::post('/getMatchesPerMatchDay','Admin\League@getMatchesPerMatchDay');
 		// end of Management by admin
 
 });

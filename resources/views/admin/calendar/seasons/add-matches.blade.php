@@ -333,6 +333,10 @@ input[name=playerSearchBox]:hover{
   margin-bottom: 5%;
   display: block;
 }
+#matchesContainer{
+  background: #222;
+
+}
 </style>
 @endsection
 
@@ -366,7 +370,7 @@ input[name=playerSearchBox]:hover{
       @if(isset($firstSeason))
       <h4>Programme season ({{$firstSeason['start_date']['month'].' '.$firstSeason['start_date']['year'].' - '.$firstSeason['end_date']['month'].' '.$firstSeason['end_date']['year']}})</h4>
       @elseif(isset($season))
-      <h4>{{date('F Y',strtotime($season->start_date)).' - '.date('F Y',strtotime($season->end_date))}}</h4>
+      <h4>{{date('F Y',strtotime($season->start_date)).' - May '.(date('Y',strtotime($season->start_date))+1)}}</h4>
       @endif
     </div>
     <div class="col-xs-12 col-md-4" style="margin-bottom:15px;">
@@ -378,9 +382,6 @@ input[name=playerSearchBox]:hover{
     </div>
     <div class="col-xs-12 col-md-8" style="margin-bottom:15px;">
       <h4 class="col-xs-12">New match...</h4>
-      <div class="col-xs-12" id="matchesContainer">
-
-      </div>
       <div class="col-xs-12" id="match-data">
         <form class="" action="/addMatch" method="post">
           {{csrf_field()}}
@@ -441,6 +442,10 @@ input[name=playerSearchBox]:hover{
             </div>
           </div>
         </form>
+        <h4 id="matchTitle" class="col-xs-12" style="display:none;">Matches list</h4>
+        <div class="col-xs-12" id="matchesContainer" style="display:none;">
+
+        </div>
       </div>
     </div>
   </div>
@@ -483,9 +488,32 @@ $(function ($) {
     $('.matchday-item').click(function () {
       $('.matchday-item').css('border-left','2px solid transparent');
       $(this).css('border-left','2px solid dodgerblue');
+      $('#matchesContainer').fadeIn(300);
+      $('#matchTitle').fadeIn(300);
       $('#matchesContainer').children().remove();
       $('input[type=hidden][name=matchday]').val($(this).attr('id'));
-      // mostrar partidos por jornada
+      $.ajax({
+        url:'/getMatchesPerMatchDay',
+        type:'post',
+        dataType:'json',
+        data:{
+          _token: '{{csrf_token()}}',
+          matchday: $(this).attr('id')
+        }
+      }).done(function (response) {
+        $.each(response,function (i,match) {
+          var $item = $('<div>');
+          $item.css({
+            padding:'5px'
+          });
+          var $date = $('<p>');
+          $date.text(match.referee+" / "+match.start_date);
+          //////////////////////////////////////////////////////
+          ////// completar
+          $item.append($date);
+          $('#matchesContainer').append($item);
+        });
+      });
     });
 
     $('.teams-selection-container').children('.Item').click(function () {
