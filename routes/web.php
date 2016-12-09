@@ -94,6 +94,7 @@ Route::get('/logout','Authentication\LoginHomeController@LogoutRequest')->middle
 
 //--------------------Routes for the user----------------------!
 Route::group(['middleware' => ['authen']], function(){
+	Route::get('/favorites','User\FavoritesController@FavoritesRequest');
 	Route::post('/getuserstadiums','User\MapController@getUserStadiums');
 	Route::get('/stadiums/{id}','User\MapController@requestStadium');
 	Route::get('/matches','User\MatchesController@MatchesRequest');

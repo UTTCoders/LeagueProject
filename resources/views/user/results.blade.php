@@ -33,6 +33,9 @@
 	}
 	#events{
 		border-radius: 0;
+		overflow-y: auto;
+		max-height: 50px;
+		padding-left: 20px;
 	}
 </style>
 @endsection
@@ -48,14 +51,17 @@
 				@include('user.goals')
 			</div>
 		</div>
-		<h3>History:</h3>
-		<div class="col-md-5 col-xs-12 thumbnail">
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		<div class="col-md-5 col-xs-12">
+		<br>
+			<div id="pieChart" style="width:100%; height:210px; margin: 0 auto"></div>
+		</div>
+	</div>
+	<div class="row">
+	<br>
+	<h4 style="color:#444;">Events</h4>
+		<div class="col-xs-11 thumbnail" id="events">
+			<h5><span class="glyphicon glyphicon-ok"></span> Something happened!</h5>
+			<h5><span class="glyphicon glyphicon-ok"></span> Something happened!</h5>
 		</div>
 	</div>
 	<div class="row">
@@ -65,19 +71,56 @@
 			<div id="commentSection">
 				@include('user.comments')
 			</div>
-			<input type="hidden" name="thematchid" value="{{$match->id}}">
 			<br>
-			@if(($match->state==1 || $match->state==3) && $allowComment)
-				<div class="col-xs-12">
-					<div class="form-group">
-						<label>Leave a comment:</label><span class="pull-right" id="charIN">(140 left)</span>
-						<textarea id="textareaC" style="border-radius: 0;" rows="3" maxlength="140" class="form-control"></textarea>
-					</div>
-					<button style="border-radius: 0; border:1px solid #ccc;" id="btnSendComment" class="btn btn-default pull-right">Send</button>
-				</div>
-			@endif
 		</div>
 	</div>
 </div>
 <br><br>
+@endsection
+
+@section('js2')
+<script src="/Highcharts/js/highcharts.js"></script>
+<script>
+$(document).ready(function(){
+	var brands=[];
+			brands[0]={name:"{{$match->teams[0]->name}}",y:Number("{{$match->teams[0]->pivot->ball_possesion}}") };
+			brands[1]={name:"{{$match->teams[1]->name}}",y:Number("{{$match->teams[1]->pivot->ball_possesion}}") };
+			var chart = new Highcharts.Chart({
+	    	chart: {
+	            plotBackgroundColor: null,
+	            plotBorderWidth: null,
+	            plotShadow: false,
+	            type: 'pie',
+	            renderTo: 'pieChart'
+	        },
+	        credits: {
+	        	enabled: false
+	        },
+	        title: {
+	            text: 'Ball possession'
+	        },
+	        tooltip: {
+	            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	        },
+	        plotOptions: {
+	            pie: {
+	                allowPointSelect: true,
+	                cursor: 'pointer',
+	                dataLabels: {
+	                    enabled: true,
+	                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+	                    style: {
+	                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+	                    }
+	                }
+	            }
+	        },
+	        series: [{
+	            name: 'Ball',
+	            colorByPoint: true,
+	            data: brands
+	        	}]
+	    	});
+});
+</script>
 @endsection

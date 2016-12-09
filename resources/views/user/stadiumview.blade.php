@@ -77,7 +77,6 @@
 			<input type="hidden" name="possession1" value="{{$match->teams[0]->pivot->ball_possesion}}">
 		</div>
 	</div>
-	<hr>
 	<div class="row">
 	<br>
 	<h4 style="color:#444;">Events</h4>

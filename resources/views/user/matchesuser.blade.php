@@ -170,26 +170,15 @@
 	<div class="container">
 		<div class="thumbnail col-lg-9" style="border-radius: 0; color: #111; padding-top: 20px; padding-bottom: 20px; box-shadow: 5px 5px #00695C;">
 			<h2 align="center"><span class="glyphicon glyphicon-th-list"></span> Calendar</h2>
-			@if(!App\League\Match::where('state',0)->count()>0)
 			<div class="container">
-				<div class="table-responsive">
-					<table class="table">
-						<tr align="center">
-							<td><strong>Teams</strong></td>
-							<td><strong>Stadium</strong></td>
-							<td><strong>Date</strong></td>
-						</tr>
-						@foreach(App\League\Match::where('state',0)->get() as $match)
-						<tr align="center">
-							
-						</tr>
-						@endforeach
-					</table>
+				<div class="col-sm-4 col-sm-offset-8">
+					<label>Filter the seasons</label>
+					<select class="form-control">
+						<option></option>
+					</select>
 				</div>
+				
 			</div>
-			@else
-			<h3 align="center">There're no matches</h3>
-			@endif
 		</div>
 		<div class="thumbnail col-lg-2 col-lg-offset-1 hidden-xs hidden-sm hidden-md" id="infoside" style="color: #111;">
 			<img src="/img/Logo La Liga Spain.png" class="img-responsive">

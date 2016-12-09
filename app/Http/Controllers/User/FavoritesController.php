@@ -16,4 +16,8 @@ class FavoritesController extends Controller
     	Auth::user()->teams()->detach($r->teamid);
     	return ["action"=>false];
     }
+
+    public function FavoritesRequest(Request $r){
+    	return view('user.favorites');
+    }
 }
