@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\League\Team;
 use App\League\Stadium;
 use App\League\Coach;
+use App\League\Season;
 
 class DataForViewsController extends Controller
 {
@@ -46,5 +47,28 @@ class DataForViewsController extends Controller
         'freeCoaches' => $freeCoaches,
         'freeStadiums' => $freeStadiums,
       ]);
+    }
+
+    public function getForAddMatches(Request $request){
+      // esta condicion no es la verdadera, pensarlo
+      if(Season::count() < 1){
+        $month=date('m');
+        $year = date('Y');
+        for($month;;$month++){
+          if($month == 8) break;
+          if($month == 12){
+            $month = 0;
+            $year++;
+          }
+        }
+        $month = date('F', mktime(0,0,0,$month,1,$year));
+        $endMonth = date('F', mktime(0,0,0,5,1,$year+1));
+        $season = ['start_date' => ['month' => $month, 'year' => $year], 'end_date' => ['month' => $endMonth, 'year' => $year+1]];
+        return view('admin.calendar.seasons.add-matches',['firstSeason' => $season]);
+      }
+      else{
+        $season = Season::latest('start_date')->get()->first();
+        return view('admin.calendar.seasons.add-matches',['season' => $season]);
+      }
     }
 }
