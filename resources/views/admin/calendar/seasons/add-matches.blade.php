@@ -259,9 +259,6 @@ input[name=playerSearchBox]{
 input[name=playerSearchBox]:hover{
   color: #fff;
 }
-#positionSelector,#teamSelector{
-  display: none;
-}
 .matchday-item{
   border: 1px solid #000;
   border-radius: 2px;
@@ -284,17 +281,11 @@ input[name=playerSearchBox]:hover{
   margin-left: 0%;
   margin-right: 0%;
 }
-#addMatchBtn{
-  display: none;
-}
 #addMatchBtn:hover{
   color:white;
 }
-#matchesContainer,#match-data{
-  display: none;
-}
 .teams-selection-container{
-  display: hidden;
+  display: inline-block;
 }
 .Item{
   position: relative;
@@ -333,7 +324,6 @@ input[name=playerSearchBox]:hover{
   height: 100%;
   margin: auto;
   overflow: hidden;
-
   display: block;
 }
 .teamItem >.img-container>img{
@@ -387,7 +377,7 @@ input[name=playerSearchBox]:hover{
       @endfor
     </div>
     <div class="col-xs-12 col-md-8" style="margin-bottom:15px;">
-      <h4 id="instruction">Select a match day...</h4>
+      <h4 class="col-xs-12">New match...</h4>
       <div class="col-xs-12" id="matchesContainer">
 
       </div>
@@ -403,12 +393,13 @@ input[name=playerSearchBox]:hover{
           @endif
           <div class="form-group no-padding col-xs-12">
             <label for="">Date</label>
-            <input type="date" name="date" value="" class="myInputWhite col-xs-12">
+            <input type="date" name="date" value="{{old('date')}}" class="myInputWhite col-xs-12">
           </div>
           <div class="form-group no-padding col-xs-12">
             <label for="">Time</label>
-            <input type="time" name="time" value="" class="myInputWhite col-xs-12">
+            <input type="time" name="time" value="{{old('time')}}" class="myInputWhite col-xs-12">
           </div>
+          <label>Referee</label>
           <div class="col-xs-12 no-padding teams-selection-container" id="coachSelector" style="padding:0;">
             @if(App\League\Referee::count() < 1)
             <h4 style="text-align:center;">No referees</h4>
@@ -425,6 +416,7 @@ input[name=playerSearchBox]:hover{
             @endforeach
             @endif
           </div>
+          <label for="" class="col-xs-12 no-padding">Teams</label>
           <div class="col-xs-12 no-padding teams-selection-container" id="teamSelector" style="padding:0;">
             @if(App\League\Team::count() < 1)
             <h4 style="text-align:center;">No teams</h4>
@@ -472,10 +464,7 @@ $(function ($) {
 
   $(function ($) {
 
-    $.each($('.teamItem'),function (i,e) {
-      $(this).height(($(this).parent().parent().parent().parent().width()-30)*($(this).parent().width()/100)-30);
-    });
-
+    $('.teamItem').height($('.teamItem').width());
     $(window).resize(function () {
       $('.teamItem').height($('.teamItem').width());
     });
@@ -495,11 +484,6 @@ $(function ($) {
       $('.matchday-item').css('border-left','2px solid transparent');
       $(this).css('border-left','2px solid dodgerblue');
       $('#matchesContainer').children().remove();
-      $('#matchesContainer').fadeIn(200);
-      $('#addMatchBtn').fadeIn(200);
-      $('#match-data').fadeIn(200);
-      $('#instruction').fadeOut(300);
-      $('.teams-selection-container').fadeIn(200);
       $('input[type=hidden][name=matchday]').val($(this).attr('id'));
       // mostrar partidos por jornada
     });
@@ -520,19 +504,20 @@ $(function ($) {
 
     $('.teamItem').click(function () {
       $.each($('.teamItem'),function (i,e) {
-        if($(e).css('background-color') == 'rgb(30, 144, 255)'){
+        if($(e).css('border-color') == 'rgb(30, 144, 255)'){
           $(e).css({
             'background-color':'#000',
+            'box-shadow':'none',
             border: '1px solid #222'
           });
         }
       });
       $(this).css({
-        'background-color': 'dodgerblue',
+        'background-color': 'transparent',
         overflow: 'hidden',
         'border-radius': '3px',
-        'box-shadow': 'inset 0 0 9px 0 rgba(0,0,0,1)',
-        border: '1px solid skyblue',
+        'box-shadow': 'inset 0 0 10px 0 rgba(50,40,255,1)',
+        border: '1px solid dodgerblue',
         cursor: 'pointer'
       });
       if($('input[type=hidden][name=visitorId]').val() == $(this).attr('id')){
@@ -544,18 +529,19 @@ $(function ($) {
     $('.teamItem').contextmenu(function (e) {
       e.preventDefault();
       $.each($('.teamItem'),function (i,e) {
-        if($(e).css('background-color') == 'rgb(221, 68, 85)'){
+        if($(e).css('border-color') == 'rgb(255, 119, 102)'){
           $(e).css({
             'background-color':'#000',
+            'box-shadow':'none',
             border: '1px solid #222'
           });
         }
       });
       $(this).css({
-        'background-color': '#d45',
+        'background-color': 'transparent',
         overflow: 'hidden',
         'border-radius': '3px',
-        'box-shadow': 'inset 0 0 9px 0 rgba(0,0,0,1)',
+        'box-shadow': 'inset 0 0 10px 0 rgba(255,40,30,.8)',
         border: '1px solid #f76',
         cursor: 'pointer'
       });

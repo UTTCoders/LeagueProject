@@ -510,28 +510,58 @@ class League extends Controller
       else{
         $season = Season::latest('start_date')->get()->first();
         if(!$season->end_date){
-          if($request->date < $season->start_date || $request->date > mktime(0,0,0,5,31,date('Y',$season->start_date+1)))
+          if($request->date < $season->start_date || $request->date > mktime(0,0,0,5,31,date('Y',strtotime($season->start_date))+1))
               return back()->with('msg',['title' => 'Ups!', 'content' => "The match date is outside of the limits of the season."])->withInput();
           if($season->matches->count() > 380)
               return back()->with('msg',['title' => 'Ups!', 'content' => "The current season is full."])->withInput();
-          $lastMatch = $season->matches->latest('start_date')->get()->first();
-          if($request->date < $lastMatch->start_date)
-            return back()->with('msg',['title' => 'Ups!', 'content' => "The next match cannot be older than the last one."])->withInput();
-          if($season->matches->where('start_date',$request->date)->count() >= 5)
-            return back()->with('msg',['title' => 'Ups!', 'content' => "The max number of games per day has been reached."])->withInput();
-          if($request->matchday > 1 and  $season->matches->count() < ($request->matchday-1)*10)
-            return back()->with('msg',['title' => 'Ups!', 'content' => "Complete the last matchday."])->withInput();
-          if($season->matches->count() >= $request->matchday*10)
-            return back()->with('msg',['title' => 'Ups!', 'content' => "The matchday is complete."])->withInput();
+          $lastMatch = $season->matches()->latest('start_date')->get()->first();
+          if($lastMatch){
+            if(date('d-m-Y',strtotime($request->date)) < date('d-m-Y',strtotime($lastMatch->start_date)))
+              return back()->with('msg',['title' => 'Ups!', 'content' => "The next match cannot be older than the last one."])->withInput();
+            if($season->matches->where('start_date',$request->date)->count() >= 5)
+              return back()->with('msg',['title' => 'Ups!', 'content' => "The max number of games per day has been reached."])->withInput();
+            if($request->matchday > 1 and  $season->matches->count() < ($request->matchday-1)*10)
+              return back()->with('msg',['title' => 'Ups!', 'content' => "Complete the last matchday."])->withInput();
+            if($season->matches->count() >= $request->matchday*10)
+              return back()->with('msg',['title' => 'Ups!', 'content' => "The matchday is complete."])->withInput();
+            //no repetir encuentros
+          }
+          if($request->matchday > 1 and $season->matches->count() < 10)
+            return back()->with('msg',['title' => 'Ups!', 'content' => "Complete the first matchday."])->withInput();
 
-          return $request->all();
+          $isSecondPart=false;
+          foreach ($season->matches->chunk(190) as $i => $matches) {
+            foreach ($matches as $j => $match) {
+              if(!$isSecondPart){
+                if($match->teams()->wherePivot('local',true)->first()->id == $request->visitorId
+                  and $match->teams()->wherePivot('local',false)->first()->id == $request->localId){
+                    return back()->with('msg',['title' => 'Ups!', 'content' => "The teams have already faced between them in the first part of the season."])->withInput();
+                }
+              }
+              if(($match->teams()->wherePivot('local',true)->first()->id == $request->localId
+                and $match->teams()->wherePivot('local',false)->first()->id == $request->visitorId)
+                || ($match->teams()->wherePivot('local',true)->first()->id == $request->visitorId
+                  and $match->teams()->wherePivot('local',false)->first()->id == $request->localId))
+                return back()->with('msg',['title' => 'Ups!', 'content' => "The teams have already faced between them in the first part of the season."])->withInput();
+            }
+            $isSecondPart=true;
+          }
 
           //partidos deben ser seguidos
           //if(date('j',strtotime($lastMatch->start_date)) == )
 
           //add match
+          $match=new Match;
+          $match->start_date = $request->date." ".$request->time;
+          $match->state=0;
+          $match->season_id = $season->id;
+          $match->referee_id = $request->refereeId;
+          $match->save();
+          $match->teams()->attach($request->localId,['local' => true]);
+          $match->teams()->attach($request->visitorId,['local' => false]);
         }
         else if(date('Y-m-d') > $season->end_date){
+          //probar este caso, cuando sigue una nueva temporada
           if($request->date < mktime(0,0,0,8,1,date('Y',$season->end_date))
             || $request->date > mktime(0,0,0,5,31,date('Y',$season->end_date+1))){
               return back()->with('msg',['title' => 'Ups!', 'content' => "The match date is outside of the limits of the season."])->withInput();
@@ -546,6 +576,7 @@ class League extends Controller
           $match->state=0;
           $match->season_id = $newSeason->id;
           $match->referee_id = $request->refereeId;
+          $match->save();
           $match->teams()->attach($request->localId,['local' => true]);
           $match->teams()->attach($request->visitorId,['local' => false]);
         }
