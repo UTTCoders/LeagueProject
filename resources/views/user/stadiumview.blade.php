@@ -30,7 +30,7 @@
 		width: 100%;
 		overflow-y: auto;
 		padding: 10px;
-		border-top: 1px solid #D9EDF7;
+		border-top: 1px solid #ccc;
 	}
 	.commentCard{
 		border-radius: 0;
@@ -42,8 +42,15 @@
 	#events{
 		border-radius: 0;
 		overflow-y: auto;
-		max-height: 50px;
+		height: 150px;
 		padding-left: 20px;
+		border-top: 1px solid #ccc;
+		border-bottom: 1px solid #ccc;
+	}
+	.event{
+		margin:5px 0px;
+		border-radius: 0px;
+		padding:5px 13px;
 	}
 </style>
 @endsection
@@ -80,11 +87,14 @@
 	<div class="row">
 	<br>
 	<h4 style="color:#444;">Events</h4>
-		<div class="col-xs-11 thumbnail" id="events">
-			<h5><span class="glyphicon glyphicon-ok"></span> Something happened!</h5>
-			<h5><span class="glyphicon glyphicon-ok"></span> Something happened!</h5>
+		<div class="col-xs-11" id="events">
+			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>
+			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>
+			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>
+			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>
 		</div>
 	</div>
+	<br>
 	<div class="row">
 	<br>
 		<div class="col-sm-9 col-xs-11">
