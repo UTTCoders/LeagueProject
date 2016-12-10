@@ -161,7 +161,7 @@
 	</div>	
 </div>
 <div class="container">
-	<div class="row" style="padding-top: 50px; padding-bottom: 50px;">
+	<div class="row" style="padding-top: 50px; padding-bottom: 55px;">
 		<div class="col-xs-12 col-md-8">
 			<h2>{{$stadium->team->name}} players</h2>
 			<ul class="list-group">
@@ -169,10 +169,10 @@
 					<li style="font-weight: bold;" class="list-group-item player action" name="{{$player->id}}"><div align="center"><span class="pull-left">Shirt {{$player->shirt_number}}</span>{{$player->name.' '.$player->last_name}}<span id="littleToggle" class="glyphicon glyphicon-menu-down pull-right"></span></div></li>
 					<li class="list-group-item submenu" id="{{$player->id}}">
 					<section class="row">
-						<section class="col-xs-5" style="text-align: right;">
+						<section class="col-xs-4" style="text-align: right;">
 							<img style="width: 100px; border-radius: 100%;" src="{{$player->photo}}">
 						</section>
-						<section class="col-xs-7" style="text-align: left;">
+						<section class="col-xs-8" style="text-align: left;">
 							<p><b>Shirt number: </b>{{$player->shirt_number}}</p>
 							<p><b>Full name: </b>{{$player->name.' '.$player->last_name}}</p>
 							<p><b>Nationality: </b>{{$player->nationality}}</p>
