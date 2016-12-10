@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	$(".submenu").hide();
 
-	$(".event").click(function(){
+	$(".action").click(function(){
 		var string = "#" + $(this).attr("name");
 		$(string).slideToggle(200);
 	});

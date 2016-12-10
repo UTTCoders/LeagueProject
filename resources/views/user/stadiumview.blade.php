@@ -52,6 +52,13 @@
 		border-radius: 0px;
 		padding:5px 13px;
 	}
+	.list-group-item.player{
+		border-radius: 0px;
+	}
+	.list-group-item.player:hover{
+		cursor:pointer;
+		background-color: #eee;
+	}
 </style>
 @endsection
 
@@ -74,7 +81,7 @@
 	<hr style="border-color: #111;">
 	<div class="row" style="color:#444;">
 		<div class="col-md-6 col-xs-12">
-			<div id="goalSection">
+			<div id="goalSection" style="color:#111;">
 				@include('user.goals')
 			</div>
 		</div>
@@ -152,6 +159,30 @@
 		</div>
 	</div>
 	</div>	
+</div>
+<div class="container">
+	<div class="row" style="padding-top: 50px; padding-bottom: 50px;">
+		<div class="col-xs-12 col-md-8">
+			<h2>{{$stadium->team->name}} players</h2>
+			<ul class="list-group">
+				@foreach($stadium->team->players as $player)
+					<li style="font-weight: bold;" class="list-group-item player action" name="{{$player->id}}"><div align="center"><span class="pull-left">Shirt {{$player->shirt_number}}</span>{{$player->name.' '.$player->last_name}}<span id="littleToggle" class="glyphicon glyphicon-menu-down pull-right"></span></div></li>
+					<li class="list-group-item submenu" id="{{$player->id}}">
+					<section class="row">
+						<section class="col-xs-5" style="text-align: right;">
+							<img style="width: 100px; border-radius: 100%;" src="{{$player->photo}}">
+						</section>
+						<section class="col-xs-7" style="text-align: left;">
+							<p><b>Shirt number: </b>{{$player->shirt_number}}</p>
+							<p><b>Full name: </b>{{$player->name.' '.$player->last_name}}</p>
+							<p><b>Nationality: </b>{{$player->nationality}}</p>
+						</section>
+					</section>
+					</li>
+				@endforeach
+			</ul>
+		</div>
+	</div>
 </div>
 @endsection
 
@@ -364,4 +395,5 @@ $(function(){
 	});
 });
 </script>
+<script src="/js/changablemenu.js"></script>
 @endsection

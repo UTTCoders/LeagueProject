@@ -173,7 +173,7 @@
 			<div class="container">
 				<div class="col-sm-4 col-sm-offset-8">
 					<label>Filter the seasons</label>
-					<select class="form-control">
+					<select class="form-control" style="border-radius: 0px;">
 						<option></option>
 					</select>
 				</div>
