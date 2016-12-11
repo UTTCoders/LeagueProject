@@ -167,11 +167,10 @@
 	@endif
 	</div>
 	<br><br>
-	@if($currentSeason)
+	@if($currentSeason && $teamsS->count()>0)
 	<div class="row" style="color:#111;">
 		<div class="col-xs-12 col-sm-10 col-sm-offset-1">
-			<h3>Current points table</h3>
-			<hr style="border-color: #111;">
+			<h3><img width="35px" src="/img/icons/cup.png"> Current points table</h3>
 			<div class="table-responsive">
 				<table class="table table-condensed">
 					<thead>
@@ -185,7 +184,7 @@
 					<tbody>
 					@foreach($teamsS as $team)
 						<tr align="center">
-							<td style="vertical-align: middle;" ><img style="width: 30px" src="/storage/{{$team->logo}}"> <b>{{$team->name}}</b></td>
+							<td style="vertical-align: middle; font-size: 15px;" ><img style="width: 30px" src="/storage/{{$team->logo}}"> <b>{{$team->name}}</b></td>
 							<td style="vertical-align: middle;" >{{$team->matchesCount}}</td>
 							<td style="vertical-align: middle;" >{{$team->differGoals}}</td>
 							<td style="vertical-align: middle;" >{{$team->points}}</td>

@@ -46,9 +46,26 @@ class MatchesController extends Controller
                     $team["differGoals"]=self::checkDifferGoals($team,$season->id);
                 }
             }
+            $teams=self::orderTeams($teams);
             return $teams;
         }
         return "nothing";
+    }
+
+    private function orderTeams($teams){
+        if ($teams->count()>0) {
+            $temp;
+            for ($i=0; $i < $teams->count()-1; $i++) { 
+                for ($j=0; $j < $teams->count()-1; $j++) { 
+                    if ($teams[$j]["points"] < $teams[$j+1]["points"]) {
+                        $temp=$teams[$j];
+                        $teams[$j]=$teams[$j+1];
+                        $teams[$j+1]=$temp;
+                    }
+                }
+            }
+        }
+        return $teams;
     }
 
     private function checkDifferGoals($team,$seasonid){
