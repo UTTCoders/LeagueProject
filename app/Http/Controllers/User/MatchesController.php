@@ -13,20 +13,21 @@ use Carbon\Carbon;
 class MatchesController extends Controller
 {
 	public function MatchesRequest(Request $r){
-        return self::TeamsSeason(self::checkSeason());
 		if (Auth::user()->teams->count()>0 && 
 		Match::where('state','>',0)->where('state','<',4)->count()>0) {
 			$res=self::checkMatches();
 			if ($res["thereAre"]) {
 				return view('user.matchesuser')
 				->with('matches',$res["matches"])
-                ->with('currentSeason',self::checkSeason());
+                ->with('currentSeason',self::checkSeason())
+                ->with('teamsS',self::TeamsSeason(self::checkSeason()));
 			}
 		}
 		return view('user.matchesuser')
 		->with('matches',
 		Match::where('state','>',0)->where('state','<',4)->get())
-        ->with('currentSeason',self::checkSeason());
+        ->with('currentSeason',self::checkSeason())
+        ->with('teamsS',self::TeamsSeason(self::checkSeason()));
 	}
 
     private function TeamsSeason($season){
@@ -34,20 +35,36 @@ class MatchesController extends Controller
             $teams=Team::all();
             foreach ($teams as $team) {
                 $team["matchesCount"]=$team->matches()
-                ->where('season_id',$season->id)->get()->count();
+                ->where('season_id',$season->id)->where('state',4)->get()->count();
                 $team["points"]=0;
+                $team["differGoals"]=0;
                 if ($team["matchesCount"]>0) {
                     foreach ($team->matches()->where('season_id',$season->id)
-                    ->get() as $match) {
-                        if ($match->state == 4) {
-                            $team["points"]+=self::checkGoalsSeason($match,$team);
-                        }
+                    ->where('state',4)->get() as $match) {
+                        $team["points"]+=self::checkGoalsSeason($match,$team);
                     }
+                    $team["differGoals"]=self::checkDifferGoals($team,$season->id);
                 }
             }
             return $teams;
         }
-        return "cucu";
+        return "nothing";
+    }
+
+    private function checkDifferGoals($team,$seasonid){
+        $goodGoals=0;
+        $badGoals=0;
+        foreach ($team->matches()->where('season_id',$seasonid)
+        ->where('state',4)->get() as $match) {
+            foreach ($match->goals as $goal) {
+                if ($goal->player->team->id == $team->id) {
+                    $goodGoals++;
+                }else{
+                    $badGoals++;
+                }
+            }
+        }
+        return $goodGoals-$badGoals;
     }
 
     private function checkGoalsSeason($match, $team){

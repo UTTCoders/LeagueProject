@@ -173,13 +173,25 @@
 			<h3>Current points table</h3>
 			<hr style="border-color: #111;">
 			<div class="table-responsive">
-				<table class="table">
-				@foreach(App\League\Team::all() as $team)
-					<tr style="vertical-align: middle;" align="center">
-						<td><img style="width: 30px" src="/storage/{{$team->logo}}"></td>
-						<td>{{$team->name}}</td>
-					</tr>
-				@endforeach
+				<table class="table table-condensed">
+					<thead>
+						<tr style="font-size: 15px;" align="center">
+							<td></td>
+							<td><b>Matches</b></td>
+							<td><b>Differ goals</b></td>
+							<td><b>Points</b></td>
+						</tr>
+					</thead>
+					<tbody>
+					@foreach($teamsS as $team)
+						<tr align="center">
+							<td style="vertical-align: middle;" ><img style="width: 30px" src="/storage/{{$team->logo}}"> <b>{{$team->name}}</b></td>
+							<td style="vertical-align: middle;" >{{$team->matchesCount}}</td>
+							<td style="vertical-align: middle;" >{{$team->differGoals}}</td>
+							<td style="vertical-align: middle;" >{{$team->points}}</td>
+						</tr>
+					@endforeach
+					</tbody>
 				</table>
 			</div>
 		</div>
