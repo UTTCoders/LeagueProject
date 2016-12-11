@@ -1162,23 +1162,28 @@ League management
                 $.ajax({
                   url:'/deleteStadium',
                   type:'post',
+                  dataType:'json',
                   data:{
                     _token:'{{csrf_token()}}',
                     id: stadiumToDelete.id
                   }
                 }).done(function (response) {
-                  $('#deletingStadiumDiv').fadeOut('fast');
-                  clickedMarker.setMap(null);
-                  stadiumsMarkers = $.grep(stadiumsMarkers, function (mrk) {
-                      return (mrk != clickedMarker);
-                  });
-                  clickedMarker = null;
-                  showMessages('OK!',['Stadium successfully delete.'],'success-card');
-                  console.log(stadiumsMarkers.length);
-                  if(stadiumsMarkers.length < 1){
-                    $('.emptyAdvice').fadeIn('fast');
+                  if(response != null){
+                    showMessages('Ups!',response['content'],'error-card');
                   }
-                  $('#editingStadiumDiv').fadeOut();
+                  else{
+                    $('#deletingStadiumDiv').fadeOut('fast');
+                    clickedMarker.setMap(null);
+                    stadiumsMarkers = $.grep(stadiumsMarkers, function (mrk) {
+                        return (mrk != clickedMarker);
+                    });
+                    clickedMarker = null;
+                    showMessages('OK!',['Stadium successfully delete.'],'success-card');
+                    if(stadiumsMarkers.length < 1){
+                      $('.emptyAdvice').fadeIn('fast');
+                    }
+                    $('#editingStadiumDiv').fadeOut();
+                  }
                 });
             }
             else showMessages('Ups!',['Have been an error! Try again.'],'error-card');
@@ -1356,12 +1361,14 @@ League management
               id: id
             }
           }).done(function (response) {
+              if(response['title'] == 'Ok!'){
+                $('div[name='+id+']').fadeOut('fast',function () {
+                  $(this).remove();
+                });
+              }
               $('.dialog-card').css('opacity',0).css('margin-top','10%');
               $('.dark-tranparent-back').fadeOut('fast');
               showMessages(response['title'],response['content'],response['type']);
-              $('div[name='+id+']').fadeOut('fast',function () {
-                $(this).remove();
-              });
           });
         });
 

@@ -135,9 +135,8 @@ Route::post('/fblogin','Auth\LoginFBController@loginAsync')->middleware('guest')
 //pruebas
 
 Route::get('/prueba2', function(){
-    $player= App\League\Player::first();
-		$player->edad = 18;
-		return $player->team;
+	App\League\Player::onlyTrashed()->restore();	
+	return "restored";
 });
 
 Route::get('/prueba3',function(){

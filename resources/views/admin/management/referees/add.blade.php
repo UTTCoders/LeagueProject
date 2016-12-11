@@ -354,6 +354,7 @@ $(function ($) {
     function showMessages(title,msg,type) {
       $('.black-transparent-back').fadeIn('slow',function () {
         $('.messageBox').css('margin-top','20%').css('opacity',1);
+        $('.messageBox').children('.header').children('h3').text(title);
         $('.messageBox').children('.body').text(msg);
       });
     }
