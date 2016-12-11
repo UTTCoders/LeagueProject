@@ -31,6 +31,10 @@
 	.list-group-item{
 		color:#444;
 	}
+	.list-group-item.team{
+		color:#444;
+		border-radius: 0px;
+	}
 	.list-group-item.team:hover{
 		cursor: pointer;
 		background-color: #eee;
@@ -60,11 +64,10 @@
 		<div class="col-xs-12 col-sm-8 col-sm-offset-2">
 			<h2 align="center"><span class="glyphicon glyphicon-star"></span> Your favorite teams!</h2>
 			<hr>
-				
 			@if(Auth::user()->teams()->count()>0)
 				<ul class="list-group">
 				@foreach(Auth::user()->teams as $team)
-					<li style="font-weight: bold;" class="list-group-item team action" name="{{$team->id}}"><div align="center"><span class="pull-left"><img src="/storage/{{$team->logo}}" style="width: 20px;"></span>{{$team->name}}<span class="glyphicon glyphicon-menu-down pull-right"></span></div></li>
+					<li style="font-weight: bold;" id="{{'list'.$team->id}}" class="list-group-item team action" name="{{$team->id}}"><div align="center"><span class="pull-left"><img src="/storage/{{$team->logo}}" style="width: 20px;"></span>{{$team->name}}<span class="glyphicon glyphicon-menu-down pull-right"></span></div></li>
 					<li class="list-group-item submenu" id="{{$team->id}}">
 					<section class="row">
 						<section class="col-sm-6 col-xs-12" style="text-align: right;">
@@ -78,7 +81,8 @@
 								<br>
 								<span style="font-size: 14px;"><b>Stadium: </b>{{$team->stadium->name}}</span>
 								<br><br>
-								<button style="border-radius: 0; border:1px solid #ccc;" id="btnAddRemove" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove"></span> Remove</button>
+								<input type="hidden" name="teamid" value="{{$team->id}}">
+								<button style="border-radius: 0; border:1px solid #ccc;" class="btn btn-default btn-sm remove"><span class="glyphicon glyphicon-remove"></span> Remove</button>
 							</div>
 						</section>
 					</section>
@@ -94,5 +98,26 @@
 @endsection
 
 @section('js2')
+<script>
+$(function(){
+	$(".remove").click(function(){
+		var team=$("input[name='teamid']").val();
+		var string="#list"+team;
+		var t=$("meta[name='toktok']").attr('content');
+		$.ajax({
+			url:"/addremovefav",method:"post",
+			data:{
+				teamid:team,_token:t,action:0
+			}
+		}).done(function(response){
+			if (!response.action) {
+				$("#"+team).slideUp().delay(1000,function(){
+					$(string).slideUp();
+				});
+			}
+		});
+	});
+});
+</script>
 <script src="/js/changablemenu.js"></script>
 @endsection
