@@ -9,7 +9,6 @@
 	}
 	.matchcard{
 		border-radius:0; 
-		border: solid 1px #666;
 		padding:0px;
 		margin:20px;
 		background-color: #fff;
@@ -29,6 +28,13 @@
 		font-weight: bold;
 		font-size: 20px;
 	}
+	.list-group-item{
+		color:#444;
+	}
+	.list-group-item.team:hover{
+		cursor: pointer;
+		background-color: #eee;
+	}
 </style>
 @endsection
 
@@ -45,27 +51,42 @@
 </div>
 <div class="jumbotron" style="margin-bottom: 0px; color: #eee; background-color: #009688;">
 	<div class="container">
-		<h2>Your favorites</h2>
-		<div class="row">
-		@if(Auth::user()->teams()->count()>0)
-			@foreach(Auth::user()->teams as $team)
-					<div class="thumbnail col-sm-5 col-xs-10 matchcard hidden-sm" id="{{$team->id}}">
-						<div class="col-sm-5 imgcard" style="background-image: url('{{'/storage/'.$team->stadium->photo}}');" align="center">
-							<img src="/img/icons/star.png" style="width: 60%;">
-						</div>
-						<div class="col-sm-7 padData" style="color:#111;">
-							<h3 align="center"><img style="width: 30px; border-radius: 100%;" src="/storage/{{$team->logo}}"> {{$team->name}}</h3>
-							<span>Stadium: <a style="color:#111;" name="{{$team->id}}" href="/stadiums/{{$team->stadium->id}}">{{$team->stadium->name}}</a></span>
-						</div>
-					</div>
-					
-			@endforeach
-		@else
-
-		@endif
+		<div class="col-xs-12 col-sm-8 col-sm-offset-2">
+			<h2 align="center"><span class="glyphicon glyphicon-star"></span> Your favorite teams!</h2>
+			<hr>
+				
+			@if(Auth::user()->teams()->count()>0)
+				<ul class="list-group">
+				@foreach(Auth::user()->teams as $team)
+					<li style="font-weight: bold;" class="list-group-item team action" name="{{$team->id}}"><div align="center"><span class="pull-left"><img src="/storage/{{$team->logo}}" style="width: 20px;"></span>{{$team->name}}<span class="glyphicon glyphicon-menu-down pull-right"></span></div></li>
+					<li class="list-group-item submenu" id="{{$team->id}}">
+					<section class="row">
+						<section class="col-sm-6 col-xs-12" style="text-align: right;">
+							<a href="/stadiums/{{$team->stadium->id}}"><img id="imgS"  style="border: 2px solid #90CAF9;" class="img-responsive" src="/storage/{{$team->stadium->photo}}"></a>
+						</section>
+						<section class="col-sm-6 col-xs-12" style="text-align: left;">
+							<div style="margin-top: 15px; margin-bottom: 10px;">
+								<span style="font-size: 18px;"><span><img src="/storage/{{$team->logo}}" style="width: 20px;"> {{$team->name}}</span>
+								<br>
+								<span style="font-size: 14px;"><b>Coach: </b>{{$team->coach->name.' '.$team->coach->last_name}}</span>
+								<br>
+								<span style="font-size: 14px;"><b>Stadium: </b>{{$team->stadium->name}}</span>
+								<br><br>
+								<button style="border-radius: 0; border:1px solid #ccc;" id="btnAddRemove" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove"></span> Remove</button>
+							</div>
+						</section>
+					</section>
+					</li>
+				@endforeach
+				</ul>
+			@else
+			<h3 align="center">You have no favorites dude! :(</h3>
+			@endif
 		</div>
 	</div>
 </div>
+@endsection
 
-
+@section('js2')
+<script src="/js/changablemenu.js"></script>
 @endsection
