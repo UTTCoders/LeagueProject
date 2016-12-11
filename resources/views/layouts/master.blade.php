@@ -325,6 +325,7 @@
                 <div class="menuPanel">
                     <i class="material-icons pull-right" id="hideBtn" style="margin-right:15px;font-size:28px;cursor:pointer;">arrow_forward</i>
                     <div class="itemsContainer">
+                        <a href="/teams" class="panelItem"><span class="glyphicon glyphicon glyphicon-flag"></span> All the teams</a>
                         <a href="/favorites" class="panelItem"><span class="glyphicon glyphicon-star-empty"></span> My favorite teams</a>
                         <a href="/matches" class="panelItem"><span class="glyphicon glyphicon-th"></span> See all matches</a>
                     </div>
