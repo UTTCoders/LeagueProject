@@ -288,7 +288,11 @@
                 <div class="menuBar"></div>
                 <div class="menuBar"></div>
             </div>
-            <a href="/favorites" class="navItem toRight">{{Auth::user()->name}}<div class="bottomBar"></div></a>
+                @if(Auth::user()->type)
+                <a href="/favorites" class="navItem toRight">Admin: {{Auth::user()->name}}<div class="bottomBar"></div></a>
+                @else
+                <a href="/favorites" class="navItem toRight">{{Auth::user()->name}}<div class="bottomBar"></div></a>
+                @endif
             @else
              <a href="/home" class="navItem toLeft">Home<div class="bottomBar"></div></a>
             <a class="navItem toRight" id="loginLauncher">Log in<div class="bottomBar"></div></a>
