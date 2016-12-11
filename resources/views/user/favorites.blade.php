@@ -35,19 +35,25 @@
 		cursor: pointer;
 		background-color: #eee;
 	}
+	.con{
+		padding-top: 100px;
+		padding-bottom: 50px;
+	}
 </style>
 @endsection
 
 @section('body2')
-<div class="container" style="margin-top: 100px; margin-bottom: 50px;">
-			<div class="col-xs-6" align="right">
-				<img src="/img/icons/user.png" class="img-responsive">
-			</div>
-			<div class="col-xs-6" style="color:#111;">
-				<h2>User info</h2>
-				<p><b>Name: </b>{{Auth::user()->name}}</p>
-				<p><b>Email: </b>{{Auth::user()->email}}</p>
-			</div>	
+<div class="con">
+	<div class="container">
+				<div class="col-xs-6" align="right">
+					<img src="/img/icons/user.png" class="img-responsive">
+				</div>
+				<div class="col-xs-6" style="color:#111;">
+					<h2>User info</h2>
+					<p><b>Name: </b>{{Auth::user()->name}}</p>
+					<p><b>Email: </b>{{Auth::user()->email}}</p>
+				</div>	
+	</div>
 </div>
 <div class="jumbotron" style="margin-bottom: 0px; color: #eee; background-color: #009688;">
 	<div class="container">
