@@ -96,6 +96,7 @@
 	<div align="center">
 		<img src="/img/soccer_player.jpg" style="width: 30%;">
 	</div>
+	<div class="row">
 	@if($matches->count()>0)
 		<h1 align="center" style="color:#111; margin-top: 20px; margin-bottom: 30px;">There are matches<br>taking place right now!</h1>
 		<br>
@@ -163,6 +164,27 @@
 		</div>
 	@else
 		<h1 align="center" style="color:#111; margin-top: 20px; margin-bottom: 30px;">Here you can see all of the matches!</h1>
+	@endif
+	</div>
+	<br><br>
+	@if($currentSeason)
+	<div class="row" style="color:#111;">
+		<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+			<h3>Current points table</h3>
+			<hr style="border-color: #111;">
+			<div class="table-responsive">
+				<table class="table">
+				@foreach(App\League\Team::all() as $team)
+					<tr style="vertical-align: middle;" align="center">
+						<td><img style="width: 30px" src="/storage/{{$team->logo}}"></td>
+						<td>{{$team->name}}</td>
+					</tr>
+				@endforeach
+				</table>
+			</div>
+		</div>
+	</div>
+	<br><br>
 	@endif
 	</div>
 </div>
