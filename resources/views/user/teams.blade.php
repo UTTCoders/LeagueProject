@@ -60,13 +60,13 @@
 						<section class="col-sm-6 col-xs-12" style="text-align: right;">
 							<a href="/stadiums/{{$team->stadium->id}}"><img id="imgS"  style="border: 2px solid #90CAF9;" class="img-responsive" src="/storage/{{$team->stadium->photo}}"></a>
 						</section>
-						<section class="col-sm-6 col-xs-12" style="text-align: left;">
+						<section class="col-sm-6 col-xs-12" style=" padding-left: 20px; text-align: left;">
 							<div style="margin-top: 15px; margin-bottom: 10px;">
 								<span style="font-size: 18px;"><span><img src="/storage/{{$team->logo}}" style="width: 20px;"> {{$team->name}}</span>
 								<br>
-								<span style="font-size: 14px;"><b>Coach: </b>{{$team->coach->name.' '.$team->coach->last_name}}</span>
+								<span style="font-size: 13px;"><b>Coach: </b>{{$team->coach->name.' '.$team->coach->last_name}}</span>
 								<br>
-								<span style="font-size: 14px;"><b>Stadium: </b>{{$team->stadium->name}}</span>
+								<span style="font-size: 13px;"><b>Stadium: </b>{{$team->stadium->name}}</span>
 								<br><br>
 								<input type="hidden" name="btn{{$team->id}}" value="{{$team->id}}">
 								@if(in_array($team->id,$favorites))

@@ -82,7 +82,8 @@
 			<p style="font-size: 20px;">Here you can see all of the stadiums.</p>
 			<div class="thumbnail" style="border-radius: 0; box-shadow: 5px 5px #1B5E20;">
 				<div style="font-size: 15px; color: #000; padding: 20px 10px;">
-					<p><span class="glyphicon glyphicon-asterisk"></span> Do click on a stadium to go to check its events and more information.</p>
+					<p><span class="glyphicon glyphicon-asterisk"></span> Hover on a stadium to see its name and the team.</p>
+					<p><span class="glyphicon glyphicon-asterisk"></span> Do click on a stadium to go to check more information.</p>
 				</div>
 			</div>
 		</div>
