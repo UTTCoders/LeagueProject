@@ -204,14 +204,17 @@
 		<div class="thumbnail col-lg-9" style="border-radius: 0; color: #111; padding-top: 20px; padding-bottom: 20px; box-shadow: 5px 5px #00695C;">
 			<h2 align="center"><span class="glyphicon glyphicon-th-list"></span> Calendar</h2>
 			<div class="container">
-				@if(!$currentSeason)
+				@if($currentSeason)
 				<div class="row">
 					<div class="col-sm-4 col-sm-offset-8">
 						<label>Filter the seasons</label>
 						<select class="form-control" style="border-radius: 0px;">
-							<option></option>
+							<option value="{{$currentSeason->id}}">{{date_format(date_create($currentSeason->start_date),"Y/m/d")}} - Current</option>
 						</select>
 					</div>
+				</div>
+				<div class="row">
+					
 				</div>
 				@else
 				<hr>
