@@ -1,0 +1,27 @@
+$(document).ready(function(){
+    $('.menu').hover(function(){
+        $('.menu').css('cursor','pointer');
+        $(this).children('.menuBar').css('cursor','pointer');
+    });
+    $('.menu').mouseleave(function(){
+        $(this).children('.menuBar').css('background-color','white');
+    });
+    var active=false;
+    $('.menu').click(function(){
+        if(active){
+            active=false;
+            $('.menuPanel').css('right','-210px');
+        }
+        else{
+            active=true;
+            $('.menuPanel').css('right','0px');
+        }
+    });
+    $.each($('.panelItem'),function(index,element){
+        $(element).click(function(){
+            $.each($('.panelSubItem[id='+$(element).prop('id')+']'),function(index,subElement){
+                $(subElement).slideToggle();
+            });
+        });
+    });
+});
