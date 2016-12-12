@@ -5,6 +5,7 @@ Add seasons
 @endsection
 
 @section('css')
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 <style media="screen">
 body{
   background:  #222525;
@@ -259,7 +260,7 @@ input[name=playerSearchBox]{
 input[name=playerSearchBox]:hover{
   color: #fff;
 }
-.matchday-item{
+.matchday-item{font-family: Roboto;
   border: 1px solid #000;
   border-radius: 2px;
   color: #fff;
@@ -338,9 +339,11 @@ input[name=playerSearchBox]:hover{
 
 }
 th{
+  font-family: Roboto;
   text-align: center;
 }
 td{
+  font-family: Roboto;
   text-align:center;
   background:red;
   font-size:12px;
@@ -574,6 +577,7 @@ $(function ($) {
     function showMessages(title,msg,type) {
       $('.black-transparent-back').fadeIn('slow',function () {
         $('.messageBox').css('margin-top','20%').css('opacity',1);
+        $('.messageBox').children('.hearder').children('h4').text(title);
         $('.messageBox').children('.body').text(msg);
       });
     }

@@ -582,7 +582,11 @@ class League extends Controller
                              ->with('matchday',$request->matchday)
                              ->withInput();
             }
-
+            $referee = Referee::find($request->refereeId);
+            if($season->matches()->offset(($request->matchday-1)*10)->limit(10)->where('referee_id',$request->refereeId)->first())
+              return back()->with('msg',['title' => 'Ups!', 'content' => $referee->name." ".$referee->last_name." has already assigned a match in the matchday ".$request->matchday."."])
+                           ->with('matchday',$request->matchday)
+                           ->withInput();
               //the next match to insert is the first of matchday
             if($request->date > date('d-m-Y',strtotime($lastMatch->start_date))){
               $lastMatchDay=date('d',strtotime($lastMatch->start_date));

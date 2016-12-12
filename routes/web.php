@@ -27,13 +27,14 @@ Route::group(['middleware' => ['authen']], function(){
 
 		// Management by admin
 		//get
-		Route::get('/admin/calendar', function () {
-				return view('admin.calendar');
-		})->middleware('admin');
 
 		Route::get('/admin/teams/add', 'Admin\DataForViewsController@getForAddTeams')->middleware('admin');
 
 		Route::get('/admin/teams/edit', 'Admin\DataForViewsController@getForEditTeams')->middleware('admin');
+
+		Route::get('/admin/stadiums-coaches', function () {
+				return view('admin.management.management');
+		})->middleware('admin');
 
 		Route::get('/admin/teams/delete', function () {
 				return view('admin.management.teams.delete');

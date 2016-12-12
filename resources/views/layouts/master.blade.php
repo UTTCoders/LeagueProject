@@ -289,7 +289,7 @@
                 <div class="menuBar"></div>
             </div>
                 @if(Auth::user()->type)
-                <a href="/favorites" class="navItem toRight">Admin: {{Auth::user()->name}}<div class="bottomBar"></div></a>
+                <a href="/favorites" class="navItem toRight">{{Auth::user()->name}}<div class="bottomBar"></div></a>
                 @else
                 <a href="/favorites" class="navItem toRight">{{Auth::user()->name}}<div class="bottomBar"></div></a>
                 @endif
@@ -306,7 +306,7 @@
                 <i class="material-icons pull-right" id="hideBtn" style="margin-right:15px;font-size:28px;cursor:pointer;">arrow_forward</i>
                 <div class="itemsContainer">
                     <a id="1"  class="panelItem event">Management</a>
-                    <a href="/" id="1" class="panelSubItem" style="display:none">Stadiums and Coaches</a>
+                    <a href="/admin/stadiums-coaches" id="1" class="panelSubItem" style="display:none">Stadiums and Coaches</a>
                     <a href="/admin/teams/add" id="1" class="panelSubItem" style="display:none">Teams</a>
                     <a href="/admin/players/add" id="1" class="panelSubItem" style="display:none">Players</a>
                     <a href="/admin/referees/add" id="1" class="panelSubItem" style="display:none">Referees</a>
