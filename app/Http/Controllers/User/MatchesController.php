@@ -105,8 +105,12 @@ class MatchesController extends Controller
 
     private function checkSeason(){
         $d=Carbon::today('America/Monterrey');
-        return Season::where('start_date','<=',$d)
-                ->where('end_date','>=',$d)->get()->first();
+        $season=Season::where('start_date','<=',$d)
+        ->where('end_date','>=',$d)->get()->first();
+        if ($season && $season->matches()->count() >0) { //here 380
+            return $season;
+        }
+        return null;
     }
 
 	private function checkMatches(){

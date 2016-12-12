@@ -204,13 +204,21 @@
 		<div class="thumbnail col-lg-9" style="border-radius: 0; color: #111; padding-top: 20px; padding-bottom: 20px; box-shadow: 5px 5px #00695C;">
 			<h2 align="center"><span class="glyphicon glyphicon-th-list"></span> Calendar</h2>
 			<div class="container">
-				<div class="col-sm-4 col-sm-offset-8">
-					<label>Filter the seasons</label>
-					<select class="form-control" style="border-radius: 0px;">
-						<option></option>
-					</select>
+				@if(!$currentSeason)
+				<div class="row">
+					<div class="col-sm-4 col-sm-offset-8">
+						<label>Filter the seasons</label>
+						<select class="form-control" style="border-radius: 0px;">
+							<option></option>
+						</select>
+					</div>
 				</div>
-				
+				@else
+				<hr>
+				<div class="row">
+					<h4 align="center">Well... any seasons there?</h4>
+				</div>
+				@endif
 			</div>
 		</div>
 		<div class="thumbnail col-lg-2 col-lg-offset-1 hidden-xs hidden-sm hidden-md" id="infoside" style="color: #111;">
