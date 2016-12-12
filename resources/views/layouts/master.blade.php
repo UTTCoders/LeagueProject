@@ -315,7 +315,6 @@
                     <a href="/admin/seasons/control-matches" id="2" class="panelSubItem" style="display:none">Control matches</a>
                 </div>
                 <div class="bottomContainer col-md-12 col-xs-12 col-sm-12 no-padding" style="position:absolute;bottom:0px;background-color:red;">
-                  <a href="/favorites" class="panelItem" style="">Favorites</a>
                   <a id="logOutBtn" href="/logout" class="panelItem">Log out</a>
                 </div>
             </div>

@@ -56,6 +56,10 @@ Route::group(['middleware' => ['authen']], function(){
 		})->middleware('admin');
 
 		Route::get('/admin/seasons/add-matches','Admin\DataForViewsController@getForAddMatches')->middleware('admin');
+
+		Route::get('/admin/seasons/control-matches','Admin\DataForViewsController@getForControlMatches')->middleware('admin');
+
+		Route::get('/admin/seasons/control-matches','Admin\DataForViewsController@getForControlMatches')->middleware('admin');
 		//post
 		Route::post('/getStadiums','Admin\League@getStadiums')->middleware('admin');
 
@@ -135,7 +139,7 @@ Route::post('/fblogin','Auth\LoginFBController@loginAsync')->middleware('guest')
 //pruebas
 
 Route::get('/prueba2', function(){
-	App\League\Player::onlyTrashed()->restore();	
+	App\League\Player::onlyTrashed()->restore();
 	return "restored";
 });
 

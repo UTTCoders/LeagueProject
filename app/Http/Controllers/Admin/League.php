@@ -481,6 +481,9 @@ class League extends Controller
       }
       if(Referee::where('name',$request->name)->where('last_name',$request->last_name)->first())
         return back()->with('msg',['title' => 'Ups!', 'content' => 'There is already a coach with the given names!'])->withInput();
+      if(Referee::count() == 20){
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'The league has enough referees!'])->withInput();
+      }
       $referee=new Referee;
       $referee->name = $request->name;
       $referee->last_name = $request->last_name;
@@ -642,7 +645,6 @@ class League extends Controller
             $isSecondPart=true;
           }
 
-          //add match
           $match=new Match;
           $match->start_date = $request->date." ".$request->time;
           $match->state=0;
