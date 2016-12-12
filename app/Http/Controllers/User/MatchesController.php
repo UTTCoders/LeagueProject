@@ -20,6 +20,7 @@ class MatchesController extends Controller
 				return view('user.matchesuser')
 				->with('matches',$res["matches"])
                 ->with('currentSeason',self::checkSeason());
+
 			}
 		}
 		return view('user.matchesuser')
