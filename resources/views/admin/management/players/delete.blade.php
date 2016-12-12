@@ -413,9 +413,10 @@ $(function ($) {
         }
     });
 
-    function showMessages(title,msg,type) {
+    function showMessages(title,msg) {
       $('.black-transparent-back').fadeIn('slow',function () {
         $('.messageBox').css('margin-top','20%').css('opacity',1);
+        $('.messageBox').children('.header').children('h3').text(title);
         $('.messageBox').children('.body').text(msg);
       });
     }
@@ -480,14 +481,18 @@ $(function ($) {
             $.ajax({
               url:'/deletePlayer',
               type:'post',
+              dataType:'json',
               data:{
                 _token:'{{csrf_token()}}',
                 id:$(this).attr('id')
               }
-            }).done(function () {
-              $parentCard.fadeOut(300,function () {
-                $parentCard.remove();
-              });
+            }).done(function (response) {
+              if(response['title'] == 'Ok!'){
+                $parentCard.fadeOut(300,function () {
+                  $parentCard.remove();
+                });
+              }
+              showMessages(response['title'],response['content']);
             });
           });
           $parentCard.hover(function () {

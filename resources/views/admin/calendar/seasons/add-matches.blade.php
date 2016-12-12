@@ -309,7 +309,7 @@ input[name=playerSearchBox]:hover{
   height: auto;
 }
 .teamItemParent{
-
+  display: none;
 }
 .teamItem{
   background: #000;
@@ -336,6 +336,14 @@ input[name=playerSearchBox]:hover{
 #matchesContainer{
   background: #222;
 
+}
+th{
+  text-align: center;
+}
+td{
+  text-align:center;
+  background:red;
+  font-size:12px;
 }
 </style>
 @endsection
@@ -371,6 +379,10 @@ input[name=playerSearchBox]:hover{
       <h4>Programme season ({{$firstSeason['start_date']['month'].' '.$firstSeason['start_date']['year'].' - '.$firstSeason['end_date']['month'].' '.$firstSeason['end_date']['year']}})</h4>
       @elseif(isset($season))
       <h4>{{date('F Y',strtotime($season->start_date)).' - May '.(date('Y',strtotime($season->start_date))+1)}}</h4>
+      @elseif(isset($nextSeason))
+      <h4>{{date('F Y',$nextSeason['start_date']).' - May '.(date('Y',$nextSeason['start_date'])+1)}}</h4>
+      @elseif(isset($uncomingSeason))
+      <h4>Waiting for next season</h4>
       @endif
     </div>
     <div class="col-xs-12 col-md-4" style="margin-bottom:15px;">
@@ -381,17 +393,21 @@ input[name=playerSearchBox]:hover{
       @endfor
     </div>
     <div class="col-xs-12 col-md-8" style="margin-bottom:15px;">
+      @if(isset($uncomingSeason))
+      <h4>There is a season ready and going on... You will be able to set up the next season until the current one had finished.</h4>
+      @else
       <h4 class="col-xs-12">New match...</h4>
+      <p class="col-xs-12">Approximately there are 10 matches at a matchday... Approximately there is a match day each week. <b>Please consider that it is irregular.</b></p>
       <div class="col-xs-12" id="match-data">
         <form class="" action="/addMatch" method="post">
           {{csrf_field()}}
           @if(isset($season))
           <input type="hidden" name="seasonId" value="{{$season->id}}">
+          @endif
           <input type="hidden" name="refereeId" value="">
           <input type="hidden" name="localId" value="">
           <input type="hidden" name="visitorId" value="">
           <input type="hidden" name="matchday" value="">
-          @endif
           <div class="form-group no-padding col-xs-12">
             <label for="">Date</label>
             <input type="date" name="date" value="{{old('date')}}" class="myInputWhite col-xs-12">
@@ -442,11 +458,22 @@ input[name=playerSearchBox]:hover{
             </div>
           </div>
         </form>
-        <h4 id="matchTitle" class="col-xs-12" style="display:none;">Matches list</h4>
-        <div class="col-xs-12" id="matchesContainer" style="display:none;">
-
-        </div>
       </div>
+      @endif
+      <h4 id="matchTitle" class="col-xs-12 no-padding" style="display:none;">Matches list</h4>
+      <table class="col-xs-12 no-padding" id="matchesContainer" style="display:none;">
+        <thead>
+          <th>Local</th>
+          <th></th>
+          <th>Visitor</th>
+          <th>Referee</th>
+          <th>Date</th>
+          <th>Time</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
@@ -458,11 +485,79 @@ input[name=playerSearchBox]:hover{
 $(function ($) {
   $('.black-transparent-back').fadeIn('slow',function () {
     $('.messageBox').css('margin-top','20%').css('opacity',1);
+    $('.messageBox').children('.header').children('h3').text('{{session("msg")["title"]}}');
     $('.messageBox').children('.body').text('{{session("msg")["content"]}}');
   });
 });
 </script>
 @endif
+
+@if(session('matchday'))
+<script>
+$(function ($) {
+  $('.matchday-item[id={{session("matchday")}}]').css('border-left','2px solid dodgerblue');
+  $('#matchesContainer').fadeIn(300);
+  $('#matchTitle').fadeIn(300);
+  $('input[type=hidden][name=matchday]').val('{{session("matchday")}}');
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  $.ajax({
+    url:'/getMatchesPerMatchDay',
+    type:'post',
+    dataType:'json',
+    data:{
+      _token: '{{csrf_token()}}',
+      matchday: '{{session("matchday")}}'
+    }
+  }).done(function (response) {
+    $.each(response,function (i,match) {
+      var $item = $('<tr>');
+      $item.css({
+        padding:'5px',
+        width:'100%',
+        position:'relative'
+      });
+      var $team1=$('<img>').attr('src',"/storage/"+match.teams[0].logo).css({
+        height:'20px'
+      });
+      var $team2=$('<img>').attr('src',"/storage/"+match.teams[1].logo).css({
+        height:'20px'
+      });
+      $td1=$('<td>')
+      $td2=$('<td>').text('vs');
+      $td3=$('<td>');
+      $td4=$('<td>').text(match.referee.name+" "+match.referee.last_name);
+      var date=new Date(match.start_date);
+      $td5=$('<td>').text(days[date.getDay()]+", "+date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear());
+      var hrs = date.getHours();
+      var min = date.getMinutes();
+      if(String(hrs).length < 2){
+        hrs = "0"+String(hrs);
+      }
+      if(String(min).length < 2){
+        min = String(min)+"0";
+      }
+      $td6=$('<td>').text(hrs+":"+min);
+      if(match.teams[0].pivot.local == 1){
+        $td1.append($team1);
+        $td3.append($team2);
+      }
+      else{
+        $td1.append($team2);
+        $td3.append($team1);
+      }
+      $item.append($td1);
+      $item.append($td2);
+      $item.append($td3);
+      $item.append($td4);
+      $item.append($td5);
+      $item.append($td6);
+      $('#matchesContainer').children('tbody').append($item);
+    });
+  });
+});
+</script>
+@endif
+
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9fuikPcHicK9HnQSzmHM-iZikumk6710&libraries=places&language=en"></script>
 <script type="text/javascript">
   var topPos=0;
@@ -473,6 +568,8 @@ $(function ($) {
     $(window).resize(function () {
       $('.teamItem').height($('.teamItem').width());
     });
+
+    $('.teamItemParent').fadeIn('1000');
 
     function showMessages(title,msg,type) {
       $('.black-transparent-back').fadeIn('slow',function () {
@@ -485,12 +582,14 @@ $(function ($) {
       $('form').submit();
     });
 
+    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
     $('.matchday-item').click(function () {
       $('.matchday-item').css('border-left','2px solid transparent');
       $(this).css('border-left','2px solid dodgerblue');
       $('#matchesContainer').fadeIn(300);
       $('#matchTitle').fadeIn(300);
-      $('#matchesContainer').children().remove();
+      $('#matchesContainer').children('tbody').children().remove();
       $('input[type=hidden][name=matchday]').val($(this).attr('id'));
       $.ajax({
         url:'/getMatchesPerMatchDay',
@@ -502,16 +601,48 @@ $(function ($) {
         }
       }).done(function (response) {
         $.each(response,function (i,match) {
-          var $item = $('<div>');
+          var $item = $('<tr>');
           $item.css({
-            padding:'5px'
+            padding:'5px',
+            width:'100%',
+            position:'relative'
           });
-          var $date = $('<p>');
-          $date.text(match.referee+" / "+match.start_date);
-          //////////////////////////////////////////////////////
-          ////// completar
-          $item.append($date);
-          $('#matchesContainer').append($item);
+          var $team1=$('<img>').attr('src',"/storage/"+match.teams[0].logo).css({
+            height:'20px'
+          });
+          var $team2=$('<img>').attr('src',"/storage/"+match.teams[1].logo).css({
+            height:'20px'
+          });
+          $td1=$('<td>')
+          $td2=$('<td>').text('vs');
+          $td3=$('<td>');
+          $td4=$('<td>').text(match.referee.name+" "+match.referee.last_name);
+          var date=new Date(match.start_date);
+          $td5=$('<td>').text(days[date.getDay()]+", "+date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear());
+          var hrs = date.getHours();
+          var min = date.getMinutes();
+          if(String(hrs).length < 2){
+            hrs = "0"+String(hrs);
+          }
+          if(String(min).length < 2){
+            min = String(min)+"0";
+          }
+          $td6=$('<td>').text(hrs+":"+min);
+          if(match.teams[0].pivot.local == 1){
+            $td1.append($team1);
+            $td3.append($team2);
+          }
+          else{
+            $td1.append($team2);
+            $td3.append($team1);
+          }
+          $item.append($td1);
+          $item.append($td2);
+          $item.append($td3);
+          $item.append($td4);
+          $item.append($td5);
+          $item.append($td6);
+          $('#matchesContainer').children('tbody').append($item);
         });
       });
     });

@@ -20,7 +20,7 @@ class League extends Controller
 {
     //
     public function getStadiums(Request $request){
-        return Stadium::all();
+        return Stadium::get();
     }
 
     public function addStadium(Request $request){
@@ -127,7 +127,11 @@ class League extends Controller
     }
 
     public function deleteStadium(Request $request){
-        Stadium::find($request->id)->delete();
+        $stadium = Stadium::find($request->id);
+        if($stadium->team)
+          return ['title' => 'Ups!', 'content' => 'The stadium belongs to a team... You cannot delete it.', 'type' => 'alert-card'];
+        $stadium->delete();
+        return null;
     }
 
     public function addCoach(Request $request){
@@ -213,7 +217,10 @@ class League extends Controller
           'id' => 'required|numeric'
         ]);
         if($result->fails()) return ['title' => 'Ups!', 'content' => 'Something went wrong!', 'type' => 'error-card'];
-        Coach::find($request->id)->delete();
+        $coach=Coach::find($request->id);
+        if($coach->team)
+          return ['title' => 'Ups!', 'content' => 'The coach is directing a team... You cannot delete it.', 'type' => 'error-card'];
+        $coach->delete();
         return ['title' => 'Ok!', 'content' => 'Coach deleted!', 'type' => 'success-card'];
     }
 
@@ -286,6 +293,10 @@ class League extends Controller
         return back()->with('msg',['title' => 'Ups!', 'content' => "Something went wrong!" ]);
       if(!$team = Team::find($request->id))
         return back()->with('msg',['title' => 'Ups!', 'content' => "Team could not be found." ]);
+      if($team->matches->count() > 0)
+        return back()->with('msg',['title' => 'Ups!', 'content' => "Team could not be deleted because is already in a competition." ]);
+      if($team->players->count() > 0)
+        return back()->with('msg',['title' => 'Ups!', 'content' => "Team could not be deleted because it has players registered." ]);
       $team->delete();
         return back()->with('msg',['title' => 'Ok!', 'content' => "Success!" ]);
     }
@@ -453,7 +464,11 @@ class League extends Controller
     }
 
     public function deletePlayer(Request $request){
-      Player::find($request->id)->delete();
+      $player=Player::find($request->id);
+      if($player->matches->count() > 0)
+        return ['title' => 'Ups!', 'content' => 'Player could not be deleted beacause he already has played in the league!', 'type' => 'success-card'];
+      $player->delete();
+      return ['title' => 'Ok!', 'content' => 'Player deleted!', 'type' => 'success-card'];
     }
 
     public function addReferee(Request $request){
@@ -466,6 +481,9 @@ class League extends Controller
       }
       if(Referee::where('name',$request->name)->where('last_name',$request->last_name)->first())
         return back()->with('msg',['title' => 'Ups!', 'content' => 'There is already a coach with the given names!'])->withInput();
+      if(Referee::count() == 20){
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'The league has enough referees!'])->withInput();
+      }
       $referee=new Referee;
       $referee->name = $request->name;
       $referee->last_name = $request->last_name;
@@ -479,17 +497,17 @@ class League extends Controller
       if(!$request->has('matchday'))
         return back()->with('msg',['title' => 'Ups!', 'content' => 'Select a matchday to insert in.'])->withInput();
       if(!$request->has('date'))
-        return back()->with('msg',['title' => 'Ups!', 'content' => 'Select a valid date.'])->withInput();
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'Select a valid date.'])->with('matchday',$request->matchday)->withInput();
       if(!$request->has('time'))
-        return back()->with('msg',['title' => 'Ups!', 'content' => 'Select a valid time.'])->withInput();
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'Select a valid time.'])->with('matchday',$request->matchday)->withInput();
       if(!$request->has('refereeId'))
-        return back()->with('msg',['title' => 'Ups!', 'content' => 'Select a referee.'])->withInput();
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'Select a referee.'])->with('matchday',$request->matchday)->withInput();
       if(!$request->has('localId'))
-        return back()->with('msg',['title' => 'Ups!', 'content' => 'Select the local team.'])->withInput();
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'Select the local team.'])->with('matchday',$request->matchday)->withInput();
       if(!$request->has('visitorId'))
-        return back()->with('msg',['title' => 'Ups!', 'content' => 'Select the visitor team.'])->withInput();
+        return back()->with('msg',['title' => 'Ups!', 'content' => 'Select the visitor team.'])->with('matchday',$request->matchday)->withInput();
       if($request->visitorId == $request->localId)
-        return back()->with('msg',['title' => 'Ups!', 'content' => "The teams cannot be equal."])->withInput();
+        return back()->with('msg',['title' => 'Ups!', 'content' => "The teams cannot be equal."])->with('matchday',$request->matchday)->withInput();
 
       if(Season::count() < 1){
         $month=date('m');
@@ -501,33 +519,109 @@ class League extends Controller
             $year++;
           }
         }
+        $monthNumber=$month;
         $month = date('F', mktime(0,0,0,$month,1,$year));
-        $endMonth = date('F', mktime(0,0,0,5,1,$year+1));
-        $season = ['start_date' => ['month' => $month, 'year' => $year], 'end_date' => ['month' => $endMonth, 'year' => $year+1]];
-        return ['firstSeason' => $season];
-        ///////////////////////////// complete this, when is the first season, add season, match, check
+
+        if($request->matchday > 1)
+          return back()->with('matchday',$request->matchday)->with('msg',['title' => 'Ups!', 'content' => "You must programme the first matchday at the beginning."])->withInput();
+
+        if(date('Y-m-d',strtotime($request->date)) < date('Y-m-d',strtotime('01-'.$monthNumber."-".$year))
+          or date('Y-m-d',strtotime($request->date)) > date('Y-m-d',strtotime('31-'.$monthNumber."-".$year)))
+          return back()->with('msg',['title' => 'Ups!', 'content' => "The league must begin on August of ".$year])
+                       ->with('matchday',$request->matchday)
+                       ->withInput();
+
+          $newSeason = new Season;
+          $newSeason->start_date=$request->date;
+          $newSeason->save();
+
+          $match=new Match;
+          $match->start_date = $request->date." ".$request->time;
+          $match->state=0;
+          $match->season_id = $newSeason->id;
+          $match->referee_id = $request->refereeId;
+          $match->save();
+
+          $match->teams()->attach($request->localId,['local' => true]);
+          $match->teams()->attach($request->visitorId,['local' => false]);
+
+          return back()->with('msg',['title' => 'OK!', 'content' => "Success!"]);
       }
       else{
         $season = Season::latest('start_date')->get()->first();
         if(!$season->end_date){
           if($request->date < $season->start_date || $request->date > mktime(0,0,0,5,31,date('Y',strtotime($season->start_date))+1))
-              return back()->with('msg',['title' => 'Ups!', 'content' => "The match date is outside of the limits of the season."])->withInput();
+              return back()->with('msg',['title' => 'Ups!', 'content' => "The match date is outside of the limits of the season."])
+                           ->with('matchday',$request->matchday)
+                           ->withInput();
           if($season->matches->count() > 380)
-              return back()->with('msg',['title' => 'Ups!', 'content' => "The current season is full."])->withInput();
+              return back()->with('msg',['title' => 'Ups!', 'content' => "The current season is full."])
+                           ->with('matchday',$request->matchday)
+                           ->withInput();
           $lastMatch = $season->matches()->latest('start_date')->get()->first();
           if($lastMatch){
             if(date('d-m-Y',strtotime($request->date)) < date('d-m-Y',strtotime($lastMatch->start_date)))
-              return back()->with('msg',['title' => 'Ups!', 'content' => "The next match cannot be older than the last one."])->withInput();
-            if($season->matches->where('start_date',$request->date)->count() >= 5)
-              return back()->with('msg',['title' => 'Ups!', 'content' => "The max number of games per day has been reached."])->withInput();
+              return back()->with('msg',['title' => 'Ups!', 'content' => "The next match cannot be older than the last one."])
+                           ->with('matchday',$request->matchday)
+                           ->withInput();
+            if($season->matches->where('start_date',$request->date)->count() >= 10)
+              return back()->with('msg',['title' => 'Ups!', 'content' => "The max number of games per day has been reached."])
+                           ->with('matchday',$request->matchday)
+                           ->withInput();
             if($request->matchday > 1 and  $season->matches->count() < ($request->matchday-1)*10)
-              return back()->with('msg',['title' => 'Ups!', 'content' => "Complete the last matchday."])->withInput();
+              return back()->with('msg',['title' => 'Ups!', 'content' => "Complete the last matchday."])
+                           ->with('matchday',$request->matchday)
+                           ->withInput();
             if($season->matches->count() >= $request->matchday*10)
-              return back()->with('msg',['title' => 'Ups!', 'content' => "The matchday is complete."])->withInput();
-            //no repetir encuentros
+              return back()->with('msg',['title' => 'Ups!', 'content' => "The matchday is complete."])
+                           ->with('matchday',$request->matchday)
+                           ->withInput();
+            foreach($season->matches()->offset(($request->matchday-1)*10)->limit(10)->get() as $match){
+              if($team = $match->teams()->where('id',$request->localId)->orWhere('id',$request->visitorId)->first())
+                return back()->with('msg',['title' => 'Ups!', 'content' => $team->name." has already a match in the matchday ".$request->matchday."."])
+                             ->with('matchday',$request->matchday)
+                             ->withInput();
+            }
+
+              //the next match to insert is the first of matchday
+            if($request->date > date('d-m-Y',strtotime($lastMatch->start_date))){
+              $lastMatchDay=date('d',strtotime($lastMatch->start_date));
+              $lastMatchMonth=date('m',strtotime($lastMatch->start_date));
+              $lastMatchYear=date('Y',strtotime($lastMatch->start_date));
+              $tempDate=mktime(0,0,0,$lastMatchMonth,$lastMatchDay,$lastMatchYear);
+              $daysCount=0;
+              for (;date('d-m-Y',$tempDate) < date('d-m-Y',strtotime($request->date)) ;) {
+                $daysCount++;
+                $lastMatchDay++;
+                if($lastMatchDay==31) {
+                  $lastMatchDay=0;
+                  $lastMatchMonth++;
+                  if($lastMatchMonth==13){
+                    $lastMatchMonth=1;
+                    $lastMatchYear++;
+                  }
+                }
+                $tempDate=mktime(0,0,0,$lastMatchMonth,$lastMatchDay,$lastMatchYear);
+              }
+              if($season->matches->count() == $request->matchday*10){
+                if( $daysCount>15)
+                  return back()->with('msg',['title' => 'Ups!', 'content' => "The max interval between matchdays are 15 days."])
+                               ->with('matchday',$request->matchday)
+                               ->withInput();
+              }
+              else{
+                if($daysCount > 1)
+                  return back()->with('msg',['title' => 'Ups!', 'content' => "The matches of a matchday must be continuous."])
+                               ->with('matchday',$request->matchday)
+                               ->withInput();
+              }
+            }
+
           }
           if($request->matchday > 1 and $season->matches->count() < 10)
-            return back()->with('msg',['title' => 'Ups!', 'content' => "Complete the first matchday."])->withInput();
+            return back()->with('msg',['title' => 'Ups!', 'content' => "Complete the first matchday."])
+                         ->with('matchday',$request->matchday)
+                         ->withInput();
 
           $isSecondPart=false;
           foreach ($season->matches->chunk(190) as $i => $matches) {
@@ -535,40 +629,52 @@ class League extends Controller
               if(!$isSecondPart){
                 if($match->teams()->wherePivot('local',true)->first()->id == $request->visitorId
                   and $match->teams()->wherePivot('local',false)->first()->id == $request->localId){
-                    return back()->with('msg',['title' => 'Ups!', 'content' => "The teams have already faced between them in the first part of the season."])->withInput();
+                    return back()->with('msg',['title' => 'Ups!', 'content' => "The teams have already faced between them in the first part of the season."])
+                                 ->with('matchday',$request->matchday)
+                                 ->withInput();
                 }
               }
               if(($match->teams()->wherePivot('local',true)->first()->id == $request->localId
                 and $match->teams()->wherePivot('local',false)->first()->id == $request->visitorId)
                 || ($match->teams()->wherePivot('local',true)->first()->id == $request->visitorId
                   and $match->teams()->wherePivot('local',false)->first()->id == $request->localId))
-                return back()->with('msg',['title' => 'Ups!', 'content' => "The match is already programmed."])->withInput();
+                return back()->with('msg',['title' => 'Ups!', 'content' => "The match is already programmed."])
+                             ->with('matchday',$request->matchday)
+                             ->withInput();
             }
             $isSecondPart=true;
           }
 
-          //partidos deben ser seguidos
-          //if(date('j',strtotime($lastMatch->start_date)) == )
-
-          //add match
           $match=new Match;
           $match->start_date = $request->date." ".$request->time;
           $match->state=0;
           $match->season_id = $season->id;
           $match->referee_id = $request->refereeId;
           $match->save();
+          /////////////////////////////////
+          ////// probar esto
+          /////////////////////////////////
+          if($season->matches->count() == 380){
+              $season->end_date=$match->start_date;
+              $season->save();
+          }
           $match->teams()->attach($request->localId,['local' => true]);
           $match->teams()->attach($request->visitorId,['local' => false]);
-          return back()->with('msg',['title' => 'OK!', 'content' => "Success!"]);
+          return back()->with('msg',['title' => 'OK!', 'content' => "Success!"])
+                       ->with('matchday',$request->matchday);
         }
         else if(date('Y-m-d') > $season->end_date){
           //probar este caso, cuando sigue una nueva temporada
-          if($request->date < mktime(0,0,0,8,1,date('Y',$season->end_date))
-            || $request->date > mktime(0,0,0,5,31,date('Y',$season->end_date+1))){
-              return back()->with('msg',['title' => 'Ups!', 'content' => "The match date is outside of the limits of the season."])->withInput();
+          if(date('Y-m-d',strtotime($request->date)) < date('Y-m-d',mktime(0,0,0,8,1,date('Y',strtotime($season->end_date))+1))
+            || date('Y-m-d',strtotime($request->date)) > date('Y-m-d',mktime(0,0,0,5,31,date('Y',strtotime($season->end_date))+2))){
+              return back()->with('msg',['title' => 'Ups!', 'content' => "The match date is outside of the limits of the season."])
+                           ->with('matchday',$request->matchday)
+                           ->withInput();
           }
-          if($request->date > mktime(0,0,0,8,31,date('Y',$season->end_date)))
-            return back()->with('msg',['title' => 'Ups!', 'content' => "The first match must be on agust."])->withInput();
+          if(date('Y-m-d',strtotime($request->date)) > date('Y-m-d',mktime(0,0,0,8,31,date('Y',strtotime($season->end_date))+1)))
+            return back()->with('msg',['title' => 'Ups!', 'content' => "The first match must be on agust."])
+                         ->with('matchday',$request->matchday)
+                         ->withInput();
           $newSeason = new Season;
           $newSeason->start_date=$request->date;
           $newSeason->save();
@@ -578,18 +684,26 @@ class League extends Controller
           $match->season_id = $newSeason->id;
           $match->referee_id = $request->refereeId;
           $match->save();
-          $match->teams()->attach($request->localId,['local' => true]);
-          $match->teams()->attach($request->visitorId,['local' => false]);
-          return back()->with('msg',['title' => 'OK!', 'content' => "Success!"]);
+          $match->teams()->attach($request->localId, ['local' => true]);
+          $match->teams()->attach($request->visitorId, ['local' => false]);
+          return back()->with('msg',['title' => 'OK!', 'content' => "Success!"])
+                       ->with('matchday',$request->matchday);
         }
         else{
-          return back()->with('msg',['title' => 'Alert!', 'content' => "The season is defined and its going on. You wont be able of programme another season until the current one finish."])->withInput();
+          return back()->with('msg',['title' => 'Alert!', 'content' => "The season is defined and its going on. You wont be able of programme another season until the current one finish."])
+                       ->with('matchday',$request->matchday)
+                       ->withInput();
         }
       }
 
     }
 
     public function getMatchesPerMatchDay(Request $request){
-      return Match::offset($request->matchday-1)->limit(10)->get();
+      $matches = Season::latest('start_date')->first()->matches()->offset(($request->matchday-1)*10)->limit(10)->get();
+      foreach ($matches as $match) {
+        $match->teams=$match->teams;
+        $match->referee=$match->referee;
+      }
+      return $matches;
     }
 }

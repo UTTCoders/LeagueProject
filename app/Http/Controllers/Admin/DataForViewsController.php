@@ -8,6 +8,7 @@ use App\League\Team;
 use App\League\Stadium;
 use App\League\Coach;
 use App\League\Season;
+use App\League\Match;
 
 class DataForViewsController extends Controller
 {
@@ -68,7 +69,29 @@ class DataForViewsController extends Controller
       }
       else{
         $season = Season::latest('start_date')->get()->first();
-        return view('admin.calendar.seasons.add-matches',['season' => $season]);
+        if(!$season->end_date){
+          //se esta programando una existente
+          return view('admin.calendar.seasons.add-matches',['season' => $season]);
+        }
+        else if(date('Y-m-d') > $season->end_date){
+          //se programara una nueva temporada
+          $nextSeason = ['start_date'=>mktime(0,0,0,8,1,date('Y',strtotime($season->end_date))+1)];
+          return view('admin.calendar.seasons.add-matches',['nextSeason' => $nextSeason]);
+        }
+        else{
+          //season programada y en progreso
+          return view('admin.calendar.seasons.add-matches',['uncomingSeason' => $season]);
+        }
       }
+    }
+
+    public function getForControlMatches(Request $request){
+      $todayMatches = Match::whereDay('start_date',date('d'))->whereMonth('start_date',date('m'))->whereYear('start_date',date('Y'))->get();
+      $tomorrowMatches = Match::whereDay('start_date',date('d')+1)->whereMonth('start_date',date('m'))->whereYear('start_date',date('Y'))->get();
+      return view('admin.calendar.seasons.control-matches',[
+        'todayMatches' => $todayMatches,
+        'tomorrowMatches' => $tomorrowMatches,
+        'states' => ['uncoming','first half','second half','full time']
+      ]);
     }
 }

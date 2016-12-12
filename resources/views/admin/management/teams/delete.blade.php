@@ -285,7 +285,7 @@ body{
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 no-padding">
       @foreach(App\League\Team::get() as $team)
-        <form class="" id="{{$team->id}}" action="/deleteTeam" method="post" enctype="multipart/form-data">
+        <form class="{{$team->id}}" id="" action="/deleteTeam" method="post" enctype="multipart/form-data">
           {{csrf_field()}}
           <input type="hidden" name="id" value="{{$team->id}}">
           <div class="col-md-3 col-xs-12 col-sm-4 cardParent" style="padding:15px; ;overflow: hidden;">
@@ -364,7 +364,7 @@ $(function ($) {
       $(this).fadeOut(1000);
     });
     $('.delete-btn').click(function () {
-      $('form#'+$(this).attr('id')).submit();
+      $('form.'+$(this).attr('id')).submit();
     });
   });
 </script>
