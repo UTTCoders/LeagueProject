@@ -171,7 +171,7 @@
 					<li class="list-group-item submenu" id="{{$player->id}}">
 					<section class="row">
 						<section class="col-xs-5 col-sm-4" style="text-align: right;">
-							<img style="width: 100px; border-radius: 100%;" src="{{$player->photo}}">
+							<img style="width: 100px; border-radius: 100%;" src="/storage/{{$player->photo}}">
 						</section>
 						<section class="col-xs-7 col-sm-8" style="text-align: left;">
 							<p style="font-size: 13px;"><b>Full name: </b>{{$player->name.' '.$player->last_name}}</p>

@@ -174,12 +174,51 @@
 		<div class="thumbnail col-lg-9" style="border-radius: 0; color: #111; padding-top: 20px; padding-bottom: 20px; box-shadow: 5px 5px #00695C;">
 			<h2 align="center"><span class="glyphicon glyphicon-th-list"></span> Calendar</h2>
 			<div class="container">
-				@if($currentSeason)
+				@if($theseasons->count()>0 && Session::has('seasons'))
 				<div class="row">
-					<div class="col-sm-4 col-sm-offset-8">
+					<div class="form-group col-sm-8 col-xs-12">
 						<label>Filter the seasons</label>
-						<select class="form-control" style="border-radius: 0px;">
-							<option value="{{$currentSeason->id}}">{{date_format(date_create($currentSeason->start_date),"Y/m/d")}} - Current</option>
+						<select name="seasonid" class="form-control" style="border-radius: 0px;">
+							@if($currentSeason)
+								<option value="{{$currentSeason->id}}">{{date_format(date_create($currentSeason->start_date),"Y/F/d")}} - Current</option>
+								@foreach($theseasons as $s)
+									@if($s->id != $currentSeason->id)
+									<option value="{{$s->id}}">{{date_format(date_create($s->start_date),"Y/F/d")}} - {{date_format(date_create($s->end_date),"Y/F/d")}}</option>
+									@endif
+								@endforeach
+							@else
+								@foreach($theseasons as $s)
+									<option value="{{$s->id}}">{{date_format(date_create($s->start_date),"Y/F/d")}} - {{date_format(date_create($s->end_date),"Y/F/d")}}</option>
+								@endforeach
+							@endif
+						</select>
+					</div>
+					<div class="form-group col-sm-4 col-xs-12">
+						<label>Matchdays</label>
+						<select name="matchday" class="form-control" style="border-radius: 0px;">
+							@if($currentSeason)
+								@if(Session::has('def'))
+									@foreach(Session::get("seasons.".$currentSeason->id) as $match)
+										@if(Session::get('def')==$loop->iteration)
+										<option selected value="{{$loop->iteration}}">Matchday {{$loop->iteration}}</option>
+										@else
+										<option value="{{$loop->iteration}}">Matchday {{$loop->iteration}}</option>
+										@endif
+									@endforeach
+								@else
+									@foreach(Session::get("seasons.".$currentSeason->id) as $match)
+										@if($loop->last)
+										<option selected value="{{$loop->iteration}}">Matchday {{$loop->iteration}}</option>
+										@else
+										<option value="{{$loop->iteration}}">Matchday {{$loop->iteration}}</option>
+										@endif
+									@endforeach
+								@endif
+							@else
+								@for($i=1; $i<=38; $i++)
+								<option value="{{$i}}">Matchday {{$i}}</option>
+								@endfor
+							@endif
 						</select>
 					</div>
 				</div>
@@ -212,4 +251,11 @@ $(document).ready(function(){
 	});
 });
 </script>
+@if($theseasons->count()>0 && Session::has('seasons'))
+<script>
+$(function(){
+	
+});
+</script>
+@endif
 @endsection

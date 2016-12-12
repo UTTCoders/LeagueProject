@@ -156,3 +156,5 @@ Route::get('/emergencylogout',function(){
 	\Auth::logout();
 	return ":D";
 });
+
+Route::get('/ses','User\MatchesController@getSession');

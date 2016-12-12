@@ -71,7 +71,7 @@ class MapController extends Controller
             if ($goal->player->team->id == $teams["local"]->id) {
                 $teams["local"]["goals"]+=1;
             }else{
-                $teams["visitor"]["goals"]++;
+                $teams["visitor"]["goals"]+=1;
             }
         }
         return $teams;

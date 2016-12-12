@@ -100,14 +100,13 @@ $(function(){
 	            credits:{
 	            	enabled:false
 	            },
-	            title: {
-	                text: ''
-	            },
+	            title: {text:''},
 	            xAxis: {
 	            	labels:{
 	            		style:{
 	            			fontSize:'13px',
-	            			fontWeight:"bold"
+	            			fontWeight:"bold",
+	            			color:"#111"
 	            		}
 	            	},
 	                categories: teams
