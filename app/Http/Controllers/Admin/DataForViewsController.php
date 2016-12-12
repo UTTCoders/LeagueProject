@@ -87,11 +87,28 @@ class DataForViewsController extends Controller
 
     public function getForControlMatches(Request $request){
       $todayMatches = Match::whereDay('start_date',date('d'))->whereMonth('start_date',date('m'))->whereYear('start_date',date('Y'))->get();
+      foreach ($todayMatches as $match) {
+        $match->localTeam=$match->teams()->wherePivot("local",true)->first();
+        $match->visitorTeam=$match->teams()->wherePivot("local",false)->first();
+        if($match->state != 0){
+          $match->localTeam->goalsCount=0;
+          $match->visitorTeam->goalsCount=0;
+          foreach ($match->goals as $goal) {
+            if($goal->player->team->id == $match->localTeam->id)
+              $match->localTeam->goalsCount++;
+            else $match->visitorTeam->goalsCount++;
+          }
+        }
+      }
       $tomorrowMatches = Match::whereDay('start_date',date('d')+1)->whereMonth('start_date',date('m'))->whereYear('start_date',date('Y'))->get();
       return view('admin.calendar.seasons.control-matches',[
         'todayMatches' => $todayMatches,
         'tomorrowMatches' => $tomorrowMatches,
         'states' => ['uncoming','first half','second half','full time']
       ]);
+    }
+
+    public function getMatch(Request $request, $id){
+      return view('admin.calendar.seasons.match-narrating');
     }
 }

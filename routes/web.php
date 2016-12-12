@@ -59,7 +59,7 @@ Route::group(['middleware' => ['authen']], function(){
 
 		Route::get('/admin/seasons/control-matches','Admin\DataForViewsController@getForControlMatches')->middleware('admin');
 
-		Route::get('/admin/seasons/control-matches','Admin\DataForViewsController@getForControlMatches')->middleware('admin');
+		Route::get('/admin/seasons/control-matches/{id}','Admin\DataForViewsController@getMatch')->middleware('admin');
 		//post
 		Route::post('/getStadiums','Admin\League@getStadiums')->middleware('admin');
 

@@ -85,6 +85,9 @@ body{
       <p style="margin:0; font-size:12px;">{{date('d-m-Y',strtotime($match->start_date))}}</p>
       <p style="margin:0; font-size:12px;">{{date('H:i',strtotime($match->start_date))}}</p>
       <p style="margin:0; font-size:12px;">{{$states[$match->state]}}</p>
+      @if($match->state != 0)
+      <p style="margin:0; font-size:16px;">{{$match->localTeam->goalsCount.' - '.$match->visitorTeam->goalsCount}}</p>
+      @endif()
     </div>
     <div class="col-xs-5 team-container">
       <div class="col-xs-12">
@@ -130,9 +133,6 @@ body{
 
   <div class="col-xs-12" style="background:#111;text-align:center;padding:10px;">
     <p style="margin:0;">{{$match->referee->name." ".$match->referee->last_name}}</p>
-    <div class="col-xs-12 no-padding" style="margin-top:5px;">
-      <a href="control-matches/{{$match->id}}" class="btnBlue2">narrate</a>
-    </div>
   </div>
 </div>
 @endforeach
