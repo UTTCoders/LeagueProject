@@ -160,6 +160,7 @@
 	</div>
 	</div>	
 </div>
+@if($stadium->team->players->count()>0)
 <div class="container">
 	<div class="row" style="padding-top: 50px; padding-bottom: 55px;">
 		<div class="col-xs-12 col-md-8">
@@ -184,6 +185,7 @@
 		</div>
 	</div>
 </div>
+@endif
 @endsection
 
 @section('js2')

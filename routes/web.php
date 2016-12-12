@@ -115,7 +115,6 @@ Route::get('activate/{t}',
 'Authentication\ActivationController@ActivationRequest');
 Route::get('/logout','Authentication\LoginHomeController@LogoutRequest')->middleware('authen');
 
-
 //--------------------Routes for the user----------------------!
 Route::group(['middleware' => ['authen']], function(){
 	Route::get("/teams",'User\TeamsController@TeamsRequest');
@@ -132,6 +131,7 @@ Route::group(['middleware' => ['authen']], function(){
 	Route::post('/askgoals','User\MapController@AskForGoals');
 	Route::post('/askstate','User\MatchesController@AskForState');
 	Route::post("/askchart",'User\MatchesController@AskPossession');
+	Route::post("/chartstats",'User\MatchesController@ChartStats');
 });
 
 // fb

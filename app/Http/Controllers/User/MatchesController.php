@@ -29,6 +29,11 @@ class MatchesController extends Controller
         ->with('currentSeason',self::checkSeason());
 	}
 
+    public function ChartStats(){
+        $teams=self::TeamsSeason(self::checkSeason());
+        return $teams;
+    }
+
     public function StatsRequest(Request $r){
         return view('user.stats')
         ->with('currentSeason',self::checkSeason())

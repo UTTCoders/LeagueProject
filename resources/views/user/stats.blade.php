@@ -53,16 +53,85 @@
 			</div>
 		</div>
 		<br><br>
+		<div class="row" style="color:#111;">
+			<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+				<h3><span class="glyphicon glyphicon-stats"></span> Chart</h3>
+				<div id="chart" style="width:100%; max-height:700px; margin: 0 auto"></div>
+			</div>
+		</div>
 		@else
 		<div class="row">
 			<h3 style="color:#111;" align="center">Sorry bro! :(</h3>
 			<h4 style="color:#111;" align="center">There are no current season stats!</h4>
 		</div>
 		@endif
+		<br><br>
 	</div>
 </div>
 @endsection
 
 @section('js2')
-<script src="/js/changablemenu.js"></script>
+@if($currentSeason && $teamsS->count()>0)
+<script src="/Highcharts/js/highcharts.js"></script>
+<script>
+$(function(){
+	var t=$("meta[name='toktok']").attr('content')
+	$.ajax({
+		url:"/chartstats",method:"post",
+		data:{
+			_token:t
+		}
+	}).done(function(response){
+		var teams = [];
+		$.each(response, function(index, val){
+            teams.push(val.name);
+        });
+
+		var points = [];
+		$.each(response, function(index, val){
+            points.push(val.points);
+        });
+
+		var chart = new Highcharts.Chart({
+	            chart: {
+	                renderTo: 'chart',
+	                type: 'bar'
+	            },
+	            credits:{
+	            	enabled:false
+	            },
+	            title: {
+	                text: ''
+	            },
+	            xAxis: {
+	            	labels:{
+	            		style:{
+	            			fontSize:'13px',
+	            			fontWeight:"bold"
+	            		}
+	            	},
+	                categories: teams
+	            },
+	            yAxis: {
+	                min: 0,
+	                allowDecimals:false,
+	                title: {text:''}
+	            },
+	            legend: {
+	                reversed: true
+	            },
+	            plotOptions: {
+	                series: {
+	                    stacking: 'normal'
+	                }
+	            },
+	            series: [{
+	                name: 'Points',
+	                data: points
+	            }]
+	        });
+	});
+});
+</script>
+@endif
 @endsection
