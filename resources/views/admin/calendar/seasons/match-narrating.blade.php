@@ -260,7 +260,7 @@ body{
           <i class="material-icons removePlayer local" id="{{$player->id}}">remove</i>
           <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-left col-xs-12">
         </div>
-        <p style="float:left;margin:0;margin-left:10px;margin-top:3px;">{{$player->name." (".$player->positions()->wherePivot('main',1)->first()->name.")"}}</p>
+        <p style="float:left;margin:0;margin-left:10px;margin-top:3px;">{{$player->name." (".$player->positions()->wherePivot('main',1)->first()->abbreviation.")"}}</p>
       </div>
       @endforeach
     </div>
@@ -272,7 +272,7 @@ body{
           <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-right col-xs-12">
           <i class="material-icons removePlayer visitor" style="left:auto;right:13px;" id="{{$player->id}}">remove</i>
         </div>
-        <p style="float:right; margin:0;margin-right:10px;margin-top:3px;">{{"(".$player->positions()->wherePivot('main',1)->first()->name.") ".$player->name}}</p>
+        <p style="float:right; margin:0;margin-right:10px;margin-top:3px;">{{"(".$player->positions()->wherePivot('main',1)->first()->abbreviation.") ".$player->name}}</p>
       </div>
       @endforeach
     </div>
@@ -287,7 +287,7 @@ body{
           <i class="material-icons addPlayer local" id="{{$player->id}}">add</i>
           <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-left col-xs-12">
         </div>
-        <p style="float:left;margin:0;margin-left:10px;margin-top:3px;">{{$player->name." (".$player->positions()->wherePivot('main',1)->first()->name.")"}}</p>
+        <p style="float:left;margin:0;margin-left:10px;margin-top:3px;">{{$player->name." (".$player->positions()->wherePivot('main',1)->first()->abbreviation.")"}}</p>
       </div>
       @endforeach
     </div>
@@ -298,7 +298,7 @@ body{
           <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-right col-xs-12">
           <i class="material-icons addPlayer visitor" id="{{$player->id}}" style="left:auto;right:13px;">add</i>
         </div>
-        <p style="float:right; margin:0;margin-right:10px;margin-top:3px;">{{"(".$player->positions()->wherePivot('main',1)->first()->name.") ".$player->name}}</p>
+        <p style="float:right; margin:0;margin-right:10px;margin-top:3px;">{{"(".$player->positions()->wherePivot('main',1)->first()->abbreviation.") ".$player->name}}</p>
       </div>
       @endforeach
     </div>

@@ -715,16 +715,44 @@ class League extends Controller
       if(!$request->players)
         return back()->with('msg',['title' => 'Ups!', 'content' => "Both teams must have 18 players."])
                      ->withInput();
+
       $match = Match::find($request->id);
-      $localPlayers = Player::find($request->players)->where('team_id',$match->teams()->wherePivot("local",true)->first()->id);
-      $visitorPlayers = Player::find($request->players)->where('team_id',$match->teams()->wherePivot("local",false)->first()->id);
-      if(count($localPlayers) < 18 or count($visitorPlayers) < 18)
+
+      //$unfixedLocalPlayers = Player::find($request->players)->where('team_id',$match->teams()->wherePivot("local",1)->first()->id);
+      //$unfixedVisitorPlayers = Player::find($request->players)->where('team_id',$match->teams()->wherePivot("local",0)->first()->id);
+
+      //$visitorPlayers=[];
+      //$localPlayers=[];
+      //foreach ($unfixedLocalPlayers as $player) {
+      //  $localPlayers[]=$player;
+      //}
+      //foreach ($unfixedVisitorPlayers as $player) {
+      //  $visitorPlayers[]=$player;
+      //}
+
+      //$match->state=1;
+      //$playersToAttach=[];
+
+      //for($i=0;$i<count($localPlayers);$i++){
+      //  if($i < 11) $playersToAttach[$localPlayers[$i]->id] = ['playing' => 1,'has_left' => 0];
+      //  else $playersToAttach[$localPlayers[$i]->id] = ['playing' => 0,'has_left' => 0];
+      //}
+      //for($i=0;$i<count($visitorPlayers);$i++){
+      //  if($i < 11) $playersToAttach[$visitorPlayers[$i]->id] = ['playing' => 1,'has_left' => 0];
+      //  else $playersToAttach[$visitorPlayers[$i]->id] = ['playing' => 0,'has_left' => 0];
+      //}
+
+      //$match->players()->attach($playersToAttach);
+      //$match->save();
+
+      $match->localTeam=$match->teams()->wherePivot("local",true)->first();
+      $match->visitorTeam=$match->teams()->wherePivot("local",false)->first();
+      return view('emailviews.match',['match'=>$match]);
+
+      if(count($localPlayers) != 18 or count($visitorPlayers) != 18)
       return back()->with('msg',['title' => 'Ups!', 'content' => "Both teams must have 18 players."])
                    ->withInput();
-      
-      $match->state=1;
-      $match->players->attach($request->players);
-      $match->save();
+
 
     }
 }

@@ -214,6 +214,9 @@ body{
 
   <div class="col-xs-12" style="background:#111;text-align:center;padding:10px;">
     <p style="margin:0;">{{$match->referee->name." ".$match->referee->last_name}}</p>
+    <div class="col-xs-12 no-padding" style="margin-top:5px;">
+      <a href="control-matches/{{$match->id}}" class="btnBlue2">narrate</a>
+    </div>
   </div>
 </div>
 @endforeach

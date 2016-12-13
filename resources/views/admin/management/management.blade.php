@@ -850,7 +850,7 @@ League management
                     position: stadiumLocation,
                     map: map,
                     icon: {
-                        url: "img/icons/ic_place_black_24dp_1x.png"
+                        url: "/img/icons/ic_place_black_24dp_1x.png"
                     },
                     title: e['name']
                 });
@@ -914,7 +914,7 @@ League management
                                     var mker = new google.maps.Marker({
                                         title: response['stadium']['name'],
                                         position: stadiumLocation,
-                                        icon: "img/icons/ic_place_black_24dp_1x.png",
+                                        icon: "/img/icons/ic_place_black_24dp_1x.png",
                                         map: map,
                                         animation: google.maps.Animation.DROP
                                     });
@@ -1033,7 +1033,7 @@ League management
                                             stadiumToEdit.location.lat = parseFloat(stadiumToEdit.location.lat);
                                             stadiumToEdit.location.lng = parseFloat(stadiumToEdit.location.lng);
                                             $('#editingStadiumDiv').attr('name',response['stadium'].id);
-                                            $('#editingStadiumDiv').children('div').children('img').attr('src','storage/'+response['stadium'].photo);
+                                            $('#editingStadiumDiv').children('div').children('img').attr('src','/storage/'+response['stadium'].photo);
                                             $('#editingStadiumDiv').children('div').children('input[type=text][id=name]').first().val(response['stadium'].name);
                                             marker.setVisible(true);
                                         }
@@ -1064,7 +1064,7 @@ League management
                                             stadiumToDelete.location.lat = parseFloat(stadiumToDelete.location.lat);
                                             stadiumToDelete.location.lng = parseFloat(stadiumToDelete.location.lng);
                                             //$('#editingStadiumDiv').attr('name',response['stadium'].id);
-                                            $('#deletingStadiumDiv').children('div').children('img').attr('src','storage/'+response['stadium'].photo);
+                                            $('#deletingStadiumDiv').children('div').children('img').attr('src','/storage/'+response['stadium'].photo);
                                             $('#deletingStadiumDiv').children('h4').first().text(response['stadium'].name);
                                         }
                                         else showMessages('Ups!',['Have been an error! Try again.'],'error-card');
@@ -1138,7 +1138,7 @@ League management
                                   }
                                   marker.setPosition({lat: 40.416786, lng: -3.703788});
                                   map.setZoom(6);
-                                  $('#editingStadiumDiv').children('div').children('img').attr('src','storage/'+response['stadium'].photo);
+                                  $('#editingStadiumDiv').children('div').children('img').attr('src','/storage/'+response['stadium'].photo);
                                   $('#editingStadiumDiv').children('div').children('input[type=text][id=name]').first().val(response['stadium'].name);
                                   $('#changeStadiumLocation').prop('checked',false);
                               }
@@ -1216,8 +1216,8 @@ League management
                     if(response['coachTeam']){
                       team = response['coachTeam'].name;
                     }
-                    $('#coachesModule').children('#editingModule').append('<div class="col-md-3 col-xs-12 col-sm-4 cardParent" name="'+response['coach'].id+'" style="padding:15px; ;overflow: hidden;"><div class="col-md-12 col-sm-12 col-xs-12 no-padding" style="height:100%;overflow: hidden;box-shadow: 0px 0px 3px 0px #000;"><div class="coachCard col-md-12 col-sm-12 col-xs-12 no-padding" id="'+response['coach'].id+'"><img src="storage/'+response['coach'].photo+'" alt="" width="120%" class=""/><i class="material-icons photo-btn" id="'+response['coach'].id+'">photo_camera<input class="file" id="coachHiddenFile" type="file"></input></i><i class="material-icons edit-btn" id="'+response['coach'].id+'">mode_edit</i><div class="col-md-12 col-xs-12 col-sm-12"><h5>'+response['coach'].name+" "+response["coach"].last_name+'</h5><p id="team">'+team+'</p></div></div></div></div>');
-                    $('#coachesModule').children('#deletingModule').append('<div class="coachCard2 col-md-3 col-sm-4 col-xs-6" name="" id=""><img src="storage/'+response['coach'].photo+'" alt="" class="col-md-12 no-padding"/><i class="material-icons delete-btn" id="'+response['coach'].id+'">delete</i><div class="col-md-12 col-xs-12 col-sm-12"><h5>'+response['coach'].name+' '+response['coach'].last_name+'</h5><p id="team">'+team+'</p></div></div>');
+                    $('#coachesModule').children('#editingModule').append('<div class="col-md-3 col-xs-12 col-sm-4 cardParent" name="'+response['coach'].id+'" style="padding:15px; ;overflow: hidden;"><div class="col-md-12 col-sm-12 col-xs-12 no-padding" style="height:100%;overflow: hidden;box-shadow: 0px 0px 3px 0px #000;"><div class="coachCard col-md-12 col-sm-12 col-xs-12 no-padding" id="'+response['coach'].id+'"><img src="/storage/'+response['coach'].photo+'" alt="" width="120%" class=""/><i class="material-icons photo-btn" id="'+response['coach'].id+'">photo_camera<input class="file" id="coachHiddenFile" type="file"></input></i><i class="material-icons edit-btn" id="'+response['coach'].id+'">mode_edit</i><div class="col-md-12 col-xs-12 col-sm-12"><h5>'+response['coach'].name+" "+response["coach"].last_name+'</h5><p id="team">'+team+'</p></div></div></div></div>');
+                    $('#coachesModule').children('#deletingModule').append('<div class="coachCard2 col-md-3 col-sm-4 col-xs-6" name="" id=""><img src="/storage/'+response['coach'].photo+'" alt="" class="col-md-12 no-padding"/><i class="material-icons delete-btn" id="'+response['coach'].id+'">delete</i><div class="col-md-12 col-xs-12 col-sm-12"><h5>'+response['coach'].name+' '+response['coach'].last_name+'</h5><p id="team">'+team+'</p></div></div>');
                     $('.edit-btn').unbind('click');
                     $.each($('.edit-btn'),function (index,element) {
                       $(element).click(function () {
@@ -1254,7 +1254,7 @@ League management
                     contentType:false
                   }).done(function (response) {
                     if(response['photo']){
-                      $('img[name='+id+']').attr('src','storage/'+response['photo']);
+                      $('img[name='+id+']').attr('src','/storage/'+response['photo']);
                     }
                   });
                 }
