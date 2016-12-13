@@ -257,7 +257,9 @@ body{
       @foreach($match->players->where('team_id',$match->localTeam->id) as $player)
       <div class="col-xs-12" style="padding:10px;">
         <div class="photo-container">
+          @if($match->state==0)
           <i class="material-icons removePlayer local" id="{{$player->id}}">remove</i>
+          @endif
           <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-left col-xs-12">
         </div>
         <p style="float:left;margin:0;margin-left:10px;margin-top:3px;">{{$player->name." (".$player->positions()->wherePivot('main',1)->first()->abbreviation.")"}}</p>
@@ -270,7 +272,9 @@ body{
       <div class="col-xs-12" style="padding:10px;">
         <div class="photo-container" style="float:right;">
           <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-right col-xs-12">
+          @if($match->state==0)
           <i class="material-icons removePlayer visitor" style="left:auto;right:13px;" id="{{$player->id}}">remove</i>
+          @endif
         </div>
         <p style="float:right; margin:0;margin-right:10px;margin-top:3px;">{{"(".$player->positions()->wherePivot('main',1)->first()->abbreviation.") ".$player->name}}</p>
       </div>
@@ -317,7 +321,7 @@ body{
         <button type="submit" name="startMatchBtn" class="btnBlue2">start now!</button>
       </form>
     </div>
-    @else()
+    @else
     <div class="events-list col-xs-12 col-md-3 no-padding">
       @foreach(App\League\EventType::get() as $i => $eventType)
       @if($i < 6)
@@ -371,21 +375,46 @@ $(function ($) {
 <script type="text/javascript">
 
   $(function ($) {
-
+    var localPlayersCount=0,visitorPlayersCount=0;
     $('.addPlayer').click(function () {
       if($(this).text() == 'add'){
-        $(this).text('remove');
-        var $input=$('<input type="hidden" class="" name="players[]" id="playersToPlay">');
-        $input.attr('value',$(this).attr('id'));
-        $('form#startMatch').append($input);
-        if($(this).hasClass('local')) $('#local-lineup').append($(this).parent().parent());
-        else $('#visitor-lineup').append($(this).parent().parent());
+        if(($(this).hasClass('local') && localPlayersCount < 18) || (!$(this).hasClass('local') && visitorPlayersCount < 18)){
+          $(this).text('remove');
+          var $input=$('<input type="hidden" class="" name="players[]" id="playersToPlay">');
+          $input.attr('value',$(this).attr('id'));
+          $('form#startMatch').append($input);
+          if($(this).hasClass('local')) {
+            $('#local-lineup').append($(this).parent().parent());
+            localPlayersCount++;
+            if(localPlayersCount == 11)
+              $('#local-lineup').append($('<hr>'));
+          }
+          else {
+            $('#visitor-lineup').append($(this).parent().parent());
+            visitorPlayersCount++;
+            if(visitorPlayersCount == 11)
+              $('#visitor-lineup').append($('<hr>'));
+          }
+        }
+        else{
+          showMessages('Alert!','The max number of players per team are 18.');
+        }
       }
       else{
         $(this).text('add');
         $('form#startMatch').children('input[type=hidden][value='+$(this).attr('id')+']').remove();
-        if($(this).hasClass('local')) $('#local-players').append($(this).parent().parent());
-        else $('#visitor-players').append($(this).parent().parent());
+        if($(this).hasClass('local')) {
+          $('#local-players').append($(this).parent().parent());
+          localPlayersCount--;
+          if(localPlayersCount == 10)
+            $('#local-lineup').children('<hr>').remove();
+        }
+        else {
+          $('#visitor-players').append($(this).parent().parent());
+          visitorPlayersCount--;
+          if(visitorPlayersCount == 10)
+            $('#visitor-lineup').children('<hr>').remove();
+        }
       }
     });
 

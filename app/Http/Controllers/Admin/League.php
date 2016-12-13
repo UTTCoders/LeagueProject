@@ -15,6 +15,8 @@ use App\League\Position;
 use App\League\Referee;
 use App\League\Season;
 use App\League\Match;
+use Mail;
+use App\Mail\MatchStarted;
 
 class League extends Controller
 {
@@ -718,41 +720,48 @@ class League extends Controller
 
       $match = Match::find($request->id);
 
-      //$unfixedLocalPlayers = Player::find($request->players)->where('team_id',$match->teams()->wherePivot("local",1)->first()->id);
-      //$unfixedVisitorPlayers = Player::find($request->players)->where('team_id',$match->teams()->wherePivot("local",0)->first()->id);
+      $unfixedLocalPlayers = Player::find($request->players)->where('team_id',$match->teams()->wherePivot("local",1)->first()->id);
+      $unfixedVisitorPlayers = Player::find($request->players)->where('team_id',$match->teams()->wherePivot("local",0)->first()->id);
 
-      //$visitorPlayers=[];
-      //$localPlayers=[];
-      //foreach ($unfixedLocalPlayers as $player) {
-      //  $localPlayers[]=$player;
-      //}
-      //foreach ($unfixedVisitorPlayers as $player) {
-      //  $visitorPlayers[]=$player;
-      //}
-
-      //$match->state=1;
-      //$playersToAttach=[];
-
-      //for($i=0;$i<count($localPlayers);$i++){
-      //  if($i < 11) $playersToAttach[$localPlayers[$i]->id] = ['playing' => 1,'has_left' => 0];
-      //  else $playersToAttach[$localPlayers[$i]->id] = ['playing' => 0,'has_left' => 0];
-      //}
-      //for($i=0;$i<count($visitorPlayers);$i++){
-      //  if($i < 11) $playersToAttach[$visitorPlayers[$i]->id] = ['playing' => 1,'has_left' => 0];
-      //  else $playersToAttach[$visitorPlayers[$i]->id] = ['playing' => 0,'has_left' => 0];
-      //}
-
-      //$match->players()->attach($playersToAttach);
-      //$match->save();
-
-      $match->localTeam=$match->teams()->wherePivot("local",true)->first();
-      $match->visitorTeam=$match->teams()->wherePivot("local",false)->first();
-      return view('emailviews.match',['match'=>$match]);
+      $visitorPlayers=[];
+      $localPlayers=[];
+      foreach ($unfixedLocalPlayers as $player) {
+        $localPlayers[]=$player;
+      }
+      foreach ($unfixedVisitorPlayers as $player) {
+        $visitorPlayers[]=$player;
+      }
 
       if(count($localPlayers) != 18 or count($visitorPlayers) != 18)
       return back()->with('msg',['title' => 'Ups!', 'content' => "Both teams must have 18 players."])
                    ->withInput();
 
+      $match->state=1;
+      $playersToAttach=[];
 
+      for($i=0;$i<count($localPlayers);$i++){
+        if($i < 11) $playersToAttach[$localPlayers[$i]->id] = ['playing' => 1,'has_left' => 0];
+        else $playersToAttach[$localPlayers[$i]->id] = ['playing' => 0,'has_left' => 0];
+      }
+      for($i=0;$i<count($visitorPlayers);$i++){
+        if($i < 11) $playersToAttach[$visitorPlayers[$i]->id] = ['playing' => 1,'has_left' => 0];
+        else $playersToAttach[$visitorPlayers[$i]->id] = ['playing' => 0,'has_left' => 0];
+      }
+
+      $match->players()->attach($playersToAttach);
+      $match->save();
+
+      $match->localTeam=$match->teams()->wherePivot("local",true)->first();
+      $match->visitorTeam=$match->teams()->wherePivot("local",false)->first();
+
+      $followers = $match->localTeam->followers->pluck('email');
+      foreach ($match->visitorTeam->followers->pluck('email') as $follower) {
+        if(!in_array($follower,$followers->all()))
+          $followers[] = $follower;
+      }
+
+      Mail::to($followers)->send(new MatchStarted($match));
+
+      return back();
     }
 }

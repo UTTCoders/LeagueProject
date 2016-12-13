@@ -22,7 +22,7 @@ class Team extends Model
     }
 
     public function followers(){
-        return $this->belongsToMany('App\League\User');
+        return $this->belongsToMany('App\User');
     }
 
     public function matches(){

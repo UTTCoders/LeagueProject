@@ -16,9 +16,11 @@ class MatchStarted extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public $match;
+
+    public function __construct($match)
     {
-        //
+        $this->match=$match;
     }
 
     /**
@@ -28,6 +30,7 @@ class MatchStarted extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('emailviews.match')
+                    ->subject('Your team is playing right now!');
     }
 }
