@@ -850,7 +850,7 @@ League management
                     position: stadiumLocation,
                     map: map,
                     icon: {
-                        url: "img/icons/ic_place_black_24dp_1x.png"
+                        url: "/img/icons/ic_place_black_24dp_1x.png"
                     },
                     title: e['name']
                 });
@@ -914,7 +914,7 @@ League management
                                     var mker = new google.maps.Marker({
                                         title: response['stadium']['name'],
                                         position: stadiumLocation,
-                                        icon: "img/icons/ic_place_black_24dp_1x.png",
+                                        icon: "/img/icons/ic_place_black_24dp_1x.png",
                                         map: map,
                                         animation: google.maps.Animation.DROP
                                     });
