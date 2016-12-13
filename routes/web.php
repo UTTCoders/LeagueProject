@@ -107,8 +107,14 @@ Route::group(['middleware' => ['authen']], function(){
 		Route::post('/addMatch','Admin\League@addMatch');
 
 		Route::post('/getMatchesPerMatchDay','Admin\League@getMatchesPerMatchDay');
-		// end of Management by admin
 
+		//excel routes
+		Route::post('/admin/players/add/excel',
+			'Admin\ExcelController@PlayersAdd');
+
+		Route::get('/admin/players/add/excel',
+			'Admin\ExcelController@PlayersRequest');
+		// end of Management by admin
 });
 
 //Route for the login needs to get inside the app without middleware
