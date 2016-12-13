@@ -288,7 +288,7 @@ body{
 <div class="col-md-12 col-xs-12 col-sm-12" style="margin-top:90px;margin-bottom:40px;">
   <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0 col-xs-12" id="manageMenu">
       <a class="manageMenuHeader col-md-12 col-sm-12 col-xs-12">Players...</a>
-      <a href="/admin/players/add" class="manageMenuItem item-active col-md-12 col-sm-12 col-xs-12">Add</a>
+      <a href="/admin/players/add" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Add</a>
       <a href="/admin/players/add/excel" class="manageMenuItem item-active col-md-12 col-sm-12 col-xs-12">Use excel</a>
       <a href="/admin/players/edit" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Edit</a>
       <a href="/admin/players/delete" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Delete</a>
