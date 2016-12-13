@@ -172,7 +172,7 @@ class DataForViewsController extends Controller
       return view('admin.calendar.seasons.control-matches',[
         'todayMatches' => $todayMatches,
         'tomorrowMatches' => $tomorrowMatches,
-        'states' => ['uncoming','first half','second half','full time'],
+        'states' => ['upcoming','first half','second half','full time'],
         'pendingTasks' => $pendingTasks
       ]);
     }
@@ -180,13 +180,61 @@ class DataForViewsController extends Controller
     public function getMatch(Request $request, $id){
       $match=Match::find($id);
       if(!$match) return redirect('/');
+      if($match->state == 4)
+      return redirect('/admin/seasons/control-matches')
+                      ->with('msg',['title' => 'Ups!', 'content' => "The match you are trying to narrate is on full-time."]);
       if(date('Y-m-d H:i:s') < Carbon::parse($match->start_date)->subHours(3)->toDateTimeString())
         return redirect('/admin/seasons/control-matches')
                         ->with('msg',['title' => 'Ups!', 'content' => "Wait ultil the match get closer. Max 3 hours before."]);
       $match->localTeam=$match->teams()->wherePivot("local",true)->first();
       $match->visitorTeam=$match->teams()->wherePivot("local",false)->first();
+      $match->localTeam->goalsCount=0;
+      $match->visitorTeam->goalsCount=0;
+      foreach ($match->goals as $goal) {
+        if($goal->player->team->id == $match->localTeam->id)
+          $match->localTeam->goalsCount++;
+        else $match->visitorTeam->goalsCount++;
+      }
+      $ordenedLocalPlayers=[];
+      $ordenedVisitorPlayers=[];
+      $localPlayers = $match->localTeam->players;
+      $visitorPlayers = $match->visitorTeam->players;
+      foreach ($localPlayers as $player) {
+        if($player->positions()->wherePivot('main',true)->first()->abbreviation == 'GK')
+          $ordenedLocalPlayers[]=$player;
+      }
+      foreach ($visitorPlayers as $player) {
+        if($player->positions()->wherePivot('main',true)->first()->abbreviation == 'GK')
+          $ordenedVisitorPlayers[]=$player;
+      }
+      foreach ($localPlayers as $player) {
+        if($player->positions()->wherePivot('main',true)->first()->abbreviation == 'DEF')
+          $ordenedLocalPlayers[]=$player;
+      }
+      foreach ($visitorPlayers as $player) {
+        if($player->positions()->wherePivot('main',true)->first()->abbreviation == 'DEF')
+          $ordenedVisitorPlayers[]=$player;
+      }
+      foreach ($localPlayers as $player) {
+        if($player->positions()->wherePivot('main',true)->first()->abbreviation == 'MF')
+          $ordenedLocalPlayers[]=$player;
+      }
+      foreach ($visitorPlayers as $player) {
+        if($player->positions()->wherePivot('main',true)->first()->abbreviation == 'MF')
+          $ordenedVisitorPlayers[]=$player;
+      }
+      foreach ($localPlayers as $player) {
+        if($player->positions()->wherePivot('main',true)->first()->abbreviation == 'ST')
+          $ordenedLocalPlayers[]=$player;
+      }
+      foreach ($visitorPlayers as $player) {
+        if($player->positions()->wherePivot('main',true)->first()->abbreviation == 'ST')
+          $ordenedVisitorPlayers[]=$player;
+      }
+      $match->localTeam->players=$ordenedLocalPlayers;
+      $match->visitorTeam->players=$ordenedVisitorPlayers;
       return view('admin.calendar.seasons.match-narrating',[
-        'states' => ['uncoming','first half','second half','full time'],
+        'states' => ['upcoming','first half','second half','full time'],
         'match' => $match
       ]);
     }

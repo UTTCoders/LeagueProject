@@ -120,7 +120,7 @@ body{
 
 @section('body')
 <div class="coverContainer">
-  <h3 class="mainTitle">Uncoming matches</h3>
+  <h3 class="mainTitle">Upcoming matches</h3>
 </div>
 <div class="black-transparent-back">
   <div class="messageBox col-md-4 col-md-offset-4 col-xs-10 col-xs-offset-1">
@@ -250,7 +250,7 @@ $(function ($) {
       $('.messageBox').css('margin-top','10%').css('opacity',0);
       $(this).fadeOut(1000);
     });
-    
+
   });
 </script>
 @endsection
