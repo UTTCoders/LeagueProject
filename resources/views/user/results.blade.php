@@ -26,7 +26,7 @@
 		resize: none;
 	}
 	.content{
-		margin-top: 100px;
+		padding-top: 100px;
 	}
 	#goalSection{
 		color:#111;
@@ -47,7 +47,7 @@
 	<div class="row" style="color:#444;">
 		<div class="col-md-6 col-xs-12">
 			<div id="goalSection">
-			<h3 align="center">Marker:</h3>
+			<h3 align="center">Final marker:</h3>
 				@include('user.goals')
 			</div>
 		</div>
@@ -97,7 +97,7 @@ $(document).ready(function(){
 	        	enabled: false
 	        },
 	        title: {
-	            text: 'Ball possession'
+	            text: 'Final ball possession:'
 	        },
 	        tooltip: {
 	            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'

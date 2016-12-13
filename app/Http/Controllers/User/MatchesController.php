@@ -32,7 +32,9 @@ class MatchesController extends Controller
 	}
 
     public function AskMatchesS(Request $r){
-        
+        return view('user.matches')
+        ->with('matches',Session::get('seasons.'.$r->seasonid.'.'.$r->matchday))
+        ->render();
     }
 
     private function generateSeasons($theseasons){
@@ -42,6 +44,7 @@ class MatchesController extends Controller
             $matchday=1;
             $count=1;
             foreach ($season->matches as $match) {
+                $match["theteams"]=self::checkGoals($match);
                 Session::push('seasons.'.$season->id.'.'.$matchday,$match);
                 if (Session::has('current')) {
                     if (Session::get('current')->id == $season->id
@@ -206,7 +209,7 @@ class MatchesController extends Controller
             if ($goal->player->team->id == $teams["local"]->id) {
                 $teams["local"]["goals"]+=1;
             }else{
-                $teams["visitor"]["goals"]++;
+                $teams["visitor"]["goals"]+=1;
             }
         }
         return $teams;

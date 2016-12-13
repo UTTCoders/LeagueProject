@@ -131,6 +131,7 @@ Route::group(['middleware' => ['authen']], function(){
 	Route::post('/askgoals','User\MapController@AskForGoals');
 	Route::post('/askstate','User\MatchesController@AskForState');
 	Route::post("/askchart",'User\MatchesController@AskPossession');
+	Route::post("/askmatches",'User\MatchesController@AskMatchesS');
 	Route::post("/chartstats",'User\MatchesController@ChartStats');
 });
 
@@ -156,5 +157,3 @@ Route::get('/emergencylogout',function(){
 	\Auth::logout();
 	return ":D";
 });
-
-Route::get('/ses','User\MatchesController@getSession');
