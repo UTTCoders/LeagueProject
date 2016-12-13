@@ -124,7 +124,7 @@ class DataForViewsController extends Controller
       $nonCompleteTeams="";
       $teams=Team::get();
       foreach ($teams as $i => $team) {
-        if($team->players->count() < 18){
+        if($team->players->count() < 14){
           if($i == count($teams)-1)
             $nonCompleteTeams .= $team->name.".";
           else $nonCompleteTeams .= $team->name.", ";
@@ -132,7 +132,7 @@ class DataForViewsController extends Controller
       }
       if($nonCompleteTeams != "")
         $pendingTasks[]=[
-          'msg' => "The next teams have less of 18 players: ".$nonCompleteTeams,
+          'msg' => "The next teams have less of 14 players: ".$nonCompleteTeams,
           'link' => '/admin/players/add'
         ];
       if(Referee::count() < 20)

@@ -76,6 +76,7 @@ body{
 .btnBlue2{
   background: linear-gradient(to bottom, dodgerblue,#0c70dd);
   border-radius: 2px;
+  font-weight: 400;
   border: 0px;
   border-top: 1px solid skyblue;
   border-bottom: 1px solid dodgerblue;
@@ -183,6 +184,9 @@ body{
 }
 .module{
   display: none;
+}
+.lineup{
+  color:#333;
 }
 </style>
 @endsection
@@ -324,32 +328,95 @@ body{
     @else
     <div class="events-list col-xs-12 col-md-3 no-padding">
       @foreach(App\League\EventType::get() as $i => $eventType)
-      @if($i < 6)
+      @if($i < 6 and $i != 1)
       <div class="col-xs-12 eventType" id="{{$eventType->id}}">
-        <img src="{{asset('storage/'.$eventType->icon)}}" width="16" alt="" style="margin-right:15px;">{{$eventType->description}}
+        <img src="{{asset($eventType->icon)}}" width="16" alt="" style="margin-right:15px;">{{$eventType->description}}
       </div>
       @endif
       @endforeach
     </div>
     <div class="col-xs-12 col-md-9">
-      @foreach(App\League\EventType::get() as $i => $eventType)
-      @if($i < 6)
-      <div class="col-xs-12 module" id="{{$eventType->id}}" style="">
-        <h3 style="color:dodgerblue;margin-top:0;">{{$eventType->description}}</h3>
+
+      <div class="col-xs-12 module" id="1" style="">
+        <h3 style="color:dodgerblue;margin-top:0;">Goal</h3>
+        <div class="col-xs-12 no-padding lineup">
+          <h4 style="float:left;">Select the player that scored...</h4>
+          <div class="col-xs-12 no-padding">
+            <div class="col-xs-6 no-padding" id="local-lineup">
+              <p style="text-align:center;color:#888;margin-top:10px;">Local</p>
+              @foreach($match->players->where('team_id',$match->localTeam->id) as $player)
+              <div class="col-xs-12" style="padding:10px;">
+                <div class="photo-container">
+                  @if($match->state==0)
+                  <i class="material-icons removePlayer local" id="{{$player->id}}">remove</i>
+                  @endif
+                  <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-left col-xs-12">
+                </div>
+                <p style="float:left;margin:0;margin-left:10px;margin-top:3px;">{{$player->name." (".$player->positions()->wherePivot('main',1)->first()->abbreviation.")"}}</p>
+              </div>
+              @endforeach
+            </div>
+            <div class="col-xs-6 no-padding" id="visitor-lineup">
+              <p style="text-align:center;color:#888;margin-top:10px;">Visitor</p>
+              @foreach($match->players->where('team_id',$match->visitorTeam->id) as $player)
+              <div class="col-xs-12" style="padding:10px;">
+                <div class="photo-container" style="float:right;">
+                  <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-right col-xs-12">
+                  @if($match->state==0)
+                  <i class="material-icons removePlayer visitor" style="left:auto;right:13px;" id="{{$player->id}}">remove</i>
+                  @endif
+                </div>
+                <p style="float:right; margin:0;margin-right:10px;margin-top:3px;">{{"(".$player->positions()->wherePivot('main',1)->first()->abbreviation.") ".$player->name}}</p>
+              </div>
+              @endforeach
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 module" id="2" style="">
+        <h3 style="color:dodgerblue;margin-top:0;">Assist</h3>
         <div class="col-xs-12">
           lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
         </div>
       </div>
-      @endif
-      @endforeach
+
+      <div class="col-xs-12 module" id="3" style="">
+        <h3 style="color:dodgerblue;margin-top:0;">Corner</h3>
+        <div class="col-xs-12">
+          lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+        </div>
+      </div>
+
+      <div class="col-xs-12 module" id="4" style="">
+        <h3 style="color:dodgerblue;margin-top:0;">Yellow card</h3>
+        <div class="col-xs-12">
+          lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+        </div>
+      </div>
+
+      <div class="col-xs-12 module" id="5" style="">
+        <h3 style="color:dodgerblue;margin-top:0;">Red card</h3>
+        <div class="col-xs-12">
+          lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+        </div>
+      </div>
+
+      <div class="col-xs-12 module" id="6" style="">
+        <h3 style="color:dodgerblue;margin-top:0;">Shoot</h3>
+        <div class="col-xs-12">
+          lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+        </div>
+      </div>
+
     </div>
     <div class="col-xs-12" style="text-align:center;padding:15px;">
       @if($match->state == 1)
-      <button type="button" name="startMatchBtn" class="btnBlue2">end first half</button>
+      <a href="/admin/end-first-half" name="endFirstHalfBtn" class="col-xs-7 col-xs-offset-4 btnBlue2">end first half</a>
       @elseif($match->state == 2)
-      <button type="button" name="startMatchBtn" class="btnBlue2">start second half</button>
+      <a href="/admin/start-second-half" name="startSecondHalfBtn" class="col-xs-7 col-xs-offset-4 btnBlue2">start second half</a>
       @else if($match->state == 3)
-      <button type="button" name="startMatchBtn" class="btnBlue2">end match</button>
+      <a href="/admin/end-match" name="endMatchBtn" class="col-xs-7 col-xs-offset-4 btnBlue2">end match</a>
       @endif
     </div>
     @endif
@@ -378,7 +445,10 @@ $(function ($) {
     var localPlayersCount=0,visitorPlayersCount=0;
     $('.addPlayer').click(function () {
       if($(this).text() == 'add'){
-        if(($(this).hasClass('local') && localPlayersCount < 18) || (!$(this).hasClass('local') && visitorPlayersCount < 18)){
+        if(($(this).hasClass('local') && localPlayersCount > 18) || (!$(this).hasClass('local') && visitorPlayersCount > 18)){
+          showMessages('Alert!','The max number of players per team are 18.');
+        }
+        else{
           $(this).text('remove');
           var $input=$('<input type="hidden" class="" name="players[]" id="playersToPlay">');
           $input.attr('value',$(this).attr('id'));
@@ -395,9 +465,6 @@ $(function ($) {
             if(visitorPlayersCount == 11)
               $('#visitor-lineup').append($('<hr>'));
           }
-        }
-        else{
-          showMessages('Alert!','The max number of players per team are 18.');
         }
       }
       else{
