@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-Add players
+Use excel
 @endsection
 
 @section('css')
@@ -331,18 +331,18 @@ body{
     <div class="col-md-6">
       <div class="col-md-12 no-padding teams-selection-container" id="teamSelector">
         @if(App\League\Team::count() < 1)
-        <h4 style="text-align:center;">No coaches</h4>
+        <h4 style="text-align:center;">No teams</h4>
         @else
-        @foreach(App\League\Team::get() as $i => $team)
-        <div class="col-md-12 no-padding Item" id="{{$team->id}}">
-          <div class="img-container">
-            <img src="{{asset('storage/'.$team->logo)}}" alt="">
+          @foreach(App\League\Team::get() as $i => $team)
+          <div class="col-md-12 no-padding Item" id="{{$team->id}}">
+            <div class="img-container">
+              <img src="{{asset('storage/'.$team->logo)}}" alt="">
+            </div>
+            <div class="col-md-9">
+              <h5>{{$team->name}}</h5>
+            </div>
           </div>
-          <div class="col-md-9">
-            <h5>{{$team->name}}</h5>
-          </div>
-        </div>
-        @endforeach
+          @endforeach
         @endif
       </div>
       <div class="col-md-12 col-xs-12 teams-selection-container no-padding" id="positionSelector">
@@ -377,128 +377,7 @@ $(function ($) {
 });
 </script>
 @endif
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9fuikPcHicK9HnQSzmHM-iZikumk6710&libraries=places&language=en"></script>
 <script type="text/javascript">
-  var service = new google.maps.places.AutocompleteService();
-  var topPos=0;
-
-  $('input[name=nationality]').keyup(function () {
-    if(this.value != ''){
-      if($('.autocomplete-container').children().css('display') != 'block')
-      $('.autocomplete-container').fadeIn(10,function () {
-        $('.autocomplete-container').children().toggle(400);
-      });
-      var input = this;
-      service.getQueryPredictions({ input: this.value }, function(predictions, status) {
-          if (status == google.maps.places.PlacesServiceStatus.OK) {
-            predictions.forEach(function(prediction) {
-              $.each(prediction.types,function (i,e) {
-                if(e == 'country'){
-                  if(!$('div.'+prediction.id)[0]){
-                    topPos+=31;
-                    var $item = $('<div>');
-                    $item.addClass(prediction.id);
-                    $item.click(function () {
-                      $('input[name=nationality]').val($(this).text());
-                      $('.autocomplete-item').toggle(400,function () {
-                        $('.autocomplete-container').fadeOut(10);
-                        $('.autocomplete-item').remove();
-                      });
-                    });
-                    $item.addClass('autocomplete-item').text(prediction.description).css({
-                      height:'31px',
-                      width:'100%',
-                      top:0,
-                      left: 0
-                    });
-                    $('.autocomplete-container').append($item);
-                  }
-                }
-              });
-            });
-          }
-          else $('.autocomplete-container').children().toggle(400,function () {
-            $(this).remove();
-            $('.autocomplete-container').fadeOut();
-          });
-      });
-    }
-    else {
-      $('.autocomplete-container').children().toggle(400,function () {
-        $(this).remove();
-        $('.autocomplete-container').fadeOut();
-      });
-
-    }
-  });
-
-  $(function ($) {
-
-    var file = $('.file-big-container').children('input[type=file]')[0].files[0];
-    if(file){
-      if(file.type.indexOf('image') < 0 || (file.type.indexOf('png') < 0 && file.type.indexOf('jpg') < 0 && file.type.indexOf('jpeg') < 0)){
-        showMessages('Ups!','Only png images.','alert-card');
-        $('.file-big-container').children('input[type=file]').val('');
-        $('.file-big-container').children('h4').text('Drag or click for select a logo...');
-      }
-      else $('.file-big-container').children('h4').text(file.name);
-    }
-    else $('.file-big-container').children('h4').text('Drag or click for select a logo...');
-
-    $('.addPositionBtn').click(function () {
-      if($(this).css('color') == 'white' || $(this).css('color') == "#fff" || $(this).css('color') == "rgb(255, 255, 255)"){
-          console.log($('i.mainPosition[id='+$(this).attr('id')+']').css('color'));
-          if($('i.mainPosition[id='+$(this).attr('id')+']').css('color') != 'rgb(255, 255, 255)'){
-            $(this).css('color','#888');
-            $('input[id=positionsInput][value='+$(this).attr('id')+']').remove();
-          }
-      }
-      else{
-        $(this).css('color','#fff');
-        $('form').append($('<input type="hidden" name="positions[]" value='+$(this).attr('id')+' id="positionsInput">'));
-      }
-    });
-
-    $('.mainPosition').click(function () {
-        $('.mainPosition').css('color','#888');
-        $(this).css('color','#fff');
-        $('input[type=hidden][name=mainPosition]').val($(this).attr('id'));
-        if($('i.addPositionBtn[id='+$(this).attr('id')+']').css('color') != 'rgb(255, 255, 255)'){
-          $('i.addPositionBtn[id='+$(this).attr('id')+']').css('color','#fff');
-          $('form').append($('<input type="hidden" name="positions[]" value='+$(this).attr('id')+' id="positionsInput" >'));
-        }
-    });
-
-    function showMessages(title,msg,type) {
-      $('.black-transparent-back').fadeIn('slow',function () {
-        $('.messageBox').css('margin-top','20%').css('opacity',1);
-        $('.messageBox').children('.body').text(msg);
-      });
-    }
-
-    $('.file-big-container').change(function () {
-      var file = $(this).children('input[type=file]')[0].files[0];
-      if(file){
-        if(file.type.indexOf('image') < 0 || (file.type.indexOf('png') < 0 && file.type.indexOf('jpg') < 0 && file.type.indexOf('jpeg') < 0)){
-          showMessages('Ups!','Only png images.','alert-card');
-          $(this).children('input[type=file]').val('');
-          $(this).children('h4').text('Drag or click for select a logo...');
-        }
-        else $(this).children('h4').text(file.name);
-      }
-      else $(this).children('h4').text('Drag or click for select a logo...');
-    });
-
-    $('#teamSelector').children('.Item').click(function () {
-      $('#teamSelector').children('.Item').css('background','#000');
-      $(this).css('background','linear-gradient(to bottom,#222,#111)');
-      $('input[name=teamId]').val($(this).attr('id'));
-    });
-
-    $('.black-transparent-back').click(function () {
-      $('.messageBox').css('margin-top','10%').css('opacity',0);
-      $(this).fadeOut(1000);
-    });
-  });
+  
 </script>
 @endsection
