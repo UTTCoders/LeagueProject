@@ -72,7 +72,7 @@
 		<br>
 		<h2 style="color:#eee; margin-top: 0px; margin-bottom: 0;" id="mainTitle">{{$stadium->name}}</h2>
 	</div>
-	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle"><img src="/storage/{{$stadium->team->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"> <strong>{{$stadium->team->name}}</strong> <br class="hidden-md hidden-sm hidden-lg">VS <strong>{{$teams["visitor"]->name}}</strong> <img src="/storage/{{$teams['visitor']->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"></h3>
+	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle"><img src="/storage/{{$stadium->team->logo}}" style="width: 30px; max-height: 35px;"> <strong>{{$stadium->team->name}}</strong> <br class="hidden-md hidden-sm hidden-lg">VS <strong>{{$teams["visitor"]->name}}</strong> <img src="/storage/{{$teams['visitor']->logo}}" style="width: 30px; max-height: 35px;"></h3>
 </div>
 <br><br>
 <div class="container">
@@ -133,7 +133,7 @@
 		<br>
 		<h2 style="color:#eee; margin-top: 0px; margin-bottom: 0;" id="mainTitle">{{$stadium->name}}</h2>
 	</div>
-	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle"><img src="/storage/{{$stadium->team->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"> <strong>{{$stadium->team->name}}</strong></h3>
+	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle"><img src="/storage/{{$stadium->team->logo}}" style="width: 35px; max-height: 40px;"> <strong>{{$stadium->team->name}}</strong></h3>
 </div>
 @endif
 <div class="jumbotron" style="background-color: #43A047; margin-bottom: 0; color: #eee;">

@@ -90,7 +90,9 @@
 				@endforeach
 				</ul>
 			@else
-			<h3 align="center">You have no favorites dude! :(</h3>
+			<h3 align="center">You have no favorites dude! :'(</h3>
+			<br>
+			<h4 align="center">Better go to check the <a href="/teams">teams</a>! :D</h4>
 			@endif
 		</div>
 	</div>
