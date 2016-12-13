@@ -31,6 +31,19 @@ class MatchesController extends Controller
         ->with('theseasons',self::theSeasons());
 	}
 
+    public function AskEvents(Request $r){
+        $thematch=Match::find($r->matchid);
+        if ($thematch->events()->count() != $r->ec) {
+            return [
+                "change"=>true,
+                "view"=>view('user.events')->with("match",$thematch)
+            ];
+        }
+        return [
+            "change"=>false
+        ];
+    }
+
     public function AskMatchesS(Request $r){
         return view('user.matches')
         ->with('matches',Session::get('seasons.'.$r->seasonid.'.'.$r->matchday))

@@ -46,6 +46,7 @@
 		padding-left: 20px;
 		border-top: 1px solid #ccc;
 		border-bottom: 1px solid #ccc;
+		background-color: #ccc;
 	}
 	.event{
 		margin:5px 0px;
@@ -93,13 +94,12 @@
 		</div>
 	</div>
 	<div class="row">
-	<br>
-	<h4 style="color:#444; font-weight: bold;"><span class="glyphicon glyphicon-flash"></span> Events</h4>
-		<div class="col-xs-11" id="events">
-			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>
-			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>
-			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>
-			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>
+		<div class="col-xs-12">
+			<br>
+			<h4 style="color:#444; font-weight: bold;"><span class="glyphicon glyphicon-flash"></span> Events</h4>
+			<div class="col-xs-11" id="events">
+				@include('user.events')
+			</div>
 		</div>
 	</div>
 	<br>
@@ -243,6 +243,16 @@
 				}).done(function(response){
 					if (response.newgoals) {
 						$("#goalSection").html(response.marker)
+					}
+				})
+
+				var eC=$("input[name='eventsCount']").val()
+				$.ajax({
+					url:"/askevents",method:"post",
+					data:{_token:t,matchid:match,ec:eC}
+				}).done(function(response){
+					if (response.change) {
+						console.log("bool works!");
 					}
 				})
 			}

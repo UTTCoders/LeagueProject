@@ -34,8 +34,15 @@
 	#events{
 		border-radius: 0;
 		overflow-y: auto;
-		max-height: 50px;
+		height: 150px;
 		padding-left: 20px;
+		border-top: 1px solid #ccc;
+		border-bottom: 1px solid #ccc;
+	}
+	.event{
+		margin:5px 0px;
+		border-radius: 0px;
+		padding:5px 13px;
 	}
 </style>
 @endsection
@@ -47,21 +54,23 @@
 	<div class="row" style="color:#444;">
 		<div class="col-md-6 col-xs-12">
 			<div id="goalSection">
-			<h3 align="center">Final marker:</h3>
+			<h3 align="center" style="font-weight: bold;">Final marker:</h3>
 				@include('user.goals')
 			</div>
 		</div>
 		<div class="col-md-5 col-xs-12">
-		<br>
+		<div class="hidden-md hidden-lg"><br><br><br></div>
 			<div id="pieChart" style="width:100%; height:210px; margin: 0 auto"></div>
+		<div class="hidden-md hidden-lg"><br></div>
 		</div>
 	</div>
 	<div class="row">
-	<br>
-	<h4 style="color:#444;">Events</h4>
-		<div class="col-xs-11 thumbnail" id="events">
-			<h5><span class="glyphicon glyphicon-ok"></span> Something happened!</h5>
-			<h5><span class="glyphicon glyphicon-ok"></span> Something happened!</h5>
+		<div class="col-xs-12">
+			<br>
+			<h4 style="color:#444; font-weight: bold;"><span class="glyphicon glyphicon-flash"></span> Events</h4>
+			<div class="col-xs-11" id="events">
+				@include('user.events')
+			</div>
 		</div>
 	</div>
 	<div class="row">
