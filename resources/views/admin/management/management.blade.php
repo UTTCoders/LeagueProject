@@ -1033,7 +1033,7 @@ League management
                                             stadiumToEdit.location.lat = parseFloat(stadiumToEdit.location.lat);
                                             stadiumToEdit.location.lng = parseFloat(stadiumToEdit.location.lng);
                                             $('#editingStadiumDiv').attr('name',response['stadium'].id);
-                                            $('#editingStadiumDiv').children('div').children('img').attr('src','storage/'+response['stadium'].photo);
+                                            $('#editingStadiumDiv').children('div').children('img').attr('src','/storage/'+response['stadium'].photo);
                                             $('#editingStadiumDiv').children('div').children('input[type=text][id=name]').first().val(response['stadium'].name);
                                             marker.setVisible(true);
                                         }
