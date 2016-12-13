@@ -15,7 +15,7 @@ class MenuController extends Controller
 {
     public function MenuRequest(Request $r){
     	if (Auth::user()->type)
-            return view('admin.management.management');
+            return redirect('/admin/seasons/control-matches');
 
         if (Match::where('state','>',0)->where('state','<',4)->count()>0) {
         	if (!Session::has('first')) {
@@ -23,7 +23,7 @@ class MenuController extends Controller
         		return redirect('/matches');
         	}
         }
-        
+
         return view('user.mapview2');
     }
 }

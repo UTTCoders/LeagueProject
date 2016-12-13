@@ -542,8 +542,8 @@ class League extends Controller
           $match->referee_id = $request->refereeId;
           $match->save();
 
-          $match->teams()->attach($request->localId,['local' => true]);
-          $match->teams()->attach($request->visitorId,['local' => false]);
+          $match->teams()->attach($request->localId,['local' => true,'ball_possesion' => 0]);
+          $match->teams()->attach($request->visitorId,['local' => false,'ball_possesion' => 0]);
 
           return back()->with('msg',['title' => 'OK!', 'content' => "Success!"]);
       }
@@ -582,7 +582,11 @@ class League extends Controller
                              ->with('matchday',$request->matchday)
                              ->withInput();
             }
-
+            $referee = Referee::find($request->refereeId);
+            if($season->matches()->offset(($request->matchday-1)*10)->limit(10)->where('referee_id',$request->refereeId)->first())
+              return back()->with('msg',['title' => 'Ups!', 'content' => $referee->name." ".$referee->last_name." has already assigned a match in the matchday ".$request->matchday."."])
+                           ->with('matchday',$request->matchday)
+                           ->withInput();
               //the next match to insert is the first of matchday
             if($request->date > date('d-m-Y',strtotime($lastMatch->start_date))){
               $lastMatchDay=date('d',strtotime($lastMatch->start_date));
@@ -658,8 +662,8 @@ class League extends Controller
               $season->end_date=$match->start_date;
               $season->save();
           }
-          $match->teams()->attach($request->localId,['local' => true]);
-          $match->teams()->attach($request->visitorId,['local' => false]);
+          $match->teams()->attach($request->localId,['local' => true,'ball_possesion' => 0]);
+          $match->teams()->attach($request->visitorId,['local' => false,'ball_possesion' => 0]);
           return back()->with('msg',['title' => 'OK!', 'content' => "Success!"])
                        ->with('matchday',$request->matchday);
         }
@@ -684,8 +688,8 @@ class League extends Controller
           $match->season_id = $newSeason->id;
           $match->referee_id = $request->refereeId;
           $match->save();
-          $match->teams()->attach($request->localId, ['local' => true]);
-          $match->teams()->attach($request->visitorId, ['local' => false]);
+          $match->teams()->attach($request->localId, ['local' => true,'ball_possesion' => 0]);
+          $match->teams()->attach($request->visitorId, ['local' => false,'ball_possesion' => 0]);
           return back()->with('msg',['title' => 'OK!', 'content' => "Success!"])
                        ->with('matchday',$request->matchday);
         }
@@ -705,5 +709,22 @@ class League extends Controller
         $match->referee=$match->referee;
       }
       return $matches;
+    }
+
+    public function startMatch(Request $request){
+      if(!$request->players)
+        return back()->with('msg',['title' => 'Ups!', 'content' => "Both teams must have 18 players."])
+                     ->withInput();
+      $match = Match::find($request->id);
+      $localPlayers = Player::find($request->players)->where('team_id',$match->teams()->wherePivot("local",true)->first()->id);
+      $visitorPlayers = Player::find($request->players)->where('team_id',$match->teams()->wherePivot("local",false)->first()->id);
+      if(count($localPlayers) < 18 or count($visitorPlayers) < 18)
+      return back()->with('msg',['title' => 'Ups!', 'content' => "Both teams must have 18 players."])
+                   ->withInput();
+      
+      $match->state=1;
+      $match->players->attach($request->players);
+      $match->save();
+
     }
 }
