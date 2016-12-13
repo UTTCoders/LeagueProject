@@ -86,14 +86,15 @@
 			</div>
 		</div>
 		<div class="col-md-5 col-xs-12">
-		<br>
+		<div class="hidden-md hidden-lg"><br><br><br></div>
 			<div id="pieChart" style="width:100%; height:210px; margin: 0 auto"></div>
 			<input type="hidden" name="possession1" value="{{$match->teams[0]->pivot->ball_possesion}}">
+		<div class="hidden-md hidden-lg"><br></div>
 		</div>
 	</div>
 	<div class="row">
 	<br>
-	<h4 style="color:#444;">Events</h4>
+	<h4 style="color:#444; font-weight: bold;"><span class="glyphicon glyphicon-flash"></span> Events</h4>
 		<div class="col-xs-11" id="events">
 			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>
 			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>

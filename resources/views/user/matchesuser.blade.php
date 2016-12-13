@@ -172,7 +172,7 @@
 <div class="jumbotron" style="margin-bottom: 0; background-color: #009688; color: #eee;">
 	<div class="container">
 		<div class="thumbnail col-xs-12" style="border-radius: 0; color: #111; padding-top: 20px; padding-bottom: 20px; box-shadow: 5px 5px #00695C;">
-			<h2 align="center"><span class="glyphicon glyphicon-th-list"></span> Calendar</h2>
+			<h2 align="center"><span class="glyphicon glyphicon-th"></span> Calendar</h2>
 			<div class="container">
 				@if($theseasons->count()>0 && Session::has('seasons'))
 				<div class="row">
