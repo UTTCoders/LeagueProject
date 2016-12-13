@@ -155,8 +155,10 @@ Route::post('/fblogin','Auth\LoginFBController@loginAsync')->middleware('guest')
 //pruebas
 
 Route::get('/prueba2', function(){
-	App\League\Player::onlyTrashed()->restore();
-	return "restored";
+	$now = Carbon\Carbon::now();
+	$matchDate = Carbon\Carbon::createFromFormat('Y-m-d H:i','2016-12-13 12:00');
+
+	return $now->diffInMinutes($matchDate);
 });
 
 Route::get('/prueba3',function(){

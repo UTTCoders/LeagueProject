@@ -15,8 +15,10 @@ use App\League\Position;
 use App\League\Referee;
 use App\League\Season;
 use App\League\Match;
+use App\League\Event;
 use Mail;
 use App\Mail\MatchStarted;
+use Carbon\Carbon;
 
 class League extends Controller
 {
@@ -757,6 +759,16 @@ class League extends Controller
 
       $match->localTeam=$match->teams()->wherePivot("local",true)->first();
       $match->visitorTeam=$match->teams()->wherePivot("local",false)->first();
+
+      $event = new Event;
+      $event->content = "Kick off! The battle between ".$match->localTeam->name." and ".$match->visitorTeam->name." has started!";
+      $event->match_id = $match->id;
+      /////////////////////////////////////////// here!!!!
+      $now = Carbon::now();
+    	$matchDate = Carbon::createFromFormat('Y-m-d H:i',date('Y-m-d H:i',strtotime($match->start_date)));
+      $event->minute = $now->diffInMinutes($matchDate);
+      $event->event_types_id = 7;
+      $event->save();
 
       $followers = $match->localTeam->followers->pluck('email');
       foreach ($match->visitorTeam->followers->pluck('email') as $follower) {
