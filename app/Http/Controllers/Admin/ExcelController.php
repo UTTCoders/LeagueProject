@@ -14,6 +14,6 @@ class ExcelController extends Controller
 	}
 
     public function PlayersAdd(Request $r){
-
+    	
     }
 }

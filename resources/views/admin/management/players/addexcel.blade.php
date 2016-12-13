@@ -295,7 +295,7 @@ body{
   </div>
   <div class="col-md-7 col-md-offset-1 no-padding col-xs-12 blackWell">
     <div class="header">
-      <h4>Player information</h4>
+      <h4>Add players</h4>
     </div>
     <div class="col-md-6 col-sm-6 col-xs-12 no-padding">
       <form class="" id="" action="/addPlayer" method="post" enctype="multipart/form-data">
