@@ -1,6 +1,6 @@
 @extends('user.userhome')
 
-@section('title','RESULTS')
+@section('title','Match Results')
 
 @section('css2')
 <style type="text/css">
@@ -38,6 +38,7 @@
 		padding-left: 20px;
 		border-top: 1px solid #ccc;
 		border-bottom: 1px solid #ccc;
+		background-color: #ccc;
 	}
 	.event{
 		margin:5px 0px;
@@ -49,7 +50,7 @@
 
 @section('body2')
 <div class="container content">
-	<h2 style="color:#111;"><strong>@if($teams["local"]["goals"] > $teams["visitor"]["goals"])Victorious: {{$teams["local"]->name}}@elseif($teams["local"]["goals"] < $teams["visitor"]["goals"])Victorious: {{$teams["visitor"]->name}}@else Equals!@endif</strong></h2>
+	<h2 style="color:#111;"><strong>@if($teams["local"]["goals"] > $teams["visitor"]["goals"])Victorious: {{$teams["local"]->name}}@elseif($teams["local"]["goals"] < $teams["visitor"]["goals"])Victorious: {{$teams["visitor"]->name}}@else Result: Equals!@endif</strong></h2>
 	<hr style="border-color: #111;">
 	<div class="row" style="color:#444;">
 		<div class="col-md-6 col-xs-12">
@@ -59,6 +60,7 @@
 			</div>
 		</div>
 		<div class="col-md-5 col-xs-12">
+		<br>
 		<div class="hidden-md hidden-lg"><br><br><br></div>
 			<div id="pieChart" style="width:100%; height:210px; margin: 0 auto"></div>
 		<div class="hidden-md hidden-lg"><br></div>
@@ -67,7 +69,7 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<br>
-			<h4 style="color:#444; font-weight: bold;"><span class="glyphicon glyphicon-flash"></span> Events</h4>
+			<h4 style="color:#444; font-weight: bold;"><span class="glyphicon glyphicon-flash"></span> All the events</h4>
 			<div class="col-xs-11" id="events">
 				@include('user.events')
 			</div>
@@ -106,7 +108,10 @@ $(document).ready(function(){
 	        	enabled: false
 	        },
 	        title: {
-	            text: 'Final ball possession:'
+	            text: 'Final ball possession:',
+	            style:{
+	            	fontWeight:"bold"
+	            }
 	        },
 	        tooltip: {
 	            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
