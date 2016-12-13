@@ -378,7 +378,7 @@ $(function ($) {
     var localPlayersCount=0,visitorPlayersCount=0;
     $('.addPlayer').click(function () {
       if($(this).text() == 'add'){
-        if(($(this).hasClass('local') && localPlayersCount < 18) || (!$(this).hasClass('local') && visitorPlayersCount < 18)){
+        if(($(this).hasClass('local') && localPlayersCount < 14) || (!$(this).hasClass('local') && visitorPlayersCount < 14)){
           $(this).text('remove');
           var $input=$('<input type="hidden" class="" name="players[]" id="playersToPlay">');
           $input.attr('value',$(this).attr('id'));
@@ -397,7 +397,7 @@ $(function ($) {
           }
         }
         else{
-          showMessages('Alert!','The max number of players per team are 18.');
+          showMessages('Alert!','The max number of players per team are 14.');
         }
       }
       else{

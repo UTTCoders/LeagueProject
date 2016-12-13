@@ -732,9 +732,13 @@ class League extends Controller
         $visitorPlayers[]=$player;
       }
 
-      if(count($localPlayers) != 18 or count($visitorPlayers) != 18)
-      return back()->with('msg',['title' => 'Ups!', 'content' => "Both teams must have 18 players."])
+      if(count($localPlayers) < 14 or count($visitorPlayers) < 14)
+      return back()->with('msg',['title' => 'Ups!', 'content' => "Both teams must have at least 14 players."])
                    ->withInput();
+
+     if(count($localPlayers) > 18 or count($visitorPlayers) > 18)
+     return back()->with('msg',['title' => 'Ups!', 'content' => "Both teams cannot have more than 18 players."])
+                  ->withInput();
 
       $match->state=1;
       $playersToAttach=[];
