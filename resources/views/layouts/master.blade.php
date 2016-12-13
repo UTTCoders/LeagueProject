@@ -313,6 +313,10 @@
                     <a id="2"  class="panelItem event">Calendar</a>
                     <a href="/admin/seasons/add-matches" id="2" class="panelSubItem" style="display:none">Programme matches</a>
                     <a href="/admin/seasons/control-matches" id="2" class="panelSubItem" style="display:none">Control matches</a>
+                        <a href="/stadistics" class="panelItem"><span class="glyphicon glyphicon-flash"></span> Stadistics</a>
+                        <a href="/matches" class="panelItem"><span class="glyphicon glyphicon-th"></span> All matches</a>
+                        <a href="/teams" class="panelItem"><span class="glyphicon glyphicon glyphicon-flag"></span> Teams</a>
+                        <a href="/favorites" class="panelItem"><span class="glyphicon glyphicon-star-empty"></span> Favorites</a>
                 </div>
                 <div class="bottomContainer col-md-12 col-xs-12 col-sm-12 no-padding" style="position:absolute;bottom:0px;background-color:red;">
                   <a id="logOutBtn" href="/logout" class="panelItem">Log out</a>

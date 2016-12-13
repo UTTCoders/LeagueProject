@@ -1,6 +1,6 @@
 @extends('user.userhome')
 
-@section('title',Auth::user()->name." | Home")
+@section('title',"League Home")
 
 @section('css2')
 <style type="text/css">
