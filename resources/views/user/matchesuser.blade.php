@@ -167,54 +167,64 @@
 	@endif
 	</div>
 	<br><br>
-	@if($currentSeason && $teamsS->count()>0)
-	<div class="row" style="color:#111;">
-		<div class="col-xs-12 col-sm-10 col-sm-offset-1">
-			<h3><img width="35px" src="/img/icons/cup.png"> Current points table</h3>
-			<div class="table-responsive">
-				<table class="table table-condensed">
-					<thead>
-						<tr style="font-size: 15px;" align="center">
-							<td></td>
-							<td><b>Matches</b></td>
-							<td><b>Differ goals</b></td>
-							<td><b>Points</b></td>
-						</tr>
-					</thead>
-					<tbody>
-					@foreach($teamsS as $team)
-						<tr align="center">
-							<td style="vertical-align: middle; font-size: 15px;" ><img style="width: 30px" src="/storage/{{$team->logo}}"> <b>{{$team->name}}</b></td>
-							<td style="vertical-align: middle;" >{{$team->matchesCount}}</td>
-							<td style="vertical-align: middle;" >{{$team->differGoals}}</td>
-							<td style="vertical-align: middle;" >{{$team->points}}</td>
-						</tr>
-					@endforeach
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	<br><br>
-	@endif
 	</div>
 </div>
 <div class="jumbotron" style="margin-bottom: 0; background-color: #009688; color: #eee;">
 	<div class="container">
-		<div class="thumbnail col-lg-9" style="border-radius: 0; color: #111; padding-top: 20px; padding-bottom: 20px; box-shadow: 5px 5px #00695C;">
-			<h2 align="center"><span class="glyphicon glyphicon-th-list"></span> Calendar</h2>
+		<div class="thumbnail col-xs-12" style="border-radius: 0; color: #111; padding-top: 20px; padding-bottom: 20px; box-shadow: 5px 5px #00695C;">
+			<h2 align="center"><span class="glyphicon glyphicon-th"></span> Calendar</h2>
 			<div class="container">
-				@if($currentSeason)
+				@if($theseasons->count()>0 && Session::has('seasons'))
 				<div class="row">
-					<div class="col-sm-4 col-sm-offset-8">
+					<div class="form-group col-sm-8 col-xs-12">
 						<label>Filter the seasons</label>
-						<select class="form-control" style="border-radius: 0px;">
-							<option value="{{$currentSeason->id}}">{{date_format(date_create($currentSeason->start_date),"Y/m/d")}} - Current</option>
+						<select id="seasonid" class="form-control" style="border-radius: 0px;">
+							@if($currentSeason)
+								<option value="{{$currentSeason->id}}">{{date_format(date_create($currentSeason->start_date),"Y/F/d")}} - Current</option>
+								@foreach($theseasons as $s)
+									@if($s->id != $currentSeason->id)
+									<option value="{{$s->id}}">{{date_format(date_create($s->start_date),"Y/F/d")}} - {{date_format(date_create($s->end_date),"Y/F/d")}}</option>
+									@endif
+								@endforeach
+							@else
+								@foreach($theseasons as $s)
+									<option value="{{$s->id}}">{{date_format(date_create($s->start_date),"Y/F/d")}} - {{date_format(date_create($s->end_date),"Y/F/d")}}</option>
+								@endforeach
+							@endif
+						</select>
+					</div>
+					<div class="form-group col-sm-4 col-xs-12">
+						<label>Matchdays</label>
+						<select id="matchday" class="form-control" style="border-radius: 0px;">
+							@if($currentSeason)
+								@if(Session::has('def'))
+									@foreach(Session::get("seasons.".$currentSeason->id) as $match)
+										@if(Session::get('def')==$loop->iteration)
+										<option selected value="{{$loop->iteration}}">Matchday {{$loop->iteration}}</option>
+										@else
+										<option value="{{$loop->iteration}}">Matchday {{$loop->iteration}}</option>
+										@endif
+									@endforeach
+								@else
+									@foreach(Session::get("seasons.".$currentSeason->id) as $match)
+										@if($loop->last)
+										<option selected value="{{$loop->iteration}}">Matchday {{$loop->iteration}}</option>
+										@else
+										<option value="{{$loop->iteration}}">Matchday {{$loop->iteration}}</option>
+										@endif
+									@endforeach
+								@endif
+							@else
+								@for($i=1; $i<=38; $i++)
+								<option value="{{$i}}">Matchday {{$i}}</option>
+								@endfor
+							@endif
 						</select>
 					</div>
 				</div>
 				<div class="row">
-					
+					<div id="matchesTable" class="table-responsive">
+					</div>
 				</div>
 				@else
 				<hr>
@@ -223,12 +233,6 @@
 				</div>
 				@endif
 			</div>
-		</div>
-		<div class="thumbnail col-lg-2 col-lg-offset-1 hidden-xs hidden-sm hidden-md" id="infoside" style="color: #111;">
-			<img src="/img/Logo La Liga Spain.png" class="img-responsive">
-			<span style="font-size: 13px;"><span class="glyphicon glyphicon-euro"></span> Lorem ipsum dolor sit amet.<br>Ut enim ad minim veniam,
-			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-			consequat.</span>
 		</div>
 	</div>
 </div>
@@ -242,4 +246,27 @@ $(document).ready(function(){
 	});
 });
 </script>
+@if($theseasons->count()>0 && Session::has('seasons'))
+<script>
+$(function(){
+	var askMatches=function(){
+		var t=$("meta[name='toktok']").attr('content')
+		var md=$("#matchday").val()
+		var sid=$("#seasonid").val()
+		$.ajax({
+			url:"/askmatches",method:"post",
+			data:{
+				_token:t,matchday:md,seasonid:sid
+			}
+		}).done(function(response){
+			$("#matchesTable").html(response);
+		});
+	}
+	askMatches();
+	$("#matchday").change(function(){
+		askMatches();
+	});
+});
+</script>
+@endif
 @endsection

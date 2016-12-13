@@ -46,6 +46,7 @@
 		padding-left: 20px;
 		border-top: 1px solid #ccc;
 		border-bottom: 1px solid #ccc;
+		background-color: #ccc;
 	}
 	.event{
 		margin:5px 0px;
@@ -72,7 +73,7 @@
 		<br>
 		<h2 style="color:#eee; margin-top: 0px; margin-bottom: 0;" id="mainTitle">{{$stadium->name}}</h2>
 	</div>
-	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle"><img src="/storage/{{$stadium->team->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"> <strong>{{$stadium->team->name}}</strong> <br class="hidden-md hidden-sm hidden-lg">VS <strong>{{$teams["visitor"]->name}}</strong> <img src="/storage/{{$teams['visitor']->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"></h3>
+	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle"><img src="/storage/{{$stadium->team->logo}}" style="width: 30px; max-height: 35px;"> <strong>{{$stadium->team->name}}</strong> <br class="hidden-md hidden-sm hidden-lg">VS <strong>{{$teams["visitor"]->name}}</strong> <img src="/storage/{{$teams['visitor']->logo}}" style="width: 30px; max-height: 35px;"></h3>
 </div>
 <br><br>
 <div class="container">
@@ -86,19 +87,19 @@
 			</div>
 		</div>
 		<div class="col-md-5 col-xs-12">
-		<br>
+		<div class="hidden-md hidden-lg"><br><br><br></div>
 			<div id="pieChart" style="width:100%; height:210px; margin: 0 auto"></div>
 			<input type="hidden" name="possession1" value="{{$match->teams[0]->pivot->ball_possesion}}">
+		<div class="hidden-md hidden-lg"><br></div>
 		</div>
 	</div>
 	<div class="row">
-	<br>
-	<h4 style="color:#444;">Events</h4>
-		<div class="col-xs-11" id="events">
-			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>
-			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>
-			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>
-			<div class="thumbnail event"><span class="glyphicon glyphicon-ok"></span> Something happened!</div>
+		<div class="col-xs-12">
+			<br>
+			<h4 style="color:#444; font-weight: bold;"><span class="glyphicon glyphicon-flash"></span> Events</h4>
+			<div class="col-xs-11" id="events">
+				@include('user.events')
+			</div>
 		</div>
 	</div>
 	<br>
@@ -133,7 +134,7 @@
 		<br>
 		<h2 style="color:#eee; margin-top: 0px; margin-bottom: 0;" id="mainTitle">{{$stadium->name}}</h2>
 	</div>
-	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle"><img src="/storage/{{$stadium->team->logo}}" style="width: 30px; max-height: 35px; border-radius: 100%;"> <strong>{{$stadium->team->name}}</strong></h3>
+	<h3 style="color:#eee; margin-top: 10px; margin-bottom: 0;" id="mainTitle"><img src="/storage/{{$stadium->team->logo}}" style="width: 35px; max-height: 40px;"> <strong>{{$stadium->team->name}}</strong></h3>
 </div>
 @endif
 <div class="jumbotron" style="background-color: #43A047; margin-bottom: 0; color: #eee;">
@@ -160,6 +161,7 @@
 	</div>
 	</div>	
 </div>
+@if($stadium->team->players->count()>0)
 <div class="container">
 	<div class="row" style="padding-top: 50px; padding-bottom: 55px;">
 		<div class="col-xs-12 col-md-8">
@@ -170,7 +172,7 @@
 					<li class="list-group-item submenu" id="{{$player->id}}">
 					<section class="row">
 						<section class="col-xs-5 col-sm-4" style="text-align: right;">
-							<img style="width: 100px; border-radius: 100%;" src="{{$player->photo}}">
+							<img style="width: 100px; border-radius: 100%;" src="/storage/{{$player->photo}}">
 						</section>
 						<section class="col-xs-7 col-sm-8" style="text-align: left;">
 							<p style="font-size: 13px;"><b>Full name: </b>{{$player->name.' '.$player->last_name}}</p>
@@ -184,6 +186,7 @@
 		</div>
 	</div>
 </div>
+@endif
 @endsection
 
 @section('js2')
@@ -240,6 +243,16 @@
 				}).done(function(response){
 					if (response.newgoals) {
 						$("#goalSection").html(response.marker)
+					}
+				})
+
+				var eC=$("input[name='eventsCount']").val()
+				$.ajax({
+					url:"/askevents",method:"post",
+					data:{_token:t,matchid:match,ec:eC}
+				}).done(function(response){
+					if (response.change) {
+						console.log("bool works!");
 					}
 				})
 			}

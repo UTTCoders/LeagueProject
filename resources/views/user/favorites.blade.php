@@ -40,8 +40,8 @@
 		background-color: #eee;
 	}
 	.con{
-		padding-top: 100px;
-		padding-bottom: 50px;
+		padding-top: 140px;
+		padding-bottom: 70px;
 	}
 </style>
 @endsection
@@ -90,10 +90,13 @@
 				@endforeach
 				</ul>
 			@else
-			<h3 align="center">You have no favorites dude! :(</h3>
+			<h3 align="center">You have no favorites dude! :'(</h3>
+			<br>
+			<h4 align="center">Better go to check the <a href="/teams">teams</a>! :D</h4>
 			@endif
 		</div>
 	</div>
+	<br><br>
 </div>
 @endsection
 

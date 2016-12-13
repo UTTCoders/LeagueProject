@@ -118,10 +118,10 @@ Route::get('activate/{t}',
 'Authentication\ActivationController@ActivationRequest');
 Route::get('/logout','Authentication\LoginHomeController@LogoutRequest')->middleware('authen');
 
-
 //--------------------Routes for the user----------------------!
 Route::group(['middleware' => ['authen']], function(){
 	Route::get("/teams",'User\TeamsController@TeamsRequest');
+	Route::get("/stadistics",'User\MatchesController@StatsRequest');
 	Route::get('/favorites','User\FavoritesController@FavoritesRequest');
 	Route::post('/getuserstadiums','User\MapController@getUserStadiums');
 	Route::get('/stadiums/{id}','User\MapController@requestStadium');
@@ -134,6 +134,9 @@ Route::group(['middleware' => ['authen']], function(){
 	Route::post('/askgoals','User\MapController@AskForGoals');
 	Route::post('/askstate','User\MatchesController@AskForState');
 	Route::post("/askchart",'User\MatchesController@AskPossession');
+	Route::post("/askmatches",'User\MatchesController@AskMatchesS');
+	Route::post("/askevents",'User\MatchesController@AskEvents');
+	Route::post("/chartstats",'User\MatchesController@ChartStats');
 });
 
 // fb

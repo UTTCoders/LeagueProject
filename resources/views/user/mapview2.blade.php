@@ -1,6 +1,6 @@
 @extends('user.userhome')
 
-@section('title',Auth::user()->name." | Home")
+@section('title',"League Home")
 
 @section('css2')
 <style type="text/css">
@@ -98,7 +98,50 @@
 	@if(App\League\Stadium::has('team')->get()->count()>0)
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqiB2cyhlFaZJmw6_x1Cz7-AvGH5dkTLU&callback=initMap&language=EN" async defer></script>
 	<script src="/js/user/usermapoptions.js"></script>
-	<script src="/js/user/stadiumsajax.js"></script>
+	<!--<script src="/js/user/stadiumsajax.js"></script>-->
+	<script type="text/javascript">
+	function getStadiums(google, map){
+		var Stadiums=[];
+		var tok=$("meta[name='toktok']").attr("content");
+		$.ajax({
+			url:"/getuserstadiums",
+			method:"post",
+			data:{
+				_token:tok
+			}
+		}).done(function(response){
+			console.log(response.length);
+			console.log(response);
+			var image={
+				url: '/img/icons/stadium8.png',
+				scaledSize: new google.maps.Size(65, 65),
+				origin: new google.maps.Point(0,0),
+				anchor: new google.maps.Point(40, 40)
+			}
+			$.each(response.stadiums,function(index,val){
+				var latLng=JSON.parse(val.location);
+				var title="Stadium: "+val.name+
+				"\nTeam: "+response.teams[index].name;
+				Stadiums[index]=new google.maps.Marker({
+					position:{
+						lat:Number(latLng.lat),
+						lng:Number(latLng.lng)
+					},
+					map:map,
+					icon: image,
+					title:title,
+					animation: google.maps.Animation.DROP,
+				});
+				Stadiums[index].id=val.id;
+				Stadiums[index].name=val.name;
+				Stadiums[index].addListener('click',function(){
+					document.location.href="/stadiums/"+this.id;
+				});
+			});
+		});
+		return Stadiums;
+	}
+	</script>
 	<script src="/js/user/usermap.js"></script>
 	@endif
 @endsection

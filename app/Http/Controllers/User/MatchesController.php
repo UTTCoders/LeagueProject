@@ -7,12 +7,13 @@ use App\Http\Controllers\Controller;
 use App\League\Match;
 use App\League\Team;
 use App\League\Season;
+use Session;
 use Auth;
 use Carbon\Carbon;
 
 class MatchesController extends Controller
 {
-	public function MatchesRequest(Request $r){
+    public function MatchesRequest(Request $r){
 		if (Auth::user()->teams->count()>0 && 
 		Match::where('state','>',0)->where('state','<',4)->count()>0) {
 			$res=self::checkMatches();
@@ -20,15 +21,78 @@ class MatchesController extends Controller
 				return view('user.matchesuser')
 				->with('matches',$res["matches"])
                 ->with('currentSeason',self::checkSeason())
-                ->with('teamsS',self::TeamsSeason(self::checkSeason()));
+                ->with('theseasons',self::theSeasons());
 			}
 		}
 		return view('user.matchesuser')
 		->with('matches',
 		Match::where('state','>',0)->where('state','<',4)->get())
         ->with('currentSeason',self::checkSeason())
-        ->with('teamsS',self::TeamsSeason(self::checkSeason()));
+        ->with('theseasons',self::theSeasons());
 	}
+
+    public function AskEvents(Request $r){
+        $thematch=Match::find($r->matchid);
+        if ($thematch->events()->count() != $r->ec) {
+            return [
+                "change"=>true,
+                "view"=>view('user.events')->with("match",$thematch)
+            ];
+        }
+        return [
+            "change"=>false
+        ];
+    }
+
+    public function AskMatchesS(Request $r){
+        return view('user.matches')
+        ->with('matches',Session::get('seasons.'.$r->seasonid.'.'.$r->matchday))
+        ->render();
+    }
+
+    private function generateSeasons($theseasons){
+        Session::put('seasons');
+        foreach ($theseasons as $season) {
+            Session::put('seasons.'.$season->id,$season);
+            $matchday=1;
+            $count=1;
+            foreach ($season->matches as $match) {
+                $match["theteams"]=self::checkGoals($match);
+                Session::push('seasons.'.$season->id.'.'.$matchday,$match);
+                if (Session::has('current')) {
+                    if (Session::get('current')->id == $season->id
+                    && $match->state == 0 && !Session::has('def')) {
+                        Session::put('def',$matchday);
+                    }
+                }
+                $count++;
+                if ($count==10) {
+                    $matchday++;
+                    $count=1;
+                }
+            }
+        }
+    }
+
+    private function theSeasons(){
+        $theseasons=Season::has('matches',">","0")->get();//here goes 380 too
+        $count=Season::has('matches',">","0")->get()->count();//here goes 380 too
+        if ($count>0) {
+            self::generateSeasons($theseasons);
+        }
+        return $theseasons;
+    }
+
+    public function ChartStats(){
+        $teams=self::TeamsSeason(self::checkSeason());
+        return $teams;
+    }
+
+    public function StatsRequest(Request $r){
+        return view('user.stats')
+        ->with('currentSeason',self::checkSeason())
+        ->with('teamsS',self::TeamsSeason(self::checkSeason()));
+    }
 
     private function TeamsSeason($season){
         if ($season) {
@@ -108,6 +172,10 @@ class MatchesController extends Controller
         $season=Season::where('start_date','<=',$d)
         ->where('end_date','>=',$d)->get()->first();
         if ($season && $season->matches()->count() >0) { //here 380
+            Session::put('current',$season);
+            if (Session::has('def')) {
+                Session::forget('def');
+            }
             return $season;
         }
         return null;
@@ -154,7 +222,7 @@ class MatchesController extends Controller
             if ($goal->player->team->id == $teams["local"]->id) {
                 $teams["local"]["goals"]+=1;
             }else{
-                $teams["visitor"]["goals"]++;
+                $teams["visitor"]["goals"]+=1;
             }
         }
         return $teams;

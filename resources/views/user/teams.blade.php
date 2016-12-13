@@ -62,7 +62,7 @@
 						</section>
 						<section class="col-sm-6 col-xs-12" style=" padding-left: 20px; text-align: left;">
 							<div style="margin-top: 15px; margin-bottom: 10px;">
-								<span style="font-size: 18px;"><span><img src="/storage/{{$team->logo}}" style="width: 20px;"> {{$team->name}}</span>
+								<span style="font-size: 18px;"><span><img src="/storage/{{$team->logo}}" style="width: 28px; max-height: 33px;"> {{$team->name}}</span>
 								<br>
 								<span style="font-size: 13px;"><b>Coach: </b>{{$team->coach->name.' '.$team->coach->last_name}}</span>
 								<br>
@@ -85,6 +85,7 @@
 			@endif
 		</div>
 	</div>
+	<br><br>
 </div>
 @endsection
 
