@@ -40,8 +40,8 @@
 		background-color: #eee;
 	}
 	.con{
-		padding-top: 100px;
-		padding-bottom: 50px;
+		padding-top: 140px;
+		padding-bottom: 70px;
 	}
 </style>
 @endsection
@@ -94,6 +94,7 @@
 			@endif
 		</div>
 	</div>
+	<br><br>
 </div>
 @endsection
 
