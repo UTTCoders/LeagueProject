@@ -172,7 +172,7 @@ class DataForViewsController extends Controller
       return view('admin.calendar.seasons.control-matches',[
         'todayMatches' => $todayMatches,
         'tomorrowMatches' => $tomorrowMatches,
-        'states' => ['upcoming','first half','second half','full time'],
+        'states' => ['upcoming','first half','break','second half','full time'],
         'pendingTasks' => $pendingTasks
       ]);
     }
@@ -234,7 +234,7 @@ class DataForViewsController extends Controller
       $match->localTeam->players=$ordenedLocalPlayers;
       $match->visitorTeam->players=$ordenedVisitorPlayers;
       return view('admin.calendar.seasons.match-narrating',[
-        'states' => ['upcoming','first half','second half','full time'],
+        'states' => ['upcoming','first half','break','second half','full time'],
         'match' => $match
       ]);
     }
