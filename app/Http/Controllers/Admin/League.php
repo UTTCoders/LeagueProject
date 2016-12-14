@@ -1006,16 +1006,31 @@ class League extends Controller
     }
 
     public function endMatch(Request $request, $id){
+
       $match = Match::find($id);
       if(!$match) return back();
       if($match->state != 3) return back();
       $match->state = 4;
       $match->save();
 
-      
+      $localTeam = $match->teams()->wherePivot('local',1)->first();
+      $visitorTeam = $match->teams()->wherePivot('local',0)->first();
+
+      $localTeam->goalsCount = 0;
+      $visitorTeam->goalsCount = 0;
+      foreach ($match->goals as $goal) {
+        if($goal->player->team->id == $localTeam->id)
+          $localTeam->goalsCount += 1;
+        else $visitorTeam->goalsCount += 1;
+      }
 
       $event = new Event;
-      $event->content = "Full-time! ";
+
+      if($localTeam->goalsCount < $visitorTeam->goalsCount)
+        $event->content = "Full-time! ".$visitorTeam->name." wins!";
+      elseif($localTeam->goalsCount > $visitorTeam->goalsCount)
+        $event->content = "Full-time! ".$localTeam->name." wins!";
+      else $event->content = "Full-time! It is a draw!";
 
       $now = Carbon::now();
     	$matchDate = Carbon::createFromFormat('Y-m-d H:i',date('Y-m-d H:i',strtotime($match->start_date)));
@@ -1027,6 +1042,6 @@ class League extends Controller
 
       $event->save();
 
-      return back();
+      return redirect('/');
     }
 }
