@@ -144,7 +144,6 @@ Route::group(['middleware' => ['authen']], function(){
 	Route::post("/askchart",'User\MatchesController@AskPossession');
 	Route::post("/askmatches",'User\MatchesController@AskMatchesS');
 	Route::post("/askevents",'User\MatchesController@AskEvents');
-	Route::post("/asktime",'User\MatchesController@AskTime');
 	Route::post("/chartstats",'User\MatchesController@ChartStats');
 });
 

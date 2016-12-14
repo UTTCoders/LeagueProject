@@ -31,13 +31,6 @@ class MatchesController extends Controller
         ->with('theseasons',self::theSeasons());
 	}
 
-    public function AskTime(Request $r){
-        $thematch=Match::find($r->matchid);
-        $carbon = new Carbon($thematch->start_date);
-        return Carbon::now('America/Monterrey')->diffInMinutes($carbon);
-        return $thematch;
-    }
-
     public function AskEvents(Request $r){
         $thematch=Match::find($r->matchid);
         if ($thematch->events()->count() != $r->ec) {

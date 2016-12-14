@@ -287,27 +287,6 @@
 			})
 		}
 		setInterval(askState,1000)
-
-		var asktime=function(){
-			var t=$("meta[name='toktok']").attr('content')
-			var match=$("input[name='thematchid']").val()
-			$.ajax({
-				url:'/asktime',method:'post',
-				data:{_token:t,matchid:match}
-			}).done(function(response){
-				/*if (response.change) {
-					if (response.state==2) {
-						$("#commentForm").hide()
-						$("#stateIndicator").html("<span class='glyphicon glyphicon-time'></span> Break time")
-					}else if(response.state==3){
-						location.reload();
-					}else if(response.state==4){
-						document.location.href="/results/"+match
-					}
-				}*/
-			})
-		}
-		setInterval(asktime,1000)
 	});
 	</script>
 <script src="/Highcharts/js/highcharts.js"></script>
