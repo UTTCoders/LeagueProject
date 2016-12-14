@@ -108,6 +108,23 @@ Route::group(['middleware' => ['authen']], function(){
 
 		Route::post('/getMatchesPerMatchDay','Admin\League@getMatchesPerMatchDay');
 
+		Route::post('/addGoal','Admin\League@addGoal');
+
+		Route::post('/addCorner','Admin\League@addCorner');
+
+		Route::post('/addYellowCard','Admin\League@addYellowCard');
+
+		Route::post('/addRedCard','Admin\League@addRedCard');
+
+		Route::post('/addShoot','Admin\League@addShoot');
+
+		Route::post('/changeBallPossesion','Admin\League@changeBallPossesion');
+
+		Route::get('/admin/end-first-half/{id}','Admin\League@endFirstHalf');
+
+		Route::get('/admin/start-second-half/{id}','Admin\League@startSecondHalf');
+
+		Route::get('/admin/end-match/{id}','Admin\League@endMatch');
 		//excel routes
 		Route::post('/admin/players/add/excel',
 			'Admin\ExcelController@PlayersAdd');
