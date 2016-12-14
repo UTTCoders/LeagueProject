@@ -20,12 +20,10 @@ class ExcelController extends Controller
     	}
     	if ($r->file('excelFile')->getClientOriginalExtension() != 'xlsx' &&
     		$r->file('excelFile')->getClientOriginalExtension() != 'xls' &&
-    		$r->file('excelFile')->getClientOriginalExtension() != 'csv' &&
-    		$r->file('excelFile')->getClientOriginalExtension() != 'ods' &&
-    		$r->file('excelFile')->getClientOriginalExtension() != 'ots') {
+    		$r->file('excelFile')->getClientOriginalExtension() != 'ods') {
     		return back()->with('msg.content',"The file format is invalid!");
     	}
-    	$m=array();
+
     	Excel::load($r->file('excelFile'), function($reader){
     		$reader->each(function($sheet){
     			if ($sheet->getTitle() === "players") {
@@ -33,25 +31,26 @@ class ExcelController extends Controller
                     	$theteam=Team::where('name',$row["team"])->first();
                     	if ($theteam) {
                     		$theplayer=Player::where("shirt_number",
-                    		$row["shirt_number"])->first();
+                    		$row["shirt_number"])->where('team_id',$theteam->id)->first();
                     		if (!$theplayer) {
-		                        $p=new Player;
-		                        $p->name=$row["name"];
-		                        $p->last_name=$row["last_name"];
-		                        $p->team_id=$theteam->id;
-		                        $p->shirt_number=$row["shirt_number"];
-		                        $p->nationality=$row["nationality"];
-		                        $p->save();
+                    			$names=Player::where("name",
+	                    		$row["name"])->where("last_name",
+	                    		$row["last_name"])->where('team_id',$theteam->id)->first();
+	                    		if (!$names) {
+			                        $p=new Player;
+			                        $p->name=$row["name"];
+			                        $p->last_name=$row["last_name"];
+			                        $p->team_id=$theteam->id;
+			                        $p->shirt_number=$row["shirt_number"];
+			                        $p->nationality=$row["nationality"];
+			                        $p->save();
+	                    		}
                     		}
                     	}
                     });
                 }
     		});
     	});
-
-    	$excel=Excel::load($r->file('excelFile'))->get();
-    	return $excel;
-    	return $m;
-    	return $r->file('excelFile')->getClientOriginalExtension();
+    	return back()->with('msg.content',"Check the players left table below.");
     }
 }

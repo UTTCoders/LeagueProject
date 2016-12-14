@@ -1168,7 +1168,7 @@ League management
                     id: stadiumToDelete.id
                   }
                 }).done(function (response) {
-                  if(response != null){
+                  if(response['result'] == false){
                     showMessages('Ups!',response['content'],'error-card');
                   }
                   else{

@@ -268,11 +268,14 @@ body{
   width: 100%;
   background-color: #eee;
   padding:5px 5px;
+  margin-bottom: 20px;
+  overflow-y: auto;
 }
 .playerNoImg{
   padding:5px 10px; 
   background-color: #111; 
   color: #eee;
+  margin-bottom: 5px;
 }
 .playerNoImg:hover{
   cursor: pointer;
@@ -329,7 +332,7 @@ body{
           <div class="form-group">
             <label id="thefile" style="font-size: 15px; color:#111; border-radius: 0px;" class="btn btn-default btn-block">
               <span id="m" style="font-weight: normal;">Select a file <span class="glyphicon glyphicon-folder-open"></span></span>
-              <input accept=".csv, .xls, .xlsx, .ods, .ots" type="file" name="excelFile" style="display: none;">
+              <input accept=".xls, .xlsx, .ods" type="file" name="excelFile" style="display: none;">
             </label>
           </div>
           <div class="form-group">
@@ -348,9 +351,6 @@ body{
               <h4 style="color: #111; margin-bottom: 20px;" align="center">There are no players left...</h4>
             @endif
           </div>
-          @if(App\League\Player::where('photo',null)->count() > 0)
-          <button style="margin-bottom: 30px; margin-top: 10px; border-radius: 0px;" class="btn btn-success btn-block">Upload the images</button>
-          @endif
       </div>
   </div>
 </div>

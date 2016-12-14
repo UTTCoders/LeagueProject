@@ -255,7 +255,7 @@
 					data:{_token:t,matchid:match,ec:eC}
 				}).done(function(response){
 					if (response.change) {
-						console.log("bool works!");
+						$("#events").html(response.view);
 					}
 				})
 			}

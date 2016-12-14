@@ -36,7 +36,7 @@ class MatchesController extends Controller
         if ($thematch->events()->count() != $r->ec) {
             return [
                 "change"=>true,
-                "view"=>view('user.events')->with("match",$thematch)
+                "view"=>view('user.events')->with("match",$thematch)->render()
             ];
         }
         return [
