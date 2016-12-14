@@ -175,7 +175,7 @@
 					<li class="list-group-item submenu" id="{{$player->id}}">
 					<section class="row">
 						<section class="col-xs-5 col-sm-4" style="text-align: right;">
-							<img style="width: 100px; border:1px solid #666;" src="/storage/{{$player->photo}}">
+							<img style="width: 110px; border:1px solid #666;" src="/storage/{{$player->photo}}">
 						</section>
 						<section class="col-xs-7 col-sm-8" style="text-align: left;">
 							<p style="font-size: 13px;"><b>Full name: </b>{{$player->name.' '.$player->last_name}}</p>
@@ -287,6 +287,27 @@
 			})
 		}
 		setInterval(askState,1000)
+
+		var asktime=function(){
+			var t=$("meta[name='toktok']").attr('content')
+			var match=$("input[name='thematchid']").val()
+			$.ajax({
+				url:'/asktime',method:'post',
+				data:{_token:t,matchid:match}
+			}).done(function(response){
+				/*if (response.change) {
+					if (response.state==2) {
+						$("#commentForm").hide()
+						$("#stateIndicator").html("<span class='glyphicon glyphicon-time'></span> Break time")
+					}else if(response.state==3){
+						location.reload();
+					}else if(response.state==4){
+						document.location.href="/results/"+match
+					}
+				}*/
+			})
+		}
+		setInterval(asktime,1000)
 	});
 	</script>
 <script src="/Highcharts/js/highcharts.js"></script>
