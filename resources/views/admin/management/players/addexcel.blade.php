@@ -263,6 +263,30 @@ body{
   margin-top: 9px;
   cursor: pointer;
 }
+#playersContainer{
+  height: 200px;
+  width: 100%;
+  background-color: #eee;
+  padding:5px 5px;
+}
+.playerNoImg{
+  padding:5px 10px; 
+  background-color: #111; 
+  color: #eee;
+}
+.playerNoImg:hover{
+  cursor: pointer;
+  background-color: #222;
+}
+#indicatorImg{
+  font-weight: normal;
+}
+.green{
+  color: #4CAF50;
+}
+.red{
+  color: #F44336;
+}
 </style>
 @endsection
 
@@ -289,7 +313,7 @@ body{
   <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0 col-xs-12" id="manageMenu">
       <a class="manageMenuHeader col-md-12 col-sm-12 col-xs-12">Players...</a>
       <a href="/admin/players/add" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Add</a>
-      <a href="/admin/players/add/excel" class="manageMenuItem item-active col-md-12 col-sm-12 col-xs-12">Use excel</a>
+      <a href="/admin/players/add/excel" class="manageMenuItem item-active col-md-12 col-sm-12 col-xs-12">Excel and images</a>
       <a href="/admin/players/edit" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Edit</a>
       <a href="/admin/players/delete" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Delete</a>
   </div>
@@ -297,71 +321,37 @@ body{
     <div class="header">
       <h4>Add players</h4>
     </div>
-    <div class="col-md-6 col-sm-6 col-xs-12 no-padding">
-      <form class="" id="" action="/addPlayer" method="post" enctype="multipart/form-data">
-        {{csrf_field()}}
-        <input type="hidden" name="teamId" value="">
-        <input type="hidden" name="mainPosition" value="">
-        <div class="form-group col-md-12 col-xs-12">
-          <input type="text" name="name" value="{{old('name')}}" placeholder="name..." class="whiteInput col-md-12 col-xs-12 no-padding">
-        </div>
-        <div class="form-group col-md-12 col-xs-12">
-          <input type="text" name="last_name" value="{{old('last_name')}}" placeholder="last name..." class="whiteInput col-md-12 col-xs-12 no-padding">
-        </div>
-        <div class="form-group col-md-12 col-xs-12">
-          <input type="text" name="nationality" autocomplete="off" value="{{old('nationality')}}" placeholder="nationality..." class="whiteInput col-md-12 col-xs-12 no-padding">
-          <div class="autocomplete-container">
-
+      <div class="col-sm-8 col-xs-12">
+        <h3>Upload an excel</h3>
+        <hr>
+        <form action="/admin/players/add/excel" enctype="multipart/form-data" method="post">
+          {{csrf_field()}}
+          <div class="form-group">
+            <label id="thefile" style="font-size: 15px; color:#111; border-radius: 0px;" class="btn btn-default btn-block">
+              <span id="m" style="font-weight: normal;">Select a file <span class="glyphicon glyphicon-folder-open"></span></span>
+              <input accept=".csv, .xls, .xlsx, .ods, .ots" type="file" name="excelFile" style="display: none;">
+            </label>
           </div>
-        </div>
-        <div class="form-group col-md-12 col-xs-12">
-          <input type="number" name="shirt_number" min="0" max="200" value="{{old('shirt_number')}}" placeholder="shirt number..." class="whiteInput col-md-6 col-xs-12 no-padding">
-        </div>
-        <div class="form-group col-md-12 col-xs-12">
-          <div class="file-big-container col-md-12">
-            <h4 style="text-align:center;margin-top:88px;">Drag or click for select a <b>photo</b>...</h4>
-            <input type="file" name="photo" value="{{old('photo')}}">
+          <div class="form-group">
+            <button style="font-weight: normal; border-radius: 0px; margin-bottom: 30px;" class="btn btn-success btn-block">UPLOAD</button>
           </div>
-        </div>
-        <div class="form-group col-md-12 col-xs-12">
-          <button type="submit" name="addTeamBtn" class="btnBlue2 col-md-4 col-md-offset-8 col-sm-12 col-xs-12 no-padding">Add</button>
-        </div>
-      </form>
-    </div>
-    <div class="col-md-6">
-      <div class="col-md-12 no-padding teams-selection-container" id="teamSelector">
-        @if(App\League\Team::count() < 1)
-        <h4 style="text-align:center;">No teams</h4>
-        @else
-          @foreach(App\League\Team::get() as $i => $team)
-          <div class="col-md-12 no-padding Item" id="{{$team->id}}">
-            <div class="img-container">
-              <img src="{{asset('storage/'.$team->logo)}}" alt="">
-            </div>
-            <div class="col-md-9">
-              <h5>{{$team->name}}</h5>
-            </div>
-          </div>
-          @endforeach
-        @endif
+        </form>
       </div>
-      <div class="col-md-12 col-xs-12 teams-selection-container no-padding" id="positionSelector">
-        @foreach(App\League\Position::get() as $position)
-        <div class="col-md-12 col-xs-12 Item no-padding" style="cursor:inherit;">
-          <div class="col-xs-2">
-            <div class="pos-container">
-              {{$position->abbreviation}}
-            </div>
+      <div class="col-sm-8 col-xs-12">
+        <h4>Players without image</h4>
+          <div id="playersContainer">
+            @if(App\League\Player::where('photo',null)->count() > 0)
+              @foreach(App\League\Player::where('photo',null)->get() as $player)
+                <label id="{{$player->id}}" align="center" class="thumbnail playerNoImg"><span class="pull-left"><img width="20px" src="/storage/{{$player->team->logo}}"></span>{{$player->name.' '.$player->last_name}}<span class="pull-right red" id="indicatorImg">No image...</span><input accept=".png, .jpeg, .jpg" type="file" style="display: none;"></label>
+              @endforeach
+            @else
+              <h4 style="color: #111; margin-bottom: 20px;" align="center">There are no players left...</h4>
+            @endif
           </div>
-          <div class="col-xs-6">
-            <h5>{{$position->name}}</h5>
-          </div>
-          <i class="col-xs-2 material-icons addPositionBtn" style="color:#888;" id="{{$position->id}}">check</i>
-          <i class="col-xs-2 material-icons mainPosition" style="color:#888;" id="{{$position->id}}">star_rate</i>
-        </div>
-        @endforeach
+          @if(App\League\Player::where('photo',null)->count() > 0)
+          <button style="margin-bottom: 30px; margin-top: 10px; border-radius: 0px;" class="btn btn-success btn-block">Upload the images</button>
+          @endif
       </div>
-    </div>
   </div>
 </div>
 @endsection
@@ -369,7 +359,7 @@ body{
 @section('js')
 @if(session('msg'))
 <script>
-$(function ($) {
+$(function () {
   $('.black-transparent-back').fadeIn('slow',function () {
     $('.messageBox').css('margin-top','20%').css('opacity',1);
     $('.messageBox').children('.body').text('{{session("msg")["content"]}}');
@@ -377,7 +367,58 @@ $(function ($) {
 });
 </script>
 @endif
-<script type="text/javascript">
-  
+<script>
+$(function () {
+    $('#thefile').change(function () {
+      var file = $(this).children('input[type=file]')[0].files[0];
+      if(file){
+          $(this).children('#m').text("File: "+file.name);
+          $(this).attr('class',"btn btn-primary btn-block");
+      }
+      else{
+        $(this).children('#m').html('Select a file <span class="glyphicon glyphicon-folder-open"></span>');
+        $(this).attr('class',"btn btn-default btn-block");
+      } 
+    });
+
+    $('.playerNoImg').change(function () {
+      var file = $(this).children('input[type=file]')[0].files[0];
+      if(file){
+          var name=file.name.substr(0, 8)+"...";
+          var res = ("<span class='glyphicon glyphicon-ok'></span> "+name);
+          var ss=$(this);
+          var formData = new FormData();
+          formData.append('newphoto' ,$(this).children('input[type=file]')[0].files[0]);
+          formData.append('_token','{{csrf_token()}}');
+          formData.append('playerid', $(this).attr('id'));
+          $.ajax({
+            url:"/imageplayer",method:"post",
+            data:formData,
+            processData: false,
+            contentType: false,
+          }).done(function(response){
+                if (response.success) {
+                  ss.children('#indicatorImg').html(res).addClass("green")
+                  .removeClass("red").delay(3000,function(){
+                    ss.slideUp(1000);
+                  });
+                }else{
+                  $('.black-transparent-back').fadeIn('slow',function () {
+                    $('.messageBox').css('margin-top','20%').css('opacity',1);
+                    $('.messageBox').children('.body').text(response.mess);
+                  });
+                }
+          });
+      }
+      else{
+        $(this).children('#indicatorImg').text("No image...").removeClass("green").addClass("red");
+      }
+    });
+
+    $('.black-transparent-back').click(function () {
+      $('.messageBox').css('margin-top','10%').css('opacity',0);
+      $(this).fadeOut(1000);
+    });
+});
 </script>
 @endsection

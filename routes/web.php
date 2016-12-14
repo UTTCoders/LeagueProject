@@ -132,6 +132,8 @@ Route::group(['middleware' => ['authen']], function(){
 		Route::get('/admin/players/add/excel',
 			'Admin\ExcelController@PlayersRequest');
 		// end of Management by admin
+
+		Route::post("/imageplayer",'Admin\ImgPlayersController@imagePlayer');
 });
 
 //Route for the login needs to get inside the app without middleware

@@ -305,14 +305,14 @@
             <div class="menuPanel">
                 <i class="material-icons pull-right" id="hideBtn" style="margin-right:15px;font-size:28px;cursor:pointer;">arrow_forward</i>
                 <div class="itemsContainer">
-                    <a id="1"  class="panelItem event">Management</a>
-                    <a href="/admin/stadiums-coaches" id="1" class="panelSubItem" style="display:none">Stadiums and Coaches</a>
-                    <a href="/admin/teams/add" id="1" class="panelSubItem" style="display:none">Teams</a>
-                    <a href="/admin/players/add" id="1" class="panelSubItem" style="display:none">Players</a>
-                    <a href="/admin/referees/add" id="1" class="panelSubItem" style="display:none">Referees</a>
-                    <a id="2"  class="panelItem event">Calendar</a>
-                    <a href="/admin/seasons/add-matches" id="2" class="panelSubItem" style="display:none">Programme matches</a>
-                    <a href="/admin/seasons/control-matches" id="2" class="panelSubItem" style="display:none">Control matches</a>
+                    <a id="lalala"  class="panelItem event">Management</a>
+                    <a href="/admin/stadiums-coaches" id="lalala" class="panelSubItem" style="display:none">Stadiums and Coaches</a>
+                    <a href="/admin/teams/add" id="lalala" class="panelSubItem" style="display:none">Teams</a>
+                    <a href="/admin/players/add" id="lalala" class="panelSubItem" style="display:none">Players</a>
+                    <a href="/admin/referees/add" id="lalala" class="panelSubItem" style="display:none">Referees</a>
+                    <a id="lalala2"  class="panelItem event">Calendar</a>
+                    <a href="/admin/seasons/add-matches" id="lalala2" class="panelSubItem" style="display:none">Programme matches</a>
+                    <a href="/admin/seasons/control-matches" id="lalala2" class="panelSubItem" style="display:none">Control matches</a>
                         <a href="/stadistics" class="panelItem">Stadistics</a>
                         <a href="/matches" class="panelItem">All matches</a>
                         <a href="/teams" class="panelItem">Teams</a>

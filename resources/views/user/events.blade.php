@@ -1,6 +1,6 @@
 @if($match->events()->count() > 0)
-	@foreach($match->events as $e)
-		<div style="color:#eee; background-color: #444;" align="center" class="thumbnail event"><span class="pull-left"><img style="width:16px;" src="/{{$e->eventType->icon}}"></span>{{$e->content}}<span class="pull-right">Min: {{date_format(date_create($e->minute),"i")}}</span></div>
+	@foreach($match->events()->orderBy('minute','desc')->get() as $e)
+		<div style="color:#eee; background-color: #444;" align="center" class="thumbnail event"><span class="pull-left"><img style="width:16px;" src="/{{$e->eventType->icon}}"></span>{{$e->content}}<span class="pull-right">Min: {{$e->minute}}</span></div>
 	@endforeach
 @else
 	<br>

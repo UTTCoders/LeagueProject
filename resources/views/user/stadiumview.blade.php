@@ -43,7 +43,7 @@
 		border-radius: 0;
 		overflow-y: auto;
 		height: 150px;
-		padding-left: 20px;
+		padding: 10px 20px;
 		border-top: 1px solid #ccc;
 		border-bottom: 1px solid #ccc;
 		background-color: #ccc;
@@ -51,7 +51,10 @@
 	.event{
 		margin:5px 0px;
 		border-radius: 0px;
-		padding:5px 13px;
+		padding-left: 13px;
+		padding-right: 13px;
+		padding-bottom: 6px;
+		padding-top: 5px;
 	}
 	.list-group-item.player{
 		border-radius: 0px;
@@ -165,14 +168,14 @@
 <div class="container">
 	<div class="row" style="padding-top: 50px; padding-bottom: 55px;">
 		<div class="col-xs-12 col-md-8">
-			<h3>{{$stadium->team->name}} team</h3>
+			<h3 style="color:#444;">{{$stadium->team->name}} team</h3>
 			<ul class="list-group">
 				@foreach($stadium->team->players as $player)
 					<li style="font-weight: bold;" class="list-group-item player action" name="{{$player->id}}"><div align="center"><span class="pull-left">Shirt {{$player->shirt_number}}</span>{{$player->name.' '.$player->last_name}}<span id="littleToggle" class="glyphicon glyphicon-menu-down pull-right"></span></div></li>
 					<li class="list-group-item submenu" id="{{$player->id}}">
 					<section class="row">
 						<section class="col-xs-5 col-sm-4" style="text-align: right;">
-							<img style="width: 100px; border-radius: 100%;" src="/storage/{{$player->photo}}">
+							<img style="width: 100px; border:1px solid #666;" src="/storage/{{$player->photo}}">
 						</section>
 						<section class="col-xs-7 col-sm-8" style="text-align: left;">
 							<p style="font-size: 13px;"><b>Full name: </b>{{$player->name.' '.$player->last_name}}</p>
