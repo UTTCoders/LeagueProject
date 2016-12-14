@@ -6,6 +6,9 @@
 
 @section('css')
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 <style media="screen">
 body{
   background:  #222525;
@@ -138,6 +141,9 @@ body{
 }
 .teams-stats>div{
   box-shadow: inset 0 0 10px 0 #000;
+  border-radius: 3px;
+  padding-top: 15px;
+  padding-bottom: 15px;
   margin-bottom: 15px;
 }
 .photo-container{
@@ -164,7 +170,9 @@ body{
   display: block;
 }
 .events-container{
-  background:white;
+  background:#111;
+  border: 1px solid rgba(0,0,0,.1);
+  color:#ddd;
   border-radius: 2px;
   box-shadow: 0 0 10px #000;
   padding: 15px;
@@ -172,21 +180,21 @@ body{
 .events-list>div{
   border-radius: 3px;
   margin-bottom:5px;
-  background: dodgerblue;
-  border: 1px solid skyblue;
+  background: transparent;
+  border: 1px solid transparent;
   cursor: pointer;
   -webkit-transition: background .4s;
 }
 .events-list>div:hover{
-  background: white;
-  color: dodgerblue;
-  border: 1px solid skyblue;
+  background: transparent;
+  color: white;
+  border: 1px solid transparent;
 }
 .module{
   display: none;
 }
 .lineup{
-  color:#333;
+  color:#888;
 }
 .clickeable{
   cursor: pointer;
@@ -198,13 +206,20 @@ body{
   padding: 0;
 }
 .match-state-btn{
+  background-color: transparent;
+  border: 1px solid #fff;
+  border-radius: 2px;
   float: right;
   margin-top: 40px;
   padding: 10px;
   padding-left: 20px;
   padding-right: 20px;
   box-shadow: 0 1px 3px 0 #333;
-  font-size: 26px;
+  font-size: 18px;
+  -webkit-transition: background-color .3s;
+}
+.match-state-btn:hover{
+  background-color: rgba(255,255,255,.1);
 }
 </style>
 @endsection
@@ -235,7 +250,7 @@ body{
 <div class="col-md-12 col-xs-12 col-sm-12" style="margin-top:40px;margin-bottom:40px;">
 <div class="col-xs-12 col-md-4 teams-stats">
   <h4>Stats</h4>
-  <div class="col-xs-12 no-padding">
+  <div class="col-xs-12" style="padding-bottom:15px;">
     <div class="col-xs-5 no-padding">
       <div class="col-xs-12 img-container">
         <img src="/storage/{{$match->localTeam->logo}}" alt="">
@@ -243,7 +258,7 @@ body{
       <h5 style="text-align:center;font-weight:600;">{{$match->localTeam->name}}</h5>
     </div>
     <div class="col-xs-2 no-padding vs" style="margin:0;">
-      <h4 style="text-align:center;background:red;margin-top:110%;border-radius:3px;padding-top:10px;padding-bottom:10px;">VS</h4>
+      <h4 style="text-align:center;margin-top:110%;border-radius:3px;padding-top:10px;padding-bottom:10px;">VS</h4>
     </div>
     <div class="col-xs-5 no-padding">
       <div class="col-xs-12 img-container">
@@ -268,14 +283,14 @@ body{
       <h6 style="text-align:center;">ball posession</h6>
     </div>
     <div class="col-xs-5 no-padding" style="text-align:center;">
-      <h6 style="color:white;font-size:16px;">{{(double)$match->localTeam->pivot->ball_possesion}}%</h6>
+      <h6 style="color:white;font-size:16px;">{{(double)$match->visitorTeam->pivot->ball_possesion}}%</h6>
     </div>
     <!--more states -->
   </div>
   <h4 style="float:left;">Lineups</h4><i class="material-icons" style="padding:0px;margin-top:10px;margin-left:10px;float:left;color:red;">keyboard_arrow_down</i>
-  <div class="col-xs-12 no-padding">
+  <div class="col-xs-12">
     <div class="col-xs-6 no-padding" id="local-lineup">
-      <p style="text-align:center;color:#888;margin-top:10px;">Local</p>
+      <p style="text-align:center;color:#fff;margin-top:10px;">Local</p>
       @foreach($match->players->where('team_id',$match->localTeam->id) as $player)
       <div class="col-xs-12" style="padding:10px;">
         <div class="photo-container">
@@ -289,7 +304,7 @@ body{
       @endforeach
     </div>
     <div class="col-xs-6 no-padding" id="visitor-lineup">
-      <p style="text-align:center;color:#888;margin-top:10px;">Visitor</p>
+      <p style="text-align:center;color:#fff;margin-top:10px;">Visitor</p>
       @foreach($match->players->where('team_id',$match->visitorTeam->id) as $player)
       <div class="col-xs-12" style="padding:10px;">
         <div class="photo-container" style="float:right;">
@@ -345,6 +360,7 @@ body{
     </div>
     @else
     <div class="events-list col-xs-12 col-md-3 no-padding">
+    @if($match->state != 2 and $match->state != 4)
       @foreach(App\League\EventType::get() as $i => $eventType)
       @if($i < 6 and $i != 1)
       <div class="col-xs-12 eventType" id="{{$eventType->id}}">
@@ -352,21 +368,23 @@ body{
       </div>
       @endif
       @endforeach
+    @endif
     </div>
+
     <div class="col-xs-12 col-md-9">
 
       <div class="col-xs-12 module" id="1" style="">
-        <h3 style="color:dodgerblue;margin-top:0;">Goal</h3>
+        <h3 style="margin-top:0;float:left;">Goal</h3>
         <button type="button" name="sendGoal" class="btnBlue2" style="position:absolute;right:10px;z-index:1;">Add!</button>
         <div class="col-xs-12 no-padding lineup">
-          <h4>Select the player that <span style="color:dodgerblue;">scored.</span>..</h4>
-          <h5>and the <span style="color:red;">assitor</span></h5>
+          <h4>Select the player that scored. ..</h4>
+          <h5>and the assitor </h5>
           <div class="col-xs-12 no-padding">
             <div class="col-xs-6 no-padding" id="local-lineup">
-              <p style="text-align:center;color:#888;margin-top:10px;">Local</p>
+              <p style="text-align:center;color:#fff;margin-top:10px;">Local</p>
               @foreach($match->players->where('team_id',$match->localTeam->id) as $player)
               @if($player->pivot->playing == 1)
-              <div class="col-xs-12" style="padding:10px;">
+              <div class="col-xs-12 goal" style="padding:10px;">
                 <div class="photo-container clickeable" id="{{$player->id}}">
                   @if($match->state==0)
                   <i class="material-icons removePlayer local" id="{{$player->id}}">remove</i>
@@ -379,10 +397,10 @@ body{
               @endforeach
             </div>
             <div class="col-xs-6 no-padding" id="visitor-lineup">
-              <p style="text-align:center;color:#888;margin-top:10px;">Visitor</p>
+              <p style="text-align:center;color:#fff;margin-top:10px;">Visitor</p>
               @foreach($match->players->where('team_id',$match->visitorTeam->id) as $player)
               @if($player->pivot->playing == 1)
-              <div class="col-xs-12" style="padding:10px;">
+              <div class="col-xs-12 goal" style="padding:10px;">
                 <div class="photo-container clickeable" style="float:right;" id="{{$player->id}}">
                   <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-right col-xs-12">
                   @if($match->state==0)
@@ -407,8 +425,8 @@ body{
       </div>
 
       <div class="col-xs-12 module" id="3" style="">
-        <h3 style="color:dodgerblue;margin-top:0;">Corner</h3>
-        <div class="col-xs-12">
+        <h3 style="margin-top:0;">Corner</h3>
+        <div class="col-xs-12 no-padding">
           <div class="col-xs-6 img-container team-selector">
             <img src="{{asset('storage/'.$match->localTeam->logo)}}" alt="" style="height:100%;position:relative; width:auto; margin:auto;display:block;">
           </div>
@@ -419,12 +437,12 @@ body{
             <input type="radio" name="team-corner" value="{{$match->localTeam->id}}">
           </div>
           <div class="col-xs-6" style="text-align:center;">
-            <input type="radio" name="team-corner" value="{{$match->localTeam->id}}">
+            <input type="radio" name="team-corner" value="{{$match->visitorTeam->id}}">
           </div>
           <form class="col-xs-12" action="/addCorner" method="post" id="addCorners">
             {{csrf_field()}}
-            <input type="hidden" name="teamId"  id="" value="">
-            <input type="hidden" name="matchId" id="" value="{{$match->id}}">
+            <input type="hidden" name="teamId" value="">
+            <input type="hidden" name="matchId" value="{{$match->id}}">
           </form>
           <div class="col-xs-12 no-padding" style="text-align:center;">
             <button type="button" name="addCorner" class="btnBlue" style="margin-top:40px;">Continue</button>
@@ -433,37 +451,225 @@ body{
       </div>
 
       <div class="col-xs-12 module" id="4" style="">
-        <h3 style="color:dodgerblue;margin-top:0;">Yellow card</h3>
-        <div class="col-xs-12">
-          lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+        <h3 style="margin-top:0;float:left;">Yellow card</h3>
+        <button type="button" name="addYellowCardBtn" class="btnBlue2" style="float:right;">Continue</button>
+        <div class="col-xs-12 no-padding">
+          <div class="col-xs-12 no-padding lineup">
+            <h4>Select the player that received the yellow card...</h4>
+            <div class="col-xs-12 no-padding">
+              <div class="col-xs-6 no-padding" id="local-lineup">
+                <p style="text-align:center;color:#fff;margin-top:10px;">Local</p>
+                @foreach($match->players->where('team_id',$match->localTeam->id) as $player)
+                @if($player->pivot->playing == 1)
+                <div class="col-xs-12 player-yellow-card" style="padding:10px;">
+                  <div class="photo-container clickeable" id="{{$player->id}}">
+                    @if($match->state==0)
+                    <i class="material-icons removePlayer local" id="{{$player->id}}">remove</i>
+                    @endif
+                    <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-left col-xs-12">
+                  </div>
+                  <p style="float:left;margin:0;margin-left:10px;margin-top:3px;">{{$player->name." (".$player->positions()->wherePivot('main',1)->first()->abbreviation.")"}}</p>
+                </div>
+                @endif
+                @endforeach
+              </div>
+              <div class="col-xs-6 no-padding" id="visitor-lineup">
+                <p style="text-align:center;color:#fff;margin-top:10px;">Visitor</p>
+                @foreach($match->players->where('team_id',$match->visitorTeam->id) as $player)
+                @if($player->pivot->playing == 1)
+                <div class="col-xs-12 player-yellow-card" style="padding:10px;">
+                  <div class="photo-container clickeable" style="float:right;" id="{{$player->id}}">
+                    <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-right col-xs-12">
+                    @if($match->state==0)
+                    <i class="material-icons removePlayer visitor" style="left:auto;right:13px;" id="{{$player->id}}">remove</i>
+                    @endif
+                  </div>
+                  <p style="float:right; margin:0;margin-right:10px;margin-top:3px;">{{"(".$player->positions()->wherePivot('main',1)->first()->abbreviation.") ".$player->name}}</p>
+                </div>
+                @endif
+                @endforeach
+              </div>
+              <div class="col-xs-12">
+                <form class="col-xs-12" action="/addYellowCard" method="post" id="yellowCardEvent">
+                  {{csrf_field()}}
+                  <input type="hidden" name="matchId" value="{{$match->id}}">
+                  <input type="hidden" name="playerId" id="player-yellow-card" value="">
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="col-xs-12 module" id="5" style="">
-        <h3 style="color:dodgerblue;margin-top:0;">Red card</h3>
         <div class="col-xs-12">
-          lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+          <h3 style="margin-top:0;float:left;">Red card</h3>
+          <button type="button" name="addRedCardBtn" class="btnBlue2" style="float:right;">Continue</button>
+          <div class="col-xs-12 no-padding">
+            <div class="col-xs-12 no-padding lineup">
+              <h4>Select the player that received the red card...</h4>
+              <div class="col-xs-12 no-padding">
+                <div class="col-xs-6 no-padding" id="local-lineup">
+                  <p style="text-align:center;color:#fff;margin-top:10px;">Local</p>
+                  @foreach($match->players->where('team_id',$match->localTeam->id) as $player)
+                  @if($player->pivot->playing == 1)
+                  <div class="col-xs-12 player-red-card" style="padding:10px;">
+                    <div class="photo-container clickeable" id="{{$player->id}}">
+                      @if($match->state==0)
+                      <i class="material-icons removePlayer local" id="{{$player->id}}">remove</i>
+                      @endif
+                      <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-left col-xs-12">
+                    </div>
+                    <p style="float:left;margin:0;margin-left:10px;margin-top:3px;">{{$player->name." (".$player->positions()->wherePivot('main',1)->first()->abbreviation.")"}}</p>
+                  </div>
+                  @endif
+                  @endforeach
+                </div>
+                <div class="col-xs-6 no-padding" id="visitor-lineup">
+                  <p style="text-align:center;color:#fff;margin-top:10px;">Visitor</p>
+                  @foreach($match->players->where('team_id',$match->visitorTeam->id) as $player)
+                  @if($player->pivot->playing == 1)
+                  <div class="col-xs-12 player-red-card" style="padding:10px;">
+                    <div class="photo-container clickeable" style="float:right;" id="{{$player->id}}">
+                      <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-right col-xs-12">
+                      @if($match->state==0)
+                      <i class="material-icons removePlayer visitor" style="left:auto;right:13px;" id="{{$player->id}}">remove</i>
+                      @endif
+                    </div>
+                    <p style="float:right; margin:0;margin-right:10px;margin-top:3px;">{{"(".$player->positions()->wherePivot('main',1)->first()->abbreviation.") ".$player->name}}</p>
+                  </div>
+                  @endif
+                  @endforeach
+                </div>
+                <div class="col-xs-12">
+                  <form class="col-xs-12" action="/addRedCard" method="post" id="redCardEvent">
+                    {{csrf_field()}}
+                    <input type="hidden" name="matchId" value="{{$match->id}}">
+                    <input type="hidden" name="playerId" id="player-red-card" value="">
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="col-xs-12 module" id="6" style="">
-        <h3 style="color:dodgerblue;margin-top:0;">Shoot</h3>
         <div class="col-xs-12">
-          lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+          <h3 style="margin-top:0;float:left;">Shoot</h3>
+          <button type="button" name="addShootBtn" class="btnBlue2" style="float:right;">Continue</button>
+          <div class="col-xs-12 no-padding">
+            <div class="col-xs-12 no-padding lineup">
+              <h4>Select the player that has shot...</h4>
+              <div class="col-xs-12 no-padding">
+                <div class="col-xs-6 no-padding" id="local-lineup">
+                  <p style="text-align:center;color:#fff;margin-top:10px;">Local</p>
+                  @foreach($match->players->where('team_id',$match->localTeam->id) as $player)
+                  @if($player->pivot->playing == 1)
+                  <div class="col-xs-12 shoter-player" style="padding:10px;">
+                    <div class="photo-container clickeable" id="{{$player->id}}">
+                      @if($match->state==0)
+                      <i class="material-icons removePlayer local" id="{{$player->id}}">remove</i>
+                      @endif
+                      <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-left col-xs-12">
+                    </div>
+                    <p style="float:left;margin:0;margin-left:10px;margin-top:3px;">{{$player->name." (".$player->positions()->wherePivot('main',1)->first()->abbreviation.")"}}</p>
+                  </div>
+                  @endif
+                  @endforeach
+                </div>
+                <div class="col-xs-6 no-padding" id="visitor-lineup">
+                  <p style="text-align:center;color:#fff;margin-top:10px;">Visitor</p>
+                  @foreach($match->players->where('team_id',$match->visitorTeam->id) as $player)
+                  @if($player->pivot->playing == 1)
+                  <div class="col-xs-12 shoter-player" style="padding:10px;">
+                    <div class="photo-container clickeable" style="float:right;" id="{{$player->id}}">
+                      <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-right col-xs-12">
+                      @if($match->state==0)
+                      <i class="material-icons removePlayer visitor" style="left:auto;right:13px;" id="{{$player->id}}">remove</i>
+                      @endif
+                    </div>
+                    <p style="float:right; margin:0;margin-right:10px;margin-top:3px;">{{"(".$player->positions()->wherePivot('main',1)->first()->abbreviation.") ".$player->name}}</p>
+                  </div>
+                  @endif
+                  @endforeach
+                </div>
+                <div class="col-xs-12">
+                  <form class="col-xs-12" action="/addShoot" method="post" id="shootEvent">
+                    {{csrf_field()}}
+                    <input type="hidden" name="matchId" value="{{$match->id}}">
+                    <input type="hidden" name="playerId" id="shooterPlayer" value="">
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-xs-12" style="text-align:center;padding:15px;">
         @if($match->state == 1)
-        <a href="/admin/end-first-half" name="endFirstHalfBtn" class="btnBlue2 match-state-btn">end first half</a>
+        <a href="/admin/end-first-half/{{$match->id}}" name="endFirstHalfBtn" class="match-state-btn">end first half</a>
         @elseif($match->state == 2)
-        <a href="/admin/start-second-half" name="startSecondHalfBtn" class="btnBlue2 match-state-btn">start second half</a>
-        @else if($match->state == 3)
-        <a href="/admin/end-match" name="endMatchBtn" class="btnBlue2 match-state-btn">end match</a>
+        <a href="/admin/start-second-half/{{$match->id}}" name="startSecondHalfBtn" class="match-state-btn">start second half</a>
+        @elseif($match->state == 3)
+        <a href="/admin/end-match/{{$match->id}}" name="endMatchBtn" class="match-state-btn">end match</a>
         @endif
       </div>
     </div>
     @endif
     </div>
+
+    <div class="col-xs-12 col-md-4 no-padding events-container" style="margin-top:20px;">
+      <h4 style="margin-top:0px;">Ball possesion</h4>
+      <div class="col-xs-12 no-padding">
+        <div class="" style="float:left;text-align:center;">
+          <strong>{{$match->localTeam->name}}</strong>
+        </div>
+        <div class="pull-right" style=";text-align:center;">
+          <strong>{{$match->visitorTeam->name}}</strong>
+        </div>
+      </div>
+      <div class="col-xs-12 no-padding">
+        <form class="col-xs-12 no-padding" action="/changeBallPossesion" method="post">
+          {{csrf_field()}}
+          <input type="hidden" name="matchId" value="{{$match->id}}">
+          <input type="hidden" name="localTeamId" value="{{$match->localTeam->id}}">
+          <input type="hidden" name="visitorTeamId" value="{{$match->visitorTeam->id}}">
+          @if((double)$match->localTeam->pivot->ball_possesion < 0)
+          <input type="range" id="posession" name="localTeamPosession" value="50" class="mdl-slider mdl-js-slider" min="0" max="100">
+          @else
+          <input type="range" id="posession" name="localTeamPosession" value="{{(double)$match->localTeam->pivot->ball_possesion}}" class="mdl-slider mdl-js-slider" min="0" max="100">
+          @endif
+          <div class="" style="float:left; width:70px; background:#222;border-radius:2px; text-align:center;" id="localPosession">
+            {{(double)$match->localTeam->pivot->ball_possesion}}
+          </div>
+          <div class="pull-right" style=" width:70px; background:#222;border-radius:2px; text-align:center;" id="visitorPosession">
+            {{(double)$match->visitorTeam->pivot->ball_possesion}}
+          </div>
+          <div class="col-xs-12 no-padding" style="padding-top:15px;">
+            <button type="submit" name="button" class="btnBlue2 col-xs-12">Set</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-md-7 col-md-offset-1 events-container" style="margin-top:20px;">
+      <h4 class="col-xs-12">Preview</h4>
+      <div class="col-xs-12">
+        @foreach($match->events()->orderBy('minute','desc')->get() as $event)
+        <div class="col-xs-12 no-padding">
+          <img src="{{asset($event->eventType->icon)}}" alt="" width="16">
+          @if($event->eventType->id == 7 or $event->eventType->id == 8 or $event->eventType->id == 9)
+          <strong style="float:right;color:dodgerblue;">{{$event->minute."'"}}</strong>
+          @else
+          <strong style="float:right;">{{$event->minute."'"}}</strong>
+          @endif
+          <p>{{$event->content}}</p>
+        </div>
+        @endforeach
+      </div>
+    </div>
+
   </div>
 </div>
 @endsection
@@ -486,8 +692,25 @@ $(function ($) {
 
   $(function ($) {
 
-    $('input.team-corner').change(function () {
+    $('input#posession').change(function () {
+      $('div#localPosession').text($(this).val()+"%");
+      $('div#visitorPosession').text((100-$(this).val())+"%");
+    });
 
+    $('button[name=addYellowCardBtn]').click(function () {
+      $('form#yellowCardEvent').submit();
+    });
+
+    $('button[name=addShootBtn]').click(function () {
+      $('form#shootEvent').submit();
+    });
+
+    $('button[name=addRedCardBtn]').click(function () {
+      $('form#redCardEvent').submit();
+    });
+
+    $('input[name=team-corner]').change(function () {
+      $('form#addCorners').children('input[name=teamId]').val($(this).val());
     });
 
     $('button[name=addCorner]').click(function () {
@@ -498,14 +721,38 @@ $(function ($) {
       $('form#goalEvent').submit();
     });
 
-    $('.clickeable').contextmenu(function (evt) {
+    $('.shoter-player').children('.clickeable').click(function () {
+      $('.shoter-player').children('.clickeable').css('border','0px none rgb(51, 51, 51)');
+      $('input#shooterPlayer').val($(this).attr('id'));
+      $(this).css({
+        border:'2px solid dodgerblue'
+      });
+    });
+
+    $('.player-yellow-card').children('.clickeable').click(function () {
+      $('.player-yellow-card').children('.clickeable').css('border','0px none rgb(51, 51, 51)');
+      $('input#player-yellow-card').val($(this).attr('id'));
+      $(this).css({
+        border:'2px solid dodgerblue'
+      });
+    });
+
+    $('.player-red-card').children('.clickeable').click(function () {
+      $('.player-red-card').children('.clickeable').css('border','0px none rgb(51, 51, 51)');
+      $('input#player-red-card').val($(this).attr('id'));
+      $(this).css({
+        border:'2px solid dodgerblue'
+      });
+    });
+
+    $('.goal').children('.clickeable').contextmenu(function (evt) {
       evt.preventDefault();
       if($(this).css('border') == '2px solid rgb(255, 0, 0)'){
         $(this).css('border','0px none rgb(51, 51, 51)');
         $('input[name=assistorId]').val('');
       }
       else{
-        $.each($('.clickeable'),function (i,e) {
+        $.each($('.goal').children('.clickeable'),function (i,e) {
           if($(e).css('border') == '2px solid rgb(255, 0, 0)'){
             $(e).css('border','0px none rgb(51, 51, 51)');
           }
@@ -516,8 +763,9 @@ $(function ($) {
         });
       }
     });
-    $('.clickeable').click(function () {
-      $.each($('.clickeable'),function (i,e) {
+
+    $('.goal').children('.clickeable').click(function () {
+      $.each($('.goal').children('.clickeable'),function (i,e) {
         if($(e).css('border') == '2px solid rgb(30, 144, 255)'){
           $(e).css('border','0px none rgb(51, 51, 51)');
         }

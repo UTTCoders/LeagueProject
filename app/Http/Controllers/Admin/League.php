@@ -797,6 +797,15 @@ class League extends Controller
 
       $match = Match::find($request->matchId);
 
+      $scorerPlayer = Player::find($request->scorerId);
+      $assistorPlayer = Player::find($request->assistorId);
+
+      if($request->assistorId and $scorerPlayer->team->id != $assistorPlayer->team->id)
+        return back()->with('msg',[
+          'title' => 'Ups!',
+          'content' => 'The assistor player must be of the same team than the scorer!'
+        ]);
+
       $now = Carbon::now();
     	$matchDate = Carbon::createFromFormat('Y-m-d H:i',date('Y-m-d H:i',strtotime($match->start_date)));
       $minute = $now->diffInMinutes($matchDate);
@@ -808,11 +817,9 @@ class League extends Controller
       $goal->type = "regular";
       $goal->save();
 
-      $scorerPlayer = Player::find($request->scorerId);
       $eventDescription= "Goal of ".$scorerPlayer->name."!";
 
       if($request->assistorId){
-        $assistorPlayer = Player::find($request->assistorId);
         $eventDescription.=" Assistance of ".$assistorPlayer->name;
         $assist = new Assist;
         $assist->match_id = $request->matchId;
@@ -860,6 +867,166 @@ class League extends Controller
         'title' => 'OK!',
         'content' => 'Success!.'
       ]);
+    }
 
+    public function addYellowCard(Request $request){
+      if(!$match = Match::find($request->matchId)){
+        return back()->with('msg',[
+          'title' => 'Ups!',
+          'content' => 'Match not found!'
+        ]);
+      }
+      if(!$player = Player::find($request->playerId)){
+        return back()->with('msg',[
+          'title' => 'Ups!',
+          'content' => 'Player not found!'
+        ]);
+      }
+      $event = new Event;
+      $event->content = "Yellow card to ".$player->name." ".$player->last_name;
+
+      $now = Carbon::now();
+    	$matchDate = Carbon::createFromFormat('Y-m-d H:i',date('Y-m-d H:i',strtotime($match->start_date)));
+      $minute = $now->diffInMinutes($matchDate);
+
+      $event->minute = $minute;
+      $event->event_type_id = 4;
+      $event->match_id = $match->id;
+      $event->save();
+      return back()->with('msg',[
+        'title' => 'OK!',
+        'content' => 'Success!'
+      ]);
+    }
+
+    public function addRedCard(Request $request){
+      if(!$match = Match::find($request->matchId)){
+        return back()->with('msg',[
+          'title' => 'Ups!',
+          'content' => 'Match not found!'
+        ]);
+      }
+      if(!$player = Player::find($request->playerId)){
+        return back()->with('msg',[
+          'title' => 'Ups!',
+          'content' => 'Player not found!'
+        ]);
+      }
+      $event = new Event;
+      $event->content = "Red card to ".$player->name." ".$player->last_name.". He has left the match.";
+
+      $now = Carbon::now();
+    	$matchDate = Carbon::createFromFormat('Y-m-d H:i',date('Y-m-d H:i',strtotime($match->start_date)));
+      $minute = $now->diffInMinutes($matchDate);
+
+      $event->minute = $minute;
+      $event->event_type_id = 5;
+      $event->match_id = $match->id;
+
+      //expulsar jugador
+      $match->players()->updateExistingPivot($player->id, ['playing' => 0]);
+
+      $event->save();
+
+      return back()->with('msg',[
+        'title' => 'OK!',
+        'content' => 'Success!'
+      ]);
+    }
+
+    public function addShoot(Request $request){
+      if(!$match = Match::find($request->matchId)){
+        return back()->with('msg',[
+          'title' => 'Ups!',
+          'content' => 'Match not found!'
+        ]);
+      }
+      if(!$player = Player::find($request->playerId)){
+        return back()->with('msg',[
+          'title' => 'Ups!',
+          'content' => 'Player not found!'
+        ]);
+      }
+      $event = new Event;
+      $event->content = $player->name." ".$player->last_name." has shot";
+
+      $now = Carbon::now();
+    	$matchDate = Carbon::createFromFormat('Y-m-d H:i',date('Y-m-d H:i',strtotime($match->start_date)));
+      $minute = $now->diffInMinutes($matchDate);
+
+      $event->minute = $minute;
+      $event->event_type_id = 6;
+      $event->match_id = $match->id;
+
+      $event->save();
+
+      return back()->with('msg',[
+        'title' => 'OK!',
+        'content' => 'Success!'
+      ]);
+    }
+
+    public function changeBallPossesion(Request $request){
+      $match=Match::find($request->matchId);
+      $match->teams()->updateExistingPivot($request->localTeamId,['ball_possesion' => $request->localTeamPosession]);
+      $match->teams()->updateExistingPivot($request->visitorTeamId,['ball_possesion' => (100-$request->localTeamPosession)]);
+      return back();
+    }
+
+    public function endFirstHalf(Request $request, $id){
+      $match = Match::find($id);
+      if(!$match) return back();
+      if($match->state != 1) return back();
+      $match->state = 2;
+      $match->save();
+
+      $event = new Event;
+      $event->content = "End of the first half";
+
+      $now = Carbon::now();
+    	$matchDate = Carbon::createFromFormat('Y-m-d H:i',date('Y-m-d H:i',strtotime($match->start_date)));
+      $minute = $now->diffInMinutes($matchDate);
+
+      $event->minute = $minute;
+      $event->event_type_id = 8;
+      $event->match_id = $match->id;
+      $event->save();
+
+      return back();
+    }
+
+    public function startSecondHalf(Request $request, $id){
+      $match = Match::find($id);
+      if(!$match) return back();
+      if($match->state != 2) return back();
+      $match->state = 3;
+      $match->save();
+
+      return back();
+    }
+
+    public function endMatch(Request $request, $id){
+      $match = Match::find($id);
+      if(!$match) return back();
+      if($match->state != 3) return back();
+      $match->state = 4;
+      $match->save();
+
+      
+
+      $event = new Event;
+      $event->content = "Full-time! ";
+
+      $now = Carbon::now();
+    	$matchDate = Carbon::createFromFormat('Y-m-d H:i',date('Y-m-d H:i',strtotime($match->start_date)));
+      $minute = $now->diffInMinutes($matchDate);
+
+      $event->minute = $minute;
+      $event->event_type_id = 9;
+      $event->match_id = $match->id;
+
+      $event->save();
+
+      return back();
     }
 }
