@@ -339,11 +339,10 @@ body{
       </div>
       <div class="col-sm-8 col-xs-12">
         <h4>Players without image</h4>
-        <form enctype="multipart/form-data" method="post" action="/imageplayer">
           <div id="playersContainer">
             @if(App\League\Player::where('photo',null)->count() > 0)
               @foreach(App\League\Player::where('photo',null)->get() as $player)
-                <label align="center" class="thumbnail playerNoImg"><span class="pull-left"><img width="20px" src="/storage/{{$player->team->logo}}"></span>{{$player->name.' '.$player->last_name}}<span class="pull-right red" id="indicatorImg">No image...</span><input accept=".png, .jpeg, .jpg" type="file" style="display: none;"></label>
+                <label id="{{$player->id}}" align="center" class="thumbnail playerNoImg"><span class="pull-left"><img width="20px" src="/storage/{{$player->team->logo}}"></span>{{$player->name.' '.$player->last_name}}<span class="pull-right red" id="indicatorImg">No image...</span><input accept=".png, .jpeg, .jpg" type="file" style="display: none;"></label>
               @endforeach
             @else
               <h4 style="color: #111; margin-bottom: 20px;" align="center">There are no players left...</h4>
@@ -352,7 +351,6 @@ body{
           @if(App\League\Player::where('photo',null)->count() > 0)
           <button style="margin-bottom: 30px; margin-top: 10px; border-radius: 0px;" class="btn btn-success btn-block">Upload the images</button>
           @endif
-        </form>
       </div>
   </div>
 </div>
@@ -388,7 +386,29 @@ $(function () {
       if(file){
           var name=file.name.substr(0, 8)+"...";
           var res = ("<span class='glyphicon glyphicon-ok'></span> "+name);
-          $(this).children('#indicatorImg').html(res).addClass("green").removeClass("red");
+          var ss=$(this);
+          var formData = new FormData();
+          formData.append('newphoto' ,$(this).children('input[type=file]')[0].files[0]);
+          formData.append('_token','{{csrf_token()}}');
+          formData.append('playerid', $(this).attr('id'));
+          $.ajax({
+            url:"/imageplayer",method:"post",
+            data:formData,
+            processData: false,
+            contentType: false,
+          }).done(function(response){
+                if (response.success) {
+                  ss.children('#indicatorImg').html(res).addClass("green")
+                  .removeClass("red").delay(3000,function(){
+                    ss.slideUp(1000);
+                  });
+                }else{
+                  $('.black-transparent-back').fadeIn('slow',function () {
+                    $('.messageBox').css('margin-top','20%').css('opacity',1);
+                    $('.messageBox').children('.body').text(response.mess);
+                  });
+                }
+          });
       }
       else{
         $(this).children('#indicatorImg').text("No image...").removeClass("green").addClass("red");

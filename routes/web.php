@@ -115,6 +115,8 @@ Route::group(['middleware' => ['authen']], function(){
 		Route::get('/admin/players/add/excel',
 			'Admin\ExcelController@PlayersRequest');
 		// end of Management by admin
+
+		Route::post("/imageplayer",'Admin\ImgPlayersController@imagePlayer');
 });
 
 //Route for the login needs to get inside the app without middleware
@@ -142,7 +144,6 @@ Route::group(['middleware' => ['authen']], function(){
 	Route::post("/askchart",'User\MatchesController@AskPossession');
 	Route::post("/askmatches",'User\MatchesController@AskMatchesS');
 	Route::post("/askevents",'User\MatchesController@AskEvents');
-	Route::post("/chartstats",'User\MatchesController@ChartStats');
 	Route::post("/chartstats",'User\MatchesController@ChartStats');
 });
 
