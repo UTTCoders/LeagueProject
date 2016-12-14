@@ -263,6 +263,30 @@ body{
   margin-top: 9px;
   cursor: pointer;
 }
+#playersContainer{
+  height: 200px;
+  width: 100%;
+  background-color: #eee;
+  padding:5px 5px;
+}
+.playerNoImg{
+  padding:5px 10px; 
+  background-color: #111; 
+  color: #eee;
+}
+.playerNoImg:hover{
+  cursor: pointer;
+  background-color: #222;
+}
+#indicatorImg{
+  font-weight: normal;
+}
+.green{
+  color: #4CAF50;
+}
+.red{
+  color: #F44336;
+}
 </style>
 @endsection
 
@@ -297,22 +321,37 @@ body{
     <div class="header">
       <h4>Add players</h4>
     </div>
-    <div class="col-sm-8 col-xs-12">
-      <h3>Upload an excel</h3>
-      <hr>
-      <form action="/admin/players/add/excel" enctype="multipart/form-data" method="post">
-        {{csrf_field()}}
-        <div class="form-group">
-          <label id="thefile" style="font-size: 18px; border-radius: 0px;" class="btn btn-default btn-block">
-            <span id="m">Select a file <span class="glyphicon glyphicon-folder-open"></span></span>
-            <input accept=".csv, .xls, .xlsx, .ods, .ots" type="file" name="excelFile" style="display: none;">
-          </label>
+      <div class="col-sm-8 col-xs-12">
+        <h3>Upload an excel</h3>
+        <hr>
+        <form action="/admin/players/add/excel" enctype="multipart/form-data" method="post">
+          {{csrf_field()}}
+          <div class="form-group">
+            <label id="thefile" style="font-size: 15px; color:#111; border-radius: 0px;" class="btn btn-default btn-block">
+              <span id="m" style="font-weight: normal;">Select a file <span class="glyphicon glyphicon-folder-open"></span></span>
+              <input accept=".csv, .xls, .xlsx, .ods, .ots" type="file" name="excelFile" style="display: none;">
+            </label>
+          </div>
+          <div class="form-group">
+            <button style="font-weight: normal; border-radius: 0px; margin-bottom: 30px;" class="btn btn-success btn-block">UPLOAD</button>
+          </div>
+        </form>
+      </div>
+      <div class="col-sm-8 col-xs-12">
+        <h4>Players without image</h4>
+        <div id="playersContainer">
+          @if(App\League\Player::where('photo',null)->count() > 0)
+            @foreach(App\League\Player::where('photo',null)->get() as $player)
+              <label align="center" class="thumbnail playerNoImg"><span class="pull-left"><img width="20px" src="/storage/{{$player->team->logo}}"></span>{{$player->name.' '.$player->last_name}}<span class="pull-right red" id="indicatorImg">No image...</span><input accept=".png, .jpeg, .jpg" type="file" style="display: none;"></label>
+            @endforeach
+          @else
+            <h4 style="color: #111; margin-bottom: 20px;" align="center">There are no players left...</h4>
+          @endif
         </div>
-        <div class="form-group">
-          <button style="border-radius: 0px; margin-bottom: 30px;" class="btn btn-success btn-block">UPLOAD</button>
-        </div>
-      </form>
-    </div>
+        @if(App\League\Player::where('photo',null)->count() > 0)
+        <button style="margin-bottom: 30px; margin-top: 10px; border-radius: 0px;" class="btn btn-success btn-block">Upload the images</button>
+        @endif
+      </div>
   </div>
 </div>
 @endsection
@@ -334,12 +373,24 @@ $(function () {
       var file = $(this).children('input[type=file]')[0].files[0];
       if(file){
           $(this).children('#m').text("File: "+file.name);
-          $(this).attr('class',"btn btn-warning btn-block");
+          $(this).attr('class',"btn btn-primary btn-block");
       }
       else{
         $(this).children('#m').html('Select a file <span class="glyphicon glyphicon-folder-open"></span>');
         $(this).attr('class',"btn btn-default btn-block");
       } 
+    });
+
+    $('.playerNoImg').change(function () {
+      var file = $(this).children('input[type=file]')[0].files[0];
+      if(file){
+          var name=file.name.substr(0, 8)+"...";
+          var res = ("<span class='glyphicon glyphicon-ok'></span> "+name);
+          $(this).children('#indicatorImg').html(res).addClass("green").removeClass("red");
+      }
+      else{
+        $(this).children('#indicatorImg').text("No image...").removeClass("green").addClass("red");
+      }
     });
 
     $('.black-transparent-back').click(function () {

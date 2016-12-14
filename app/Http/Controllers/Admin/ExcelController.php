@@ -42,20 +42,16 @@ class ExcelController extends Controller
 		                        $p->shirt_number=$row["shirt_number"];
 		                        $p->nationality=$row["nationality"];
 		                        $p->save();
-                    		}else{
-                    			$m[]="cucu";
                     		}
-                    	}else{
-                    		$m[]="cucu2";
                     	}
                     });
                 }
     		});
     	});
 
-    	return $m;
     	$excel=Excel::load($r->file('excelFile'))->get();
     	return $excel;
+    	return $m;
     	return $r->file('excelFile')->getClientOriginalExtension();
     }
 }
