@@ -188,6 +188,24 @@ body{
 .lineup{
   color:#333;
 }
+.clickeable{
+  cursor: pointer;
+}
+.selected{
+  border: 2px solid dodgerblue;
+}
+.team-selector{
+  padding: 0;
+}
+.match-state-btn{
+  float: right;
+  margin-top: 40px;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-shadow: 0 1px 3px 0 #333;
+  font-size: 26px;
+}
 </style>
 @endsection
 
@@ -339,14 +357,17 @@ body{
 
       <div class="col-xs-12 module" id="1" style="">
         <h3 style="color:dodgerblue;margin-top:0;">Goal</h3>
+        <button type="button" name="sendGoal" class="btnBlue2" style="position:absolute;right:10px;z-index:1;">Add!</button>
         <div class="col-xs-12 no-padding lineup">
-          <h4 style="float:left;">Select the player that scored...</h4>
+          <h4>Select the player that <span style="color:dodgerblue;">scored.</span>..</h4>
+          <h5>and the <span style="color:red;">assitor</span></h5>
           <div class="col-xs-12 no-padding">
             <div class="col-xs-6 no-padding" id="local-lineup">
               <p style="text-align:center;color:#888;margin-top:10px;">Local</p>
               @foreach($match->players->where('team_id',$match->localTeam->id) as $player)
+              @if($player->pivot->playing == 1)
               <div class="col-xs-12" style="padding:10px;">
-                <div class="photo-container">
+                <div class="photo-container clickeable" id="{{$player->id}}">
                   @if($match->state==0)
                   <i class="material-icons removePlayer local" id="{{$player->id}}">remove</i>
                   @endif
@@ -354,13 +375,15 @@ body{
                 </div>
                 <p style="float:left;margin:0;margin-left:10px;margin-top:3px;">{{$player->name." (".$player->positions()->wherePivot('main',1)->first()->abbreviation.")"}}</p>
               </div>
+              @endif
               @endforeach
             </div>
             <div class="col-xs-6 no-padding" id="visitor-lineup">
               <p style="text-align:center;color:#888;margin-top:10px;">Visitor</p>
               @foreach($match->players->where('team_id',$match->visitorTeam->id) as $player)
+              @if($player->pivot->playing == 1)
               <div class="col-xs-12" style="padding:10px;">
-                <div class="photo-container" style="float:right;">
+                <div class="photo-container clickeable" style="float:right;" id="{{$player->id}}">
                   <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-right col-xs-12">
                   @if($match->state==0)
                   <i class="material-icons removePlayer visitor" style="left:auto;right:13px;" id="{{$player->id}}">remove</i>
@@ -368,23 +391,44 @@ body{
                 </div>
                 <p style="float:right; margin:0;margin-right:10px;margin-top:3px;">{{"(".$player->positions()->wherePivot('main',1)->first()->abbreviation.") ".$player->name}}</p>
               </div>
+              @endif
               @endforeach
             </div>
+            <div class="col-xs-12">
+              <form class="col-xs-12" action="/addGoal" method="post" id="goalEvent">
+                {{csrf_field()}}
+                <input type="hidden" name="matchId" value="{{$match->id}}">
+                <input type="hidden" name="scorerId" value="">
+                <input type="hidden" name="assistorId" value="">
+              </form>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <div class="col-xs-12 module" id="2" style="">
-        <h3 style="color:dodgerblue;margin-top:0;">Assist</h3>
-        <div class="col-xs-12">
-          lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
         </div>
       </div>
 
       <div class="col-xs-12 module" id="3" style="">
         <h3 style="color:dodgerblue;margin-top:0;">Corner</h3>
         <div class="col-xs-12">
-          lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+          <div class="col-xs-6 img-container team-selector">
+            <img src="{{asset('storage/'.$match->localTeam->logo)}}" alt="" style="height:100%;position:relative; width:auto; margin:auto;display:block;">
+          </div>
+          <div class="col-xs-6 img-container team-selector">
+            <img src="{{asset('storage/'.$match->visitorTeam->logo)}}" alt="" style="height:100%; width:auto; margin:auto;display:block;">
+          </div>
+          <div class="col-xs-6" style="text-align:center;">
+            <input type="radio" name="team-corner" value="{{$match->localTeam->id}}">
+          </div>
+          <div class="col-xs-6" style="text-align:center;">
+            <input type="radio" name="team-corner" value="{{$match->localTeam->id}}">
+          </div>
+          <form class="col-xs-12" action="/addCorner" method="post" id="addCorners">
+            {{csrf_field()}}
+            <input type="hidden" name="teamId" value="">
+            <input type="hidden" name="matchId" value="{{$match->id}}">
+          </form>
+          <div class="col-xs-12 no-padding" style="text-align:center;">
+            <button type="button" name="addCorner" class="btnBlue" style="margin-top:40px;">Continue</button>
+          </div>
         </div>
       </div>
 
@@ -408,16 +452,15 @@ body{
           lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
         </div>
       </div>
-
-    </div>
-    <div class="col-xs-12" style="text-align:center;padding:15px;">
-      @if($match->state == 1)
-      <a href="/admin/end-first-half" name="endFirstHalfBtn" class="col-xs-7 col-xs-offset-4 btnBlue2">end first half</a>
-      @elseif($match->state == 2)
-      <a href="/admin/start-second-half" name="startSecondHalfBtn" class="col-xs-7 col-xs-offset-4 btnBlue2">start second half</a>
-      @else if($match->state == 3)
-      <a href="/admin/end-match" name="endMatchBtn" class="col-xs-7 col-xs-offset-4 btnBlue2">end match</a>
-      @endif
+      <div class="col-xs-12" style="text-align:center;padding:15px;">
+        @if($match->state == 1)
+        <a href="/admin/end-first-half" name="endFirstHalfBtn" class="btnBlue2 match-state-btn">end first half</a>
+        @elseif($match->state == 2)
+        <a href="/admin/start-second-half" name="startSecondHalfBtn" class="btnBlue2 match-state-btn">start second half</a>
+        @else if($match->state == 3)
+        <a href="/admin/end-match" name="endMatchBtn" class="btnBlue2 match-state-btn">end match</a>
+        @endif
+      </div>
     </div>
     @endif
     </div>
@@ -442,6 +485,45 @@ $(function ($) {
 <script type="text/javascript">
 
   $(function ($) {
+
+    $('button[name=addCorner]').click(function () {
+      $('form#addCorner').submit();
+    });
+
+    $('button[name=sendGoal]').click(function () {
+      $('form#goalEvent').submit();
+    });
+
+    $('.clickeable').contextmenu(function (evt) {
+      evt.preventDefault();
+      if($(this).css('border') == '2px solid rgb(255, 0, 0)'){
+        $(this).css('border','0px none rgb(51, 51, 51)');
+        $('input[name=assistorId]').val('');
+      }
+      else{
+        $.each($('.clickeable'),function (i,e) {
+          if($(e).css('border') == '2px solid rgb(255, 0, 0)'){
+            $(e).css('border','0px none rgb(51, 51, 51)');
+          }
+        });
+        $('input[name=assistorId]').val($(this).attr('id'));
+        $(this).css({
+          border:'2px solid red'
+        });
+      }
+    });
+    $('.clickeable').click(function () {
+      $.each($('.clickeable'),function (i,e) {
+        if($(e).css('border') == '2px solid rgb(30, 144, 255)'){
+          $(e).css('border','0px none rgb(51, 51, 51)');
+        }
+      });
+      $('input[name=scorerId]').val($(this).attr('id'));
+      $(this).css({
+        border:'2px solid dodgerblue'
+      });
+    });
+
     var localPlayersCount=0,visitorPlayersCount=0;
     $('.addPlayer').click(function () {
       if($(this).text() == 'add'){

@@ -108,6 +108,10 @@ Route::group(['middleware' => ['authen']], function(){
 
 		Route::post('/getMatchesPerMatchDay','Admin\League@getMatchesPerMatchDay');
 
+		Route::post('/addGoal','Admin\League@addGoal');
+
+		Route::post('/addGoal','Admin\League@addCorner');
+
 		//excel routes
 		Route::post('/admin/players/add/excel',
 			'Admin\ExcelController@PlayersAdd');

@@ -16,6 +16,8 @@ use App\League\Referee;
 use App\League\Season;
 use App\League\Match;
 use App\League\Event;
+use App\League\Assist;
+use App\League\Goal;
 use Mail;
 use App\Mail\MatchStarted;
 use Carbon\Carbon;
@@ -755,6 +757,7 @@ class League extends Controller
       }
 
       $match->players()->attach($playersToAttach);
+      $match->start_date = date('Y-m-d H:i');
       $match->save();
 
       $match->localTeam=$match->teams()->wherePivot("local",true)->first();
@@ -764,9 +767,9 @@ class League extends Controller
       $event->content = "Kick off! The battle between ".$match->localTeam->name." and ".$match->visitorTeam->name." has started!";
       $event->match_id = $match->id;
       /////////////////////////////////////////// here!!!!
-      $now = Carbon::now();
-    	$matchDate = Carbon::createFromFormat('Y-m-d H:i',date('Y-m-d H:i',strtotime($match->start_date)));
-      $event->minute = $now->diffInMinutes($matchDate);
+      ///ingresar en minutos
+      //probar que se ingrese en ceros
+      $event->minute = 0;
       $event->event_types_id = 7;
       $event->save();
 
@@ -779,5 +782,66 @@ class League extends Controller
       Mail::to($followers)->send(new MatchStarted($match));
 
       return back();
+    }
+
+    public function addGoal(Request $request){
+      $result=Validator::make($request->all(), [
+        'scorerId' =>'required',
+        'matchId' =>'required|numeric'
+      ]);
+      if($result->fails())
+        return back()->with('msg',[
+          'title' => 'Ups!',
+          'content' => 'Something went wrong!'
+        ]);
+
+      $match = Match::find($request->matchId);
+
+      $now = Carbon::now();
+    	$matchDate = Carbon::createFromFormat('Y-m-d H:i',date('Y-m-d H:i',strtotime($match->start_date)));
+      $minute = $now->diffInMinutes($matchDate);
+
+      $goal = new Goal;
+      $goal->match_id = $request->matchId;
+      $goal->minute = $minute;
+      $goal->player_id = $request->scorerId;
+      $goal->type = "regular";
+      $goal->save();
+
+      $scorerPlayer = Player::find($request->scorerId);
+      $eventDescription= "Goal of ".$scorerPlayer->name."!";
+
+      if($request->assistorId){
+        $assistorPlayer = Player::find($request->assistorId);
+        $eventDescription.=" Assistance of ".$assistorPlayer->name;
+        $assist = new Assist;
+        $assist->match_id = $request->matchId;
+        $assist->player_id = $assistorPlayer->id;
+        $assist->save();
+      }
+
+      $event = new Event;
+
+      $event->event_type_id = 1;
+      $event->content = $eventDescription;
+      $event->match_id = $request->matchId;
+      $event->minute = $minute;
+
+      $event->save();
+
+      return back()->with('msg',[
+        'title' => 'OK!',
+        'content' => 'Success!'
+      ]);
+    }
+
+    public function addCorner(Request $request){
+      if(!$request->matchId || !$request->teamId)
+        return back()->with('msg',[
+          'title' => 'Stop just there!',
+          'content' => 'Select the team that will kick the corner.'
+        ]);
+      $event = new Event;
+      
     }
 }
