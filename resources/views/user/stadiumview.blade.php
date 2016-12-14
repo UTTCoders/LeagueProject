@@ -43,7 +43,7 @@
 		border-radius: 0;
 		overflow-y: auto;
 		height: 150px;
-		padding: 20px 20px;
+		padding: 10px 20px;
 		border-top: 1px solid #ccc;
 		border-bottom: 1px solid #ccc;
 		background-color: #ccc;
