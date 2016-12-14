@@ -110,7 +110,7 @@ Route::group(['middleware' => ['authen']], function(){
 
 		Route::post('/addGoal','Admin\League@addGoal');
 
-		Route::post('/addGoal','Admin\League@addCorner');
+		Route::post('/addCorner','Admin\League@addCorner');
 
 		//excel routes
 		Route::post('/admin/players/add/excel',

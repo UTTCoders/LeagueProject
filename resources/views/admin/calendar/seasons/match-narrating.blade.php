@@ -423,8 +423,8 @@ body{
           </div>
           <form class="col-xs-12" action="/addCorner" method="post" id="addCorners">
             {{csrf_field()}}
-            <input type="hidden" name="teamId" value="">
-            <input type="hidden" name="matchId" value="{{$match->id}}">
+            <input type="hidden" name="teamId"  id="" value="">
+            <input type="hidden" name="matchId" id="" value="{{$match->id}}">
           </form>
           <div class="col-xs-12 no-padding" style="text-align:center;">
             <button type="button" name="addCorner" class="btnBlue" style="margin-top:40px;">Continue</button>
@@ -486,8 +486,12 @@ $(function ($) {
 
   $(function ($) {
 
+    $('input.team-corner').change(function () {
+
+    });
+
     $('button[name=addCorner]').click(function () {
-      $('form#addCorner').submit();
+      $('form#addCorners').submit();
     });
 
     $('button[name=sendGoal]').click(function () {

@@ -841,7 +841,25 @@ class League extends Controller
           'title' => 'Stop just there!',
           'content' => 'Select the team that will kick the corner.'
         ]);
+
       $event = new Event;
-      
+
+      $match = Match::find($request->matchId);
+
+      $now = Carbon::now();
+    	$matchDate = Carbon::createFromFormat('Y-m-d H:i',date('Y-m-d H:i',strtotime($match->start_date)));
+      $minute = $now->diffInMinutes($matchDate);
+
+      $event->event_type_id = 3;
+      $event->match_id = $match->id;
+      $event->minute = $minute;
+      $event->content = "Corner for ".Team::find($match->id)->name;
+      $event->save();
+
+      return back()->with('msg',[
+        'title' => 'OK!',
+        'content' => 'Success!.'
+      ]);
+
     }
 }
