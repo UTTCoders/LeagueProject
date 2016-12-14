@@ -339,18 +339,20 @@ body{
       </div>
       <div class="col-sm-8 col-xs-12">
         <h4>Players without image</h4>
-        <div id="playersContainer">
+        <form enctype="multipart/form-data" method="post" action="/imageplayer">
+          <div id="playersContainer">
+            @if(App\League\Player::where('photo',null)->count() > 0)
+              @foreach(App\League\Player::where('photo',null)->get() as $player)
+                <label align="center" class="thumbnail playerNoImg"><span class="pull-left"><img width="20px" src="/storage/{{$player->team->logo}}"></span>{{$player->name.' '.$player->last_name}}<span class="pull-right red" id="indicatorImg">No image...</span><input accept=".png, .jpeg, .jpg" type="file" style="display: none;"></label>
+              @endforeach
+            @else
+              <h4 style="color: #111; margin-bottom: 20px;" align="center">There are no players left...</h4>
+            @endif
+          </div>
           @if(App\League\Player::where('photo',null)->count() > 0)
-            @foreach(App\League\Player::where('photo',null)->get() as $player)
-              <label align="center" class="thumbnail playerNoImg"><span class="pull-left"><img width="20px" src="/storage/{{$player->team->logo}}"></span>{{$player->name.' '.$player->last_name}}<span class="pull-right red" id="indicatorImg">No image...</span><input accept=".png, .jpeg, .jpg" type="file" style="display: none;"></label>
-            @endforeach
-          @else
-            <h4 style="color: #111; margin-bottom: 20px;" align="center">There are no players left...</h4>
+          <button style="margin-bottom: 30px; margin-top: 10px; border-radius: 0px;" class="btn btn-success btn-block">Upload the images</button>
           @endif
-        </div>
-        @if(App\League\Player::where('photo',null)->count() > 0)
-        <button style="margin-bottom: 30px; margin-top: 10px; border-radius: 0px;" class="btn btn-success btn-block">Upload the images</button>
-        @endif
+        </form>
       </div>
   </div>
 </div>

@@ -143,6 +143,7 @@ Route::group(['middleware' => ['authen']], function(){
 	Route::post("/askmatches",'User\MatchesController@AskMatchesS');
 	Route::post("/askevents",'User\MatchesController@AskEvents');
 	Route::post("/chartstats",'User\MatchesController@ChartStats');
+	Route::post("/chartstats",'User\MatchesController@ChartStats');
 });
 
 // fb
