@@ -51,7 +51,10 @@
 	.event{
 		margin:5px 0px;
 		border-radius: 0px;
-		padding:5px 13px;
+		padding-left: 13px;
+		padding-right: 13px;
+		padding-bottom: 6px;
+		padding-top: 5px;
 	}
 	.list-group-item.player{
 		border-radius: 0px;
