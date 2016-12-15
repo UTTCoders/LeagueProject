@@ -134,10 +134,12 @@ class League extends Controller
 
     public function deleteStadium(Request $request){
         $stadium = Stadium::find($request->id);
+        if(!$stadium)
+          return ['result'=>false,'title' => 'Ups!', 'content' => 'Stadium not found!', 'type' => 'alert-card'];
         if($stadium->team)
-          return ['title' => 'Ups!', 'content' => 'The stadium belongs to a team... You cannot delete it.', 'type' => 'alert-card'];
+          return ['result'=>false,'title' => 'Ups!', 'content' => 'The stadium belongs to a team... You cannot delete it.', 'type' => 'alert-card'];
         $stadium->delete();
-        return null;
+        return ['result'=>true];
     }
 
     public function addCoach(Request $request){
@@ -770,7 +772,7 @@ class League extends Controller
       ///ingresar en minutos
       //probar que se ingrese en ceros
       $event->minute = 0;
-      $event->event_types_id = 7;
+      $event->event_type_id = 7;
       $event->save();
 
       $followers = $match->localTeam->followers->pluck('email');

@@ -251,7 +251,8 @@ body{
 <div class="col-xs-12 col-md-4 teams-stats">
   <h4>Stats</h4>
   <div class="col-xs-12" style="padding-bottom:15px;">
-    <div class="col-xs-5 no-padding">
+    <div class="col-xs-12 no-padding">
+      <div class="col-xs-5 no-padding">
       <div class="col-xs-12 img-container">
         <img src="/storage/{{$match->localTeam->logo}}" alt="">
       </div>
@@ -266,24 +267,29 @@ body{
       </div>
       <h5 style="text-align:center;font-weight:600;">{{$match->visitorTeam->name}}</h5>
     </div>
-    <div class="col-xs-5 no-padding" style="text-align:center;">
+    </div>
+    <div class="col-xs-12 no-padding">
+      <div class="col-xs-5 no-padding" style="text-align:center;">
       <h3 style="color:red;">{{$match->localTeam->goalsCount}}</h3>
-    </div>
-    <div class="col-xs-2 no-padding" style="margin:0;">
-      <h3 style="text-align:center;">-</h3>
-    </div>
-    <div class="col-xs-5 no-padding" style="text-align:center;">
-      <h3 style="color:red;">{{$match->visitorTeam->goalsCount}}</h3>
+      </div>
+      <div class="col-xs-2 no-padding" style="margin:0;">
+        <h3 style="text-align:center;">-</h3>
+      </div>
+      <div class="col-xs-5 no-padding" style="text-align:center;">
+        <h3 style="color:red;">{{$match->visitorTeam->goalsCount}}</h3>
+      </div>
     </div>
 
-    <div class="col-xs-5 no-padding" style="text-align:center;">
+    <div class="col-xs-12 no-padding">
+      <div class="col-xs-5 no-padding" style="text-align:center;">
       <h6 style="color:white;font-size:16px;">{{(double)$match->localTeam->pivot->ball_possesion}}%</h6>
-    </div>
-    <div class="col-xs-2 no-padding" style="margin:0;">
-      <h6 style="text-align:center;">ball posession</h6>
-    </div>
-    <div class="col-xs-5 no-padding" style="text-align:center;">
-      <h6 style="color:white;font-size:16px;">{{(double)$match->visitorTeam->pivot->ball_possesion}}%</h6>
+      </div>
+      <div class="col-xs-2 no-padding" style="margin:0;">
+        <h6 style="text-align:center;">ball posession</h6>
+      </div>
+      <div class="col-xs-5 no-padding" style="text-align:center;">
+        <h6 style="color:white;font-size:16px;">{{(double)$match->visitorTeam->pivot->ball_possesion}}%</h6>
+      </div>
     </div>
     <!--more states -->
   </div>

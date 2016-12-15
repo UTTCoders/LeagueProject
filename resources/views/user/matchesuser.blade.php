@@ -113,11 +113,11 @@
 					<span class="glyphicon glyphicon-star-empty favStarCard"></span>
 					@endif
 					<div>
-						<h3 align="center"><img style="width: 30px;" src="/storage/{{$match->teams->where('pivot.local',true)->first()->logo}}"> @if(isset($match->teams->where('pivot.local',true)->first()['favorite']))<span class="favText">@endif{{$match->teams->where('pivot.local',true)->first()->name}}@if(isset($match->teams->where('pivot.local',true)->first()['favorite']))</span>@endif VS @if(isset($match->teams->where('pivot.local',false)->first()['favorite']))<span class="favText">@endif{{$match->teams->where('pivot.local',false)->first()->name}}@if(isset($match->teams->where('pivot.local',false)->first()['favorite']))</span>@endif <img style="width: 30px;" src="/storage/{{$match->teams->where('pivot.local',false)->first()->logo}}"></h3>
+						<h4 align="center"><img style="width: 30px;" src="/storage/{{$match->teams->where('pivot.local',true)->first()->logo}}"> @if(isset($match->teams->where('pivot.local',true)->first()['favorite']))<span class="favText">@endif{{$match->teams->where('pivot.local',true)->first()->name}}@if(isset($match->teams->where('pivot.local',true)->first()['favorite']))</span>@endif VS @if(isset($match->teams->where('pivot.local',false)->first()['favorite']))<span class="favText">@endif{{$match->teams->where('pivot.local',false)->first()->name}}@if(isset($match->teams->where('pivot.local',false)->first()['favorite']))</span>@endif <img style="width: 30px;" src="/storage/{{$match->teams->where('pivot.local',false)->first()->logo}}"></h4>
 					</div>
 
 					<hr style="border-color: #666;">
-					<div>
+					<div style="font-size: 13px;">
 						<div class="col-sm-5" align="left">
 							<p><strong><span class="glyphicon glyphicon-flag"></span> Stadium: </strong>{{$match->teams->where('pivot.local',true)->first()->stadium->name}}</p>
 							<p><strong><span class="glyphicon glyphicon-bookmark"></span> Local: </strong>{{$match->teams->where('pivot.local',true)->first()->name}}</p>
