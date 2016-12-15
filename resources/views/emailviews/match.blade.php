@@ -116,7 +116,7 @@
         @endforeach
       </div>
       <div class="col-xs-12 no-padding">
-        <a href="{{url('/')}}/stadiums/{{$match->localTeam->id}}" class="btn">Go to the narration!</a>
+        <a href="{{url('/')}}/stadiums/{{$match->localTeam->stadium->id}}" class="btn">Go to the narration!</a>
       </div>
       <p>league-project.com</p>
     </div>
