@@ -285,6 +285,21 @@ input[name=playerSearchBox]:hover{
 #positionSelector,#teamSelector{
   display: none;
 }
+.players-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.players-container::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.players-container::-webkit-scrollbar-thumb {
+  background-color: #fff;
+  border-radius: 5px;
+  outline: 1px solid slategrey;
+}
 </style>
 @endsection
 
