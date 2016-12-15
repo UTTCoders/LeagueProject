@@ -160,6 +160,7 @@ body{
   border-radius: 3px;
   box-shadow: 0 1px 2px 0 #000;
   overflow: hidden;
+  padding-bottom: 15px;
 }
 .blackWell > .header{
   margin: 0;

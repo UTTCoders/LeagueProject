@@ -305,7 +305,15 @@ body{
           @endif
           <img src="{{asset('storage/'.$player->photo)}}" alt="" class="pull-left col-xs-12">
         </div>
-        <p style="float:left;margin:0;margin-left:10px;margin-top:3px;">{{$player->name." (".$player->positions()->wherePivot('main',1)->first()->abbreviation.")"}}</p>
+        <div style="float:left;margin:0;margin-left:10px;margin-top:3px;">
+          <p style="margin:0">{{$player->name}}</p>
+          <p style="margin:0;color:#888;">{{$player->positions()->wherePivot('main',1)->first()->name}}</p>
+          @if($player->pivot->playing)
+          <p style="margin:0;color:#888;">(playing)</p>
+          @else
+          <p style="margin:0;color:#888;">(not playing)</p>
+          @endif
+        </div>
       </div>
       @endforeach
     </div>
@@ -319,7 +327,15 @@ body{
           <i class="material-icons removePlayer visitor" style="left:auto;right:13px;" id="{{$player->id}}">remove</i>
           @endif
         </div>
-        <p style="float:right; margin:0;margin-right:10px;margin-top:3px;">{{"(".$player->positions()->wherePivot('main',1)->first()->abbreviation.") ".$player->name}}</p>
+        <div style="float:right;margin:0;margin-right:10px;margin-top:3px;">
+          <p style="margin:0;text-align:right;">{{$player->name}}</p>
+          <p style="margin:0;text-align:right;color:#888;">{{$player->positions()->wherePivot('main',1)->first()->name}}</p>
+          @if($player->pivot->playing)
+          <p style="margin:0;text-align:right;color:#888;">(playing)</p>
+          @else
+          <p style="margin:0;text-align:right;color:#888;">(not playing)</p>
+          @endif
+        </div>
       </div>
       @endforeach
     </div>
@@ -383,7 +399,7 @@ body{
         <h3 style="margin-top:0;float:left;">Goal</h3>
         <button type="button" name="sendGoal" class="btnBlue2" style="position:absolute;right:10px;z-index:1;">Add!</button>
         <div class="col-xs-12 no-padding lineup">
-          <h4>Select the player that scored. ..</h4>
+          <h4>Select the player that scored...</h4>
           <h5>and the assitor </h5>
           <div class="col-xs-12 no-padding">
             <div class="col-xs-6 no-padding" id="local-lineup">
@@ -660,9 +676,9 @@ body{
     </div>
 
     <div class="col-xs-12 col-md-7 col-md-offset-1 events-container" style="margin-top:20px;">
-      <h4 class="col-xs-12">Preview</h4>
+      <h4 class="col-xs-12" style="margin-top:0">Preview</h4>
       <div class="col-xs-12">
-        @foreach($match->events()->orderBy('minute','desc')->get() as $event)
+        @foreach($match->events()->orderBy('created_at','desc')->get() as $event)
         <div class="col-xs-12 no-padding">
           <img src="{{asset($event->eventType->icon)}}" alt="" width="16">
           @if($event->eventType->id == 7 or $event->eventType->id == 8 or $event->eventType->id == 9)

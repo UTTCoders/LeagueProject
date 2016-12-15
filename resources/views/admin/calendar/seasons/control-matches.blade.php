@@ -155,26 +155,28 @@ body{
 @else
   @foreach($todayMatches as $match)
   <div class="col-xs-12 col-md-4 matchCard no-padding">
-    <div class="col-xs-5 team-container">
-      <div class="col-xs-12">
-        <img src="{{asset('storage/'.$match->teams()->wherePivot("local",true)->first()->logo)}}" alt="">
+    <div class="col-xs-12 no-padding">
+      <div class="col-xs-5 team-container">
+        <div class="col-xs-12">
+          <img src="{{asset('storage/'.$match->teams()->wherePivot("local",true)->first()->logo)}}" alt="">
+        </div>
+        <h5 class="col-xs-12" style="text-align:center">{{$match->teams()->wherePivot("local",true)->first()->name}}</h5>
       </div>
-      <h5 class="col-xs-12" style="text-align:center">{{$match->teams()->wherePivot("local",true)->first()->name}}</h5>
-    </div>
-    <div class="col-xs-2" style="text-align:center;padding:0;">
-      <p style="background:Red; font-weight:600;">VS</p>
-      <p style="margin:0; font-size:12px;">{{date('d-m-Y',strtotime($match->start_date))}}</p>
-      <p style="margin:0; font-size:12px;">{{date('H:i',strtotime($match->start_date))}}</p>
-      <p style="margin:0; font-size:12px;">{{$states[$match->state]}}</p>
-      @if($match->state != 0)
-      <p style="margin:0; font-size:16px;">{{$match->localTeam->goalsCount.' - '.$match->visitorTeam->goalsCount}}</p>
-      @endif()
-    </div>
-    <div class="col-xs-5 team-container">
-      <div class="col-xs-12">
-        <img src="{{asset('storage/'.$match->teams()->wherePivot("local",false)->first()->logo)}}" alt="">
+      <div class="col-xs-2" style="text-align:center;padding:0;">
+        <p style="background:Red; font-weight:600;">VS</p>
+        <p style="margin:0; font-size:12px;">{{date('d-m-Y',strtotime($match->start_date))}}</p>
+        <p style="margin:0; font-size:12px;">{{date('H:i',strtotime($match->start_date))}}</p>
+        <p style="margin:0; font-size:12px;">{{$states[$match->state]}}</p>
+        @if($match->state != 0)
+        <p style="margin:0; font-size:16px;">{{$match->localTeam->goalsCount.' - '.$match->visitorTeam->goalsCount}}</p>
+        @endif()
       </div>
-      <h5 class="col-xs-12" style="text-align:center">{{$match->teams()->wherePivot("local",false)->first()->name}}</h5>
+      <div class="col-xs-5 team-container">
+        <div class="col-xs-12">
+          <img src="{{asset('storage/'.$match->teams()->wherePivot("local",false)->first()->logo)}}" alt="">
+        </div>
+        <h5 class="col-xs-12" style="text-align:center">{{$match->teams()->wherePivot("local",false)->first()->name}}</h5>
+      </div>
     </div>
 
     <div class="col-xs-12" style="background:#111;text-align:center;padding:10px;">

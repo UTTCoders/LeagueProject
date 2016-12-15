@@ -20,6 +20,7 @@ use App\League\Assist;
 use App\League\Goal;
 use Mail;
 use App\Mail\MatchStarted;
+use App\Mail\MatchFinished;
 use Carbon\Carbon;
 
 class League extends Controller
@@ -502,6 +503,7 @@ class League extends Controller
     }
 
     public function addMatch(Request $request){
+
       if(!$request->has('matchday'))
         return back()->with('msg',['title' => 'Ups!', 'content' => 'Select a matchday to insert in.'])->withInput();
       if(!$request->has('date'))
@@ -556,9 +558,12 @@ class League extends Controller
           return back()->with('msg',['title' => 'OK!', 'content' => "Success!"]);
       }
       else{
+
         $season = Season::latest('start_date')->get()->first();
+
         if(!$season->end_date){
-          if($request->date < $season->start_date || $request->date > mktime(0,0,0,5,31,date('Y',strtotime($season->start_date))+1))
+
+          if($request->date < $season->start_date || $request->date > date('Y-m-d',mktime(0,0,0,5,31,date('Y',strtotime($season->start_date))+1)))
               return back()->with('msg',['title' => 'Ups!', 'content' => "The match date is outside of the limits of the season."])
                            ->with('matchday',$request->matchday)
                            ->withInput();
@@ -566,9 +571,11 @@ class League extends Controller
               return back()->with('msg',['title' => 'Ups!', 'content' => "The current season is full."])
                            ->with('matchday',$request->matchday)
                            ->withInput();
+
           $lastMatch = $season->matches()->latest('start_date')->get()->first();
+
           if($lastMatch){
-            if(date('d-m-Y',strtotime($request->date)) < date('d-m-Y',strtotime($lastMatch->start_date)))
+            if(date('Y-m-d',strtotime($request->date)) < date('Y-m-d',strtotime($lastMatch->start_date)))
               return back()->with('msg',['title' => 'Ups!', 'content' => "The next match cannot be older than the last one."])
                            ->with('matchday',$request->matchday)
                            ->withInput();
@@ -596,13 +603,13 @@ class League extends Controller
                            ->with('matchday',$request->matchday)
                            ->withInput();
               //the next match to insert is the first of matchday
-            if($request->date > date('d-m-Y',strtotime($lastMatch->start_date))){
+            if($request->date > date('Y-m-d',strtotime($lastMatch->start_date))){
               $lastMatchDay=date('d',strtotime($lastMatch->start_date));
               $lastMatchMonth=date('m',strtotime($lastMatch->start_date));
               $lastMatchYear=date('Y',strtotime($lastMatch->start_date));
               $tempDate=mktime(0,0,0,$lastMatchMonth,$lastMatchDay,$lastMatchYear);
               $daysCount=0;
-              for (;date('d-m-Y',$tempDate) < date('d-m-Y',strtotime($request->date)) ;) {
+              for (;date('Y-m-d',$tempDate) < date('Y-m-d',strtotime($request->date)) ;) {
                 $daysCount++;
                 $lastMatchDay++;
                 if($lastMatchDay==31) {
@@ -721,7 +728,7 @@ class League extends Controller
 
     public function startMatch(Request $request){
       if(!$request->players)
-        return back()->with('msg',['title' => 'Ups!', 'content' => "Both teams must have 18 players."])
+        return back()->with('msg',['title' => 'Ups!', 'content' => "Both teams must have at least 14 players."])
                      ->withInput();
 
       $match = Match::find($request->id);
@@ -862,7 +869,7 @@ class League extends Controller
       $event->event_type_id = 3;
       $event->match_id = $match->id;
       $event->minute = $minute;
-      $event->content = "Corner for ".Team::find($match->id)->name;
+      $event->content = "Corner for ".Team::find($request->teamId)->name;
       $event->save();
 
       return back()->with('msg',[
@@ -969,9 +976,14 @@ class League extends Controller
     }
 
     public function changeBallPossesion(Request $request){
-      $match=Match::find($request->matchId);
-      $match->teams()->updateExistingPivot($request->localTeamId,['ball_possesion' => $request->localTeamPosession]);
-      $match->teams()->updateExistingPivot($request->visitorTeamId,['ball_possesion' => (100-$request->localTeamPosession)]);
+      $match = Match::find($request->matchId);
+      if($match->state == 0)
+        return back()->with('msg',[
+          'title' => 'Alert!',
+          'content' => 'You cannot change the ball possession until the match starts!'
+        ]);
+      $match->teams()->updateExistingPivot($request->localTeamId, ['ball_possesion' => $request->localTeamPosession]);
+      $match->teams()->updateExistingPivot($request->visitorTeamId, ['ball_possesion' => (100-$request->localTeamPosession)]);
       return back();
     }
 
@@ -1010,28 +1022,31 @@ class League extends Controller
     public function endMatch(Request $request, $id){
 
       $match = Match::find($id);
+
       if(!$match) return back();
+
       if($match->state != 3) return back();
+
       $match->state = 4;
       $match->save();
 
-      $localTeam = $match->teams()->wherePivot('local',1)->first();
-      $visitorTeam = $match->teams()->wherePivot('local',0)->first();
-
-      $localTeam->goalsCount = 0;
-      $visitorTeam->goalsCount = 0;
-      foreach ($match->goals as $goal) {
-        if($goal->player->team->id == $localTeam->id)
-          $localTeam->goalsCount += 1;
-        else $visitorTeam->goalsCount += 1;
-      }
+      $match->localTeam=$match->teams()->wherePivot("local",true)->first();
+      $match->visitorTeam=$match->teams()->wherePivot("local",false)->first();
 
       $event = new Event;
 
-      if($localTeam->goalsCount < $visitorTeam->goalsCount)
-        $event->content = "Full-time! ".$visitorTeam->name." wins!";
-      elseif($localTeam->goalsCount > $visitorTeam->goalsCount)
-        $event->content = "Full-time! ".$localTeam->name." wins!";
+      $match->localTeam->goalsCount = 0;
+      $match->visitorTeam->goalsCount = 0;
+      foreach ($match->goals as $goal) {
+        if($goal->player->team->id == $match->localTeam->id)
+          $match->localTeam->goalsCount += 1;
+        else $match->visitorTeam->goalsCount += 1;
+      }
+
+      if($match->localTeam->goalsCount < $match->visitorTeam->goalsCount)
+        $event->content = "Full-time! ".$match->visitorTeam->name." wins!";
+      elseif($match->localTeam->goalsCount > $match->visitorTeam->goalsCount)
+        $event->content = "Full-time! ".$match->localTeam->name." wins!";
       else $event->content = "Full-time! It is a draw!";
 
       $now = Carbon::now();
@@ -1043,6 +1058,14 @@ class League extends Controller
       $event->match_id = $match->id;
 
       $event->save();
+
+      $followers = $match->localTeam->followers->pluck('email');
+      foreach ($match->visitorTeam->followers->pluck('email') as $follower) {
+        if(!in_array($follower,$followers->all()))
+          $followers[] = $follower;
+      }
+
+      Mail::to($followers)->send(new MatchFinished($match));
 
       return redirect('/');
     }

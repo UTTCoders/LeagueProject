@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class MatchStarted extends Mailable
+class MatchFinished extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,7 +30,7 @@ class MatchStarted extends Mailable
      */
     public function build()
     {
-        return $this->view('emailviews.match')
-                    ->subject('Your team is playing right now!');
+        return $this->view('emailviews.match-finished')
+        ->subject($this->match->localTeam->name." vs ".$this->match->visitorTeam->name." just has finished!");
     }
 }
