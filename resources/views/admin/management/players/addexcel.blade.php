@@ -266,7 +266,7 @@ body{
 #playersContainer{
   height: 200px;
   width: 100%;
-  background-color: #eee;
+  background-color: #fff;
   padding:5px 5px;
   margin-bottom: 20px;
   overflow-y: auto;
