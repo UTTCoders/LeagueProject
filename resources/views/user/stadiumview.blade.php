@@ -386,7 +386,7 @@ $(document).ready(function(){
 	    	}
 		});
 	}
-	setInterval(askChart,60000);
+	setInterval(askChart,1000);
 });
 </script>
 @endif

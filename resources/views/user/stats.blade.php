@@ -41,7 +41,7 @@
 						<tbody>
 						@foreach($teamsS as $team)
 							<tr align="center">
-								<td style="vertical-align: middle; font-size: 15px;" ><img style="width: 30px" src="/storage/{{$team->logo}}"> <b>{{$team->name}}</b></td>
+								<td style="vertical-align: middle; font-size: 15px;" >@if($team->points > 0 && $loop->first) <span class="pull-left"><img style="width: 30px" src="/img/icons/chrown.png"></span> @endif <img style="width: 30px" src="/storage/{{$team->logo}}"> <b>{{$team->name}}</b></td>
 								<td style="vertical-align: middle;" >{{$team->matchesCount}}</td>
 								<td style="vertical-align: middle;" >{{$team->differGoals}}</td>
 								<td style="vertical-align: middle;" >{{$team->points}}</td>
