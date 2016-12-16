@@ -374,7 +374,7 @@ td{
   <div class="col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0 col-xs-12" id="manageMenu">
       <a class="manageMenuHeader col-md-12 col-sm-12 col-xs-12">Matches...</a>
       <a href="/admin/seasons/add" class="manageMenuItem item-active col-md-12 col-sm-12 col-xs-12">Add</a>
-      <a href="/admin/seasons/edit" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Edit</a>
+      <!--<a href="/admin/seasons/edit" class="manageMenuItem col-md-12 col-sm-12 col-xs-12">Edit</a>-->
   </div>
   <div class="col-md-7 col-md-offset-1 no-padding col-xs-12 blackWell">
     <div class="header">

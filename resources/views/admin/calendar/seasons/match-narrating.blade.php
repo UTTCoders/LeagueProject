@@ -658,9 +658,9 @@ body{
           <input type="hidden" name="localTeamId" value="{{$match->localTeam->id}}">
           <input type="hidden" name="visitorTeamId" value="{{$match->visitorTeam->id}}">
           @if((double)$match->localTeam->pivot->ball_possesion < 0)
-          <input type="range" id="posession" name="localTeamPosession" value="50" class="mdl-slider mdl-js-slider" min="0" max="100">
+          <input type="range" id="posession" name="localTeamPosession" value="50" class="mdl-slider mdl-js-slider" min="0" max="100" style="background-color: white;">
           @else
-          <input type="range" id="posession" name="localTeamPosession" value="{{(double)$match->localTeam->pivot->ball_possesion}}" class="mdl-slider mdl-js-slider" min="0" max="100">
+          <input type="range" id="posession" name="localTeamPosession" value="{{(double)$match->localTeam->pivot->ball_possesion}}" class="mdl-slider mdl-js-slider" min="0" max="100" style="background-color: white;">
           @endif
           <div class="" style="float:left; width:70px; background:#222;border-radius:2px; text-align:center;" id="localPosession">
             {{(double)$match->localTeam->pivot->ball_possesion}}
@@ -801,7 +801,7 @@ $(function ($) {
     var localPlayersCount=0,visitorPlayersCount=0;
     $('.addPlayer').click(function () {
       if($(this).text() == 'add'){
-        if(($(this).hasClass('local') && localPlayersCount > 18) || (!$(this).hasClass('local') && visitorPlayersCount > 18)){
+        if(($(this).hasClass('local') && localPlayersCount > 17) || (!$(this).hasClass('local') && visitorPlayersCount > 17)){
           showMessages('Alert!','The max number of players per team are 18.');
         }
         else{
