@@ -84,7 +84,7 @@ body{
     height: 100%;
 }
 .teams-selection-container{
-  background-color: #000;
+  background-color: #222;
   margin-bottom: 15px;
   border-radius: 3px;
   padding-top: 10px;
@@ -266,11 +266,11 @@ input[name=playerSearchBox]:hover{
   color: #fff;
   cursor: pointer;
   float: left;
-  width: 90%;
-  margin-left: 0%;
-  margin-right: 10%;
-  background: #000;
+  margin-left: 1%;
+  margin-right: 1%;
+  background: #222;
   text-align: center;
+  padding: 0;
   margin-bottom: 2px;
   -webkit-transition: width .4s, margin-left .4s;
 }
@@ -278,9 +278,8 @@ input[name=playerSearchBox]:hover{
   color:#ddd;
 }
 .matchday-item:hover{
-  width: 100%;
-  margin-left: 0%;
-  margin-right: 0%;
+  background-color: dodgerblue;
+
 }
 #addMatchBtn:hover{
   color:white;
@@ -313,7 +312,7 @@ input[name=playerSearchBox]:hover{
   display: none;
 }
 .teamItem{
-  background: #000;
+  background: transparent;
   overflow: hidden;
   border-radius: 3px;
   box-shadow: inset 0 0 9px 0 rgba(0,0,0,1);
@@ -389,9 +388,10 @@ td{
       @endif
     </div>
     <div class="col-xs-12 col-md-4" style="margin-bottom:15px;">
+      <h4 style="margin-left:1%">Matchday</h4>
       @for($i = 1; $i <= 38; $i++)
-      <div class="matchday-item" id="{{$i}}">
-        Matchday {{$i}}
+      <div class="matchday-item col-xs-2" id="{{$i}}">
+        {{$i}}
       </div>
       @endfor
     </div>
@@ -653,7 +653,7 @@ $(function ($) {
 
     $('.teams-selection-container').children('.Item').click(function () {
       $('.teams-selection-container').children('.Item').css({
-        background:'#000',
+        background:'#222',
         'border-right':'2px solid #000',
         color:'#ddd'
       });
@@ -669,17 +669,14 @@ $(function ($) {
       $.each($('.teamItem'),function (i,e) {
         if($(e).css('border-color') == 'rgb(30, 144, 255)'){
           $(e).css({
-            'background-color':'#000',
-            'box-shadow':'none',
+            'border-radius': '3px',
             border: '1px solid #222'
           });
         }
       });
       $(this).css({
-        'background-color': 'transparent',
         overflow: 'hidden',
         'border-radius': '3px',
-        'box-shadow': 'inset 0 0 10px 0 rgba(50,40,255,1)',
         border: '1px solid dodgerblue',
         cursor: 'pointer'
       });
@@ -694,17 +691,13 @@ $(function ($) {
       $.each($('.teamItem'),function (i,e) {
         if($(e).css('border-color') == 'rgb(255, 119, 102)'){
           $(e).css({
-            'background-color':'#000',
-            'box-shadow':'none',
             border: '1px solid #222'
           });
         }
       });
       $(this).css({
-        'background-color': 'transparent',
         overflow: 'hidden',
         'border-radius': '3px',
-        'box-shadow': 'inset 0 0 10px 0 rgba(255,40,30,.8)',
         border: '1px solid #f76',
         cursor: 'pointer'
       });
